@@ -1,0 +1,2 @@
+import { evaluateLayout } from './model.js';
+self.onmessage=()=>{try{const results=[];for(let a=0;a<=6;a++)for(let b=0;b<=6-a;b++){results.push(evaluateLayout([a,b,6-a-b]));self.postMessage({progress:results.length});}const valid=results.filter(r=>r.withinIllustrativeLimit).sort((a,b)=>b.worstNetRecoveryW-a.worstNetRecoveryW);self.postMessage({best:valid[0]??null,validCount:valid.length,spread:results.find(r=>r.counts.join(',')==='2,2,2'),grouped:results.find(r=>r.counts.join(',')==='4,2,0')});}catch(e){self.postMessage({error:e.message});}};

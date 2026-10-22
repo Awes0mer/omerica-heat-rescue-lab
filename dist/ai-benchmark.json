@@ -1,0 +1,3191 @@
+{
+  "description": "Eight predeclared seeds, 18 observed training designs per method, fixed scenario protocol; no global optimum or hardware validation claimed.",
+  "simulated": true,
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "budget": 18,
+  "protocol": {
+    "version": "heat-rescue-bo-v1",
+    "defaultBudget": 18,
+    "warmupTrials": 4,
+    "temperatureLimitC": 80,
+    "triggersC": [
+      66,
+      70,
+      74,
+      78
+    ],
+    "flowFractions": [
+      0.25,
+      0.5,
+      0.75,
+      1
+    ],
+    "lengthScales": [
+      0.32,
+      0.32,
+      0.32,
+      0.5,
+      0.5
+    ],
+    "noiseVariance": 0.000001,
+    "objective": "Maximize worst-case generated energy minus modeled incremental cooling energy, subject to peak hot-plate temperature at or below 80 C."
+  },
+  "parameterProfile": "synthetic-open-v2",
+  "sharedThermalParameters": {
+    "branchCount": 3,
+    "totalTiles": 6,
+    "serverHeatW": 200,
+    "ambientC": 25,
+    "inletC": 25,
+    "flowKgS": 0.01,
+    "backupFlowKgS": 0.005,
+    "waterCpJkgK": 4183,
+    "hotCapacityJK": 900,
+    "coldCapacityJK": 450,
+    "waterCapacityJK": 418.3,
+    "bypassConductanceWK": 4,
+    "coldWaterConductanceWK": 25,
+    "hotAmbientConductanceWK": 1,
+    "coldAmbientConductanceWK": 2,
+    "waterAmbientConductanceWK": 0.5,
+    "basePumpW": 3,
+    "extraPumpW": 0.9,
+    "backupPumpW": 0.5,
+    "illustrativeLimitC": 80,
+    "parameterProfile": "synthetic-open-v2",
+    "alphaVK": 0.05,
+    "resistanceOhm": 2.5,
+    "conductanceWK": 0.6,
+    "maximumStepS": 0.25
+  },
+  "sourceSHA256": {
+    "planner": "36669a8677b09238d7341f062fead199edcfefd8dc2fd4dc32875780154fc84f",
+    "physics": "678b8fa6aa551a28dd0fb988d045122810e3fd1ba706866ecc0d84574e9f5da8",
+    "thermalModel": "9b6a1b5e1b73dc3c53c3f9a5f616491c0f87fb17e3dd0d0b135c7fcb3801a422"
+  },
+  "trainingScenarios": [
+    {
+      "loadsW": [
+        240,
+        200,
+        160
+      ],
+      "inletC": 25,
+      "ambientC": 25,
+      "normalFlowScale": 1,
+      "coldWaterScale": 1,
+      "bypassScale": 1,
+      "remainingFlowFraction": 0,
+      "faultStartS": 30,
+      "durationS": 600,
+      "id": "train-1",
+      "label": "Pipe A fully blocked",
+      "faultBranch": 0
+    },
+    {
+      "loadsW": [
+        240,
+        200,
+        160
+      ],
+      "inletC": 25,
+      "ambientC": 25,
+      "normalFlowScale": 1,
+      "coldWaterScale": 1,
+      "bypassScale": 1,
+      "remainingFlowFraction": 0,
+      "faultStartS": 30,
+      "durationS": 600,
+      "id": "train-2",
+      "label": "Pipe B fully blocked",
+      "faultBranch": 1
+    },
+    {
+      "loadsW": [
+        240,
+        200,
+        160
+      ],
+      "inletC": 25,
+      "ambientC": 25,
+      "normalFlowScale": 1,
+      "coldWaterScale": 1,
+      "bypassScale": 1,
+      "remainingFlowFraction": 0,
+      "faultStartS": 30,
+      "durationS": 600,
+      "id": "train-3",
+      "label": "Pipe C fully blocked",
+      "faultBranch": 2
+    }
+  ],
+  "heldoutScenarios": [
+    {
+      "loadsW": [
+        240,
+        200,
+        160
+      ],
+      "inletC": 25,
+      "ambientC": 25,
+      "normalFlowScale": 1,
+      "coldWaterScale": 1,
+      "bypassScale": 1,
+      "remainingFlowFraction": 0.25,
+      "faultStartS": 30,
+      "durationS": 900,
+      "id": "holdout-partial",
+      "label": "Partial blockage in pipe A",
+      "faultBranch": 0
+    },
+    {
+      "loadsW": [
+        240,
+        200,
+        160
+      ],
+      "inletC": 30,
+      "ambientC": 30,
+      "normalFlowScale": 1,
+      "coldWaterScale": 1,
+      "bypassScale": 1,
+      "remainingFlowFraction": 0,
+      "faultStartS": 30,
+      "durationS": 900,
+      "id": "holdout-warm",
+      "label": "Warmer supply and room; pipe B blocked",
+      "faultBranch": 1
+    },
+    {
+      "loadsW": [
+        180,
+        220,
+        200
+      ],
+      "inletC": 25,
+      "ambientC": 25,
+      "normalFlowScale": 1,
+      "coldWaterScale": 1,
+      "bypassScale": 1,
+      "remainingFlowFraction": 0,
+      "faultStartS": 30,
+      "durationS": 900,
+      "id": "holdout-load",
+      "label": "Workload moved between servers; pipe C blocked",
+      "faultBranch": 2
+    },
+    {
+      "loadsW": [
+        240,
+        200,
+        160
+      ],
+      "inletC": 25,
+      "ambientC": 25,
+      "normalFlowScale": 1,
+      "coldWaterScale": 0.8,
+      "bypassScale": 0.8,
+      "remainingFlowFraction": 0,
+      "faultStartS": 30,
+      "durationS": 900,
+      "id": "holdout-contact",
+      "label": "Weaker heat transfer; pipe A blocked",
+      "faultBranch": 0
+    },
+    {
+      "loadsW": [
+        240,
+        200,
+        160
+      ],
+      "inletC": 25,
+      "ambientC": 25,
+      "normalFlowScale": 0.8,
+      "coldWaterScale": 1,
+      "bypassScale": 1,
+      "remainingFlowFraction": 0,
+      "faultStartS": 30,
+      "durationS": 900,
+      "id": "holdout-flow",
+      "label": "20% less main flow; pipe B blocked",
+      "faultBranch": 1
+    },
+    {
+      "loadsW": [
+        200,
+        180,
+        220
+      ],
+      "inletC": 30,
+      "ambientC": 28,
+      "normalFlowScale": 1,
+      "coldWaterScale": 0.9,
+      "bypassScale": 1,
+      "remainingFlowFraction": 0.25,
+      "faultStartS": 30,
+      "durationS": 900,
+      "id": "holdout-combined",
+      "label": "Warm partial blockage with shifted workload",
+      "faultBranch": 2
+    }
+  ],
+  "heldoutUsedForSelection": false,
+  "interpretation": "Read temperature feasibility alongside energy: a high-energy but over-temperature result is a failed design. Eight seeds are an illustrative benchmark, not a statistical proof of superiority. No algorithm or scenario was retuned after reviewing these held-out results.",
+  "methods": {
+    "fixed": {
+      "count": 8,
+      "heldoutFeasibleRuns": 8,
+      "positiveNetAndFeasibleRuns": 0,
+      "energyStatisticsIncludeUnsafeRuns": true,
+      "meanHeldoutWorstEnergyJ": -385.7628400159588,
+      "medianHeldoutWorstEnergyJ": -385.7628400159588,
+      "minimumHeldoutWorstEnergyJ": -385.7628400159588,
+      "maximumHeldoutWorstEnergyJ": -385.7628400159588
+    },
+    "ai": {
+      "count": 8,
+      "heldoutFeasibleRuns": 6,
+      "positiveNetAndFeasibleRuns": 6,
+      "energyStatisticsIncludeUnsafeRuns": true,
+      "meanHeldoutWorstEnergyJ": 172.5047464067808,
+      "medianHeldoutWorstEnergyJ": 167.67747372502072,
+      "minimumHeldoutWorstEnergyJ": 141.0537395846211,
+      "maximumHeldoutWorstEnergyJ": 226.92216566266052
+    },
+    "random": {
+      "count": 8,
+      "heldoutFeasibleRuns": 5,
+      "positiveNetAndFeasibleRuns": 1,
+      "energyStatisticsIncludeUnsafeRuns": true,
+      "meanHeldoutWorstEnergyJ": -147.376198700565,
+      "medianHeldoutWorstEnergyJ": -270.5803919085718,
+      "minimumHeldoutWorstEnergyJ": -385.7628400159588,
+      "maximumHeldoutWorstEnergyJ": 224.96721466693316
+    },
+    "placement": {
+      "count": 8,
+      "heldoutFeasibleRuns": 8,
+      "positiveNetAndFeasibleRuns": 0,
+      "energyStatisticsIncludeUnsafeRuns": true,
+      "meanHeldoutWorstEnergyJ": -219.12268025222033,
+      "medianHeldoutWorstEnergyJ": -219.12268025222033,
+      "minimumHeldoutWorstEnergyJ": -219.12268025222033,
+      "maximumHeldoutWorstEnergyJ": -219.12268025222033
+    }
+  },
+  "runs": [
+    {
+      "seed": 1,
+      "fixed": {
+        "design": {
+          "counts": [
+            2,
+            2,
+            2
+          ],
+          "triggerC": 74,
+          "backupFlowFraction": 0.5
+        },
+        "train": {
+          "scoreJ": -11.664183265688052,
+          "maxHotC": 75.41673338369417,
+          "feasible": true
+        },
+        "holdout": {
+          "scoreJ": -385.7628400159588,
+          "maxHotC": 79.12271994917965,
+          "feasible": true
+        }
+      },
+      "ai": {
+        "design": {
+          "counts": [
+            3,
+            2,
+            1
+          ],
+          "triggerC": 70,
+          "backupFlowFraction": 0.25
+        },
+        "train": {
+          "scoreJ": 167.45433970649833,
+          "maxHotC": 74.54466583272219,
+          "feasible": true
+        },
+        "holdout": {
+          "scoreJ": 167.67747372502072,
+          "maxHotC": 78.89803483978281,
+          "feasible": true
+        },
+        "learningCurve": [
+          {
+            "trial": 1,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 2,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 3,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 4,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 5,
+            "scoreJ": 44.02356086492989,
+            "feasible": true
+          },
+          {
+            "trial": 6,
+            "scoreJ": 132.03273661417154,
+            "feasible": true
+          },
+          {
+            "trial": 7,
+            "scoreJ": 164.85605570268592,
+            "feasible": true
+          },
+          {
+            "trial": 8,
+            "scoreJ": 164.85605570268592,
+            "feasible": true
+          },
+          {
+            "trial": 9,
+            "scoreJ": 164.85605570268592,
+            "feasible": true
+          },
+          {
+            "trial": 10,
+            "scoreJ": 164.85605570268592,
+            "feasible": true
+          },
+          {
+            "trial": 11,
+            "scoreJ": 164.85605570268592,
+            "feasible": true
+          },
+          {
+            "trial": 12,
+            "scoreJ": 164.85605570268592,
+            "feasible": true
+          },
+          {
+            "trial": 13,
+            "scoreJ": 167.45433970649833,
+            "feasible": true
+          },
+          {
+            "trial": 14,
+            "scoreJ": 167.45433970649833,
+            "feasible": true
+          },
+          {
+            "trial": 15,
+            "scoreJ": 167.45433970649833,
+            "feasible": true
+          },
+          {
+            "trial": 16,
+            "scoreJ": 167.45433970649833,
+            "feasible": true
+          },
+          {
+            "trial": 17,
+            "scoreJ": 167.45433970649833,
+            "feasible": true
+          },
+          {
+            "trial": 18,
+            "scoreJ": 167.45433970649833,
+            "feasible": true
+          }
+        ]
+      },
+      "random": {
+        "design": {
+          "counts": [
+            2,
+            2,
+            2
+          ],
+          "triggerC": 74,
+          "backupFlowFraction": 0.5
+        },
+        "train": {
+          "scoreJ": -11.664183265688052,
+          "maxHotC": 75.41673338369417,
+          "feasible": true
+        },
+        "holdout": {
+          "scoreJ": -385.7628400159588,
+          "maxHotC": 79.12271994917965,
+          "feasible": true
+        },
+        "learningCurve": [
+          {
+            "trial": 1,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 2,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 3,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 4,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 5,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 6,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 7,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 8,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 9,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 10,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 11,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 12,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 13,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 14,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 15,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 16,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 17,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 18,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          }
+        ]
+      },
+      "placement": {
+        "design": {
+          "counts": [
+            3,
+            2,
+            1
+          ],
+          "triggerC": 74,
+          "backupFlowFraction": 0.5
+        },
+        "train": {
+          "scoreJ": 39.17771176573319,
+          "maxHotC": 75.24369539575359,
+          "feasible": true
+        },
+        "holdout": {
+          "scoreJ": -219.12268025222033,
+          "maxHotC": 76.82209557884215,
+          "feasible": true
+        },
+        "learningCurve": [
+          {
+            "trial": 1,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 2,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 3,
+            "scoreJ": 6.354392677214719,
+            "feasible": true
+          },
+          {
+            "trial": 4,
+            "scoreJ": 6.354392677214719,
+            "feasible": true
+          },
+          {
+            "trial": 5,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 6,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 7,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 8,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 9,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 10,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 11,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 12,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 13,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 14,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 15,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 16,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 17,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 18,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          }
+        ]
+      }
+    },
+    {
+      "seed": 2,
+      "fixed": {
+        "design": {
+          "counts": [
+            2,
+            2,
+            2
+          ],
+          "triggerC": 74,
+          "backupFlowFraction": 0.5
+        },
+        "train": {
+          "scoreJ": -11.664183265688052,
+          "maxHotC": 75.41673338369417,
+          "feasible": true
+        },
+        "holdout": {
+          "scoreJ": -385.7628400159588,
+          "maxHotC": 79.12271994917965,
+          "feasible": true
+        }
+      },
+      "ai": {
+        "design": {
+          "counts": [
+            2,
+            2,
+            2
+          ],
+          "triggerC": 74,
+          "backupFlowFraction": 0.25
+        },
+        "train": {
+          "scoreJ": 164.93559818436495,
+          "maxHotC": 77.87719970268876,
+          "feasible": true
+        },
+        "holdout": {
+          "scoreJ": 226.92216566266052,
+          "maxHotC": 83.00833699250522,
+          "feasible": false
+        },
+        "learningCurve": [
+          {
+            "trial": 1,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 2,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 3,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 4,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 5,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 6,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 7,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 8,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 9,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 10,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 11,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 12,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 13,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 14,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 15,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 16,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 17,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 18,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          }
+        ]
+      },
+      "random": {
+        "design": {
+          "counts": [
+            3,
+            0,
+            3
+          ],
+          "triggerC": 74,
+          "backupFlowFraction": 0.25
+        },
+        "train": {
+          "scoreJ": 0.41789321865223883,
+          "maxHotC": 77.030400320518,
+          "feasible": true
+        },
+        "holdout": {
+          "scoreJ": -155.39794380118485,
+          "maxHotC": 82.05999850913996,
+          "feasible": false
+        },
+        "learningCurve": [
+          {
+            "trial": 1,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 2,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 3,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 4,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 5,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 6,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 7,
+            "scoreJ": 0.41789321865223883,
+            "feasible": true
+          },
+          {
+            "trial": 8,
+            "scoreJ": 0.41789321865223883,
+            "feasible": true
+          },
+          {
+            "trial": 9,
+            "scoreJ": 0.41789321865223883,
+            "feasible": true
+          },
+          {
+            "trial": 10,
+            "scoreJ": 0.41789321865223883,
+            "feasible": true
+          },
+          {
+            "trial": 11,
+            "scoreJ": 0.41789321865223883,
+            "feasible": true
+          },
+          {
+            "trial": 12,
+            "scoreJ": 0.41789321865223883,
+            "feasible": true
+          },
+          {
+            "trial": 13,
+            "scoreJ": 0.41789321865223883,
+            "feasible": true
+          },
+          {
+            "trial": 14,
+            "scoreJ": 0.41789321865223883,
+            "feasible": true
+          },
+          {
+            "trial": 15,
+            "scoreJ": 0.41789321865223883,
+            "feasible": true
+          },
+          {
+            "trial": 16,
+            "scoreJ": 0.41789321865223883,
+            "feasible": true
+          },
+          {
+            "trial": 17,
+            "scoreJ": 0.41789321865223883,
+            "feasible": true
+          },
+          {
+            "trial": 18,
+            "scoreJ": 0.41789321865223883,
+            "feasible": true
+          }
+        ]
+      },
+      "placement": {
+        "design": {
+          "counts": [
+            3,
+            2,
+            1
+          ],
+          "triggerC": 74,
+          "backupFlowFraction": 0.5
+        },
+        "train": {
+          "scoreJ": 39.17771176573319,
+          "maxHotC": 75.24369539575359,
+          "feasible": true
+        },
+        "holdout": {
+          "scoreJ": -219.12268025222033,
+          "maxHotC": 76.82209557884215,
+          "feasible": true
+        },
+        "learningCurve": [
+          {
+            "trial": 1,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 2,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 3,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 4,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 5,
+            "scoreJ": 0.36599802885700683,
+            "feasible": true
+          },
+          {
+            "trial": 6,
+            "scoreJ": 0.36599802885700683,
+            "feasible": true
+          },
+          {
+            "trial": 7,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 8,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 9,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 10,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 11,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 12,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 13,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 14,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 15,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 16,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 17,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 18,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          }
+        ]
+      }
+    },
+    {
+      "seed": 3,
+      "fixed": {
+        "design": {
+          "counts": [
+            2,
+            2,
+            2
+          ],
+          "triggerC": 74,
+          "backupFlowFraction": 0.5
+        },
+        "train": {
+          "scoreJ": -11.664183265688052,
+          "maxHotC": 75.41673338369417,
+          "feasible": true
+        },
+        "holdout": {
+          "scoreJ": -385.7628400159588,
+          "maxHotC": 79.12271994917965,
+          "feasible": true
+        }
+      },
+      "ai": {
+        "design": {
+          "counts": [
+            3,
+            2,
+            1
+          ],
+          "triggerC": 70,
+          "backupFlowFraction": 0.25
+        },
+        "train": {
+          "scoreJ": 167.45433970649833,
+          "maxHotC": 74.54466583272219,
+          "feasible": true
+        },
+        "holdout": {
+          "scoreJ": 167.67747372502072,
+          "maxHotC": 78.89803483978281,
+          "feasible": true
+        },
+        "learningCurve": [
+          {
+            "trial": 1,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 2,
+            "scoreJ": 148.2643043194215,
+            "feasible": true
+          },
+          {
+            "trial": 3,
+            "scoreJ": 148.2643043194215,
+            "feasible": true
+          },
+          {
+            "trial": 4,
+            "scoreJ": 148.2643043194215,
+            "feasible": true
+          },
+          {
+            "trial": 5,
+            "scoreJ": 148.2643043194215,
+            "feasible": true
+          },
+          {
+            "trial": 6,
+            "scoreJ": 165.12371026456879,
+            "feasible": true
+          },
+          {
+            "trial": 7,
+            "scoreJ": 165.12371026456879,
+            "feasible": true
+          },
+          {
+            "trial": 8,
+            "scoreJ": 165.12371026456879,
+            "feasible": true
+          },
+          {
+            "trial": 9,
+            "scoreJ": 165.12371026456879,
+            "feasible": true
+          },
+          {
+            "trial": 10,
+            "scoreJ": 165.12371026456879,
+            "feasible": true
+          },
+          {
+            "trial": 11,
+            "scoreJ": 167.45433970649833,
+            "feasible": true
+          },
+          {
+            "trial": 12,
+            "scoreJ": 167.45433970649833,
+            "feasible": true
+          },
+          {
+            "trial": 13,
+            "scoreJ": 167.45433970649833,
+            "feasible": true
+          },
+          {
+            "trial": 14,
+            "scoreJ": 167.45433970649833,
+            "feasible": true
+          },
+          {
+            "trial": 15,
+            "scoreJ": 167.45433970649833,
+            "feasible": true
+          },
+          {
+            "trial": 16,
+            "scoreJ": 167.45433970649833,
+            "feasible": true
+          },
+          {
+            "trial": 17,
+            "scoreJ": 167.45433970649833,
+            "feasible": true
+          },
+          {
+            "trial": 18,
+            "scoreJ": 167.45433970649833,
+            "feasible": true
+          }
+        ]
+      },
+      "random": {
+        "design": {
+          "counts": [
+            2,
+            2,
+            2
+          ],
+          "triggerC": 70,
+          "backupFlowFraction": 0.25
+        },
+        "train": {
+          "scoreJ": 148.2643043194215,
+          "maxHotC": 77.37622402354789,
+          "feasible": true
+        },
+        "holdout": {
+          "scoreJ": 224.96721466693316,
+          "maxHotC": 83.00833699250522,
+          "feasible": false
+        },
+        "learningCurve": [
+          {
+            "trial": 1,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 2,
+            "scoreJ": 148.2643043194215,
+            "feasible": true
+          },
+          {
+            "trial": 3,
+            "scoreJ": 148.2643043194215,
+            "feasible": true
+          },
+          {
+            "trial": 4,
+            "scoreJ": 148.2643043194215,
+            "feasible": true
+          },
+          {
+            "trial": 5,
+            "scoreJ": 148.2643043194215,
+            "feasible": true
+          },
+          {
+            "trial": 6,
+            "scoreJ": 148.2643043194215,
+            "feasible": true
+          },
+          {
+            "trial": 7,
+            "scoreJ": 148.2643043194215,
+            "feasible": true
+          },
+          {
+            "trial": 8,
+            "scoreJ": 148.2643043194215,
+            "feasible": true
+          },
+          {
+            "trial": 9,
+            "scoreJ": 148.2643043194215,
+            "feasible": true
+          },
+          {
+            "trial": 10,
+            "scoreJ": 148.2643043194215,
+            "feasible": true
+          },
+          {
+            "trial": 11,
+            "scoreJ": 148.2643043194215,
+            "feasible": true
+          },
+          {
+            "trial": 12,
+            "scoreJ": 148.2643043194215,
+            "feasible": true
+          },
+          {
+            "trial": 13,
+            "scoreJ": 148.2643043194215,
+            "feasible": true
+          },
+          {
+            "trial": 14,
+            "scoreJ": 148.2643043194215,
+            "feasible": true
+          },
+          {
+            "trial": 15,
+            "scoreJ": 148.2643043194215,
+            "feasible": true
+          },
+          {
+            "trial": 16,
+            "scoreJ": 148.2643043194215,
+            "feasible": true
+          },
+          {
+            "trial": 17,
+            "scoreJ": 148.2643043194215,
+            "feasible": true
+          },
+          {
+            "trial": 18,
+            "scoreJ": 148.2643043194215,
+            "feasible": true
+          }
+        ]
+      },
+      "placement": {
+        "design": {
+          "counts": [
+            3,
+            2,
+            1
+          ],
+          "triggerC": 74,
+          "backupFlowFraction": 0.5
+        },
+        "train": {
+          "scoreJ": 39.17771176573319,
+          "maxHotC": 75.24369539575359,
+          "feasible": true
+        },
+        "holdout": {
+          "scoreJ": -219.12268025222033,
+          "maxHotC": 76.82209557884215,
+          "feasible": true
+        },
+        "learningCurve": [
+          {
+            "trial": 1,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 2,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 3,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 4,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 5,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 6,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 7,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 8,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 9,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 10,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 11,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 12,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 13,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 14,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 15,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 16,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 17,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 18,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          }
+        ]
+      }
+    },
+    {
+      "seed": 4,
+      "fixed": {
+        "design": {
+          "counts": [
+            2,
+            2,
+            2
+          ],
+          "triggerC": 74,
+          "backupFlowFraction": 0.5
+        },
+        "train": {
+          "scoreJ": -11.664183265688052,
+          "maxHotC": 75.41673338369417,
+          "feasible": true
+        },
+        "holdout": {
+          "scoreJ": -385.7628400159588,
+          "maxHotC": 79.12271994917965,
+          "feasible": true
+        }
+      },
+      "ai": {
+        "design": {
+          "counts": [
+            3,
+            2,
+            1
+          ],
+          "triggerC": 66,
+          "backupFlowFraction": 0.25
+        },
+        "train": {
+          "scoreJ": 165.12371026456879,
+          "maxHotC": 74.17638103542475,
+          "feasible": true
+        },
+        "holdout": {
+          "scoreJ": 141.0537395846211,
+          "maxHotC": 78.89803483978281,
+          "feasible": true
+        },
+        "learningCurve": [
+          {
+            "trial": 1,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 2,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 3,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 4,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 5,
+            "scoreJ": 132.03273661417154,
+            "feasible": true
+          },
+          {
+            "trial": 6,
+            "scoreJ": 132.03273661417154,
+            "feasible": true
+          },
+          {
+            "trial": 7,
+            "scoreJ": 132.03273661417154,
+            "feasible": true
+          },
+          {
+            "trial": 8,
+            "scoreJ": 132.03273661417154,
+            "feasible": true
+          },
+          {
+            "trial": 9,
+            "scoreJ": 165.12371026456879,
+            "feasible": true
+          },
+          {
+            "trial": 10,
+            "scoreJ": 165.12371026456879,
+            "feasible": true
+          },
+          {
+            "trial": 11,
+            "scoreJ": 165.12371026456879,
+            "feasible": true
+          },
+          {
+            "trial": 12,
+            "scoreJ": 165.12371026456879,
+            "feasible": true
+          },
+          {
+            "trial": 13,
+            "scoreJ": 165.12371026456879,
+            "feasible": true
+          },
+          {
+            "trial": 14,
+            "scoreJ": 165.12371026456879,
+            "feasible": true
+          },
+          {
+            "trial": 15,
+            "scoreJ": 165.12371026456879,
+            "feasible": true
+          },
+          {
+            "trial": 16,
+            "scoreJ": 165.12371026456879,
+            "feasible": true
+          },
+          {
+            "trial": 17,
+            "scoreJ": 165.12371026456879,
+            "feasible": true
+          },
+          {
+            "trial": 18,
+            "scoreJ": 165.12371026456879,
+            "feasible": true
+          }
+        ]
+      },
+      "random": {
+        "design": {
+          "counts": [
+            2,
+            2,
+            2
+          ],
+          "triggerC": 74,
+          "backupFlowFraction": 0.5
+        },
+        "train": {
+          "scoreJ": -11.664183265688052,
+          "maxHotC": 75.41673338369417,
+          "feasible": true
+        },
+        "holdout": {
+          "scoreJ": -385.7628400159588,
+          "maxHotC": 79.12271994917965,
+          "feasible": true
+        },
+        "learningCurve": [
+          {
+            "trial": 1,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 2,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 3,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 4,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 5,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 6,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 7,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 8,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 9,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 10,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 11,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 12,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 13,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 14,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 15,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 16,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 17,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 18,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          }
+        ]
+      },
+      "placement": {
+        "design": {
+          "counts": [
+            3,
+            2,
+            1
+          ],
+          "triggerC": 74,
+          "backupFlowFraction": 0.5
+        },
+        "train": {
+          "scoreJ": 39.17771176573319,
+          "maxHotC": 75.24369539575359,
+          "feasible": true
+        },
+        "holdout": {
+          "scoreJ": -219.12268025222033,
+          "maxHotC": 76.82209557884215,
+          "feasible": true
+        },
+        "learningCurve": [
+          {
+            "trial": 1,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 2,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 3,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 4,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 5,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 6,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 7,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 8,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 9,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 10,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 11,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 12,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 13,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 14,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 15,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 16,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 17,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 18,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          }
+        ]
+      }
+    },
+    {
+      "seed": 5,
+      "fixed": {
+        "design": {
+          "counts": [
+            2,
+            2,
+            2
+          ],
+          "triggerC": 74,
+          "backupFlowFraction": 0.5
+        },
+        "train": {
+          "scoreJ": -11.664183265688052,
+          "maxHotC": 75.41673338369417,
+          "feasible": true
+        },
+        "holdout": {
+          "scoreJ": -385.7628400159588,
+          "maxHotC": 79.12271994917965,
+          "feasible": true
+        }
+      },
+      "ai": {
+        "design": {
+          "counts": [
+            3,
+            2,
+            1
+          ],
+          "triggerC": 70,
+          "backupFlowFraction": 0.25
+        },
+        "train": {
+          "scoreJ": 167.45433970649833,
+          "maxHotC": 74.54466583272219,
+          "feasible": true
+        },
+        "holdout": {
+          "scoreJ": 167.67747372502072,
+          "maxHotC": 78.89803483978281,
+          "feasible": true
+        },
+        "learningCurve": [
+          {
+            "trial": 1,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 2,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 3,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 4,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 5,
+            "scoreJ": 44.02356086492989,
+            "feasible": true
+          },
+          {
+            "trial": 6,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 7,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 8,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 9,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 10,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 11,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 12,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 13,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 14,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 15,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 16,
+            "scoreJ": 167.45433970649833,
+            "feasible": true
+          },
+          {
+            "trial": 17,
+            "scoreJ": 167.45433970649833,
+            "feasible": true
+          },
+          {
+            "trial": 18,
+            "scoreJ": 167.45433970649833,
+            "feasible": true
+          }
+        ]
+      },
+      "random": {
+        "design": {
+          "counts": [
+            2,
+            2,
+            2
+          ],
+          "triggerC": 74,
+          "backupFlowFraction": 0.5
+        },
+        "train": {
+          "scoreJ": -11.664183265688052,
+          "maxHotC": 75.41673338369417,
+          "feasible": true
+        },
+        "holdout": {
+          "scoreJ": -385.7628400159588,
+          "maxHotC": 79.12271994917965,
+          "feasible": true
+        },
+        "learningCurve": [
+          {
+            "trial": 1,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 2,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 3,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 4,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 5,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 6,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 7,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 8,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 9,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 10,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 11,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 12,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 13,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 14,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 15,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 16,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 17,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 18,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          }
+        ]
+      },
+      "placement": {
+        "design": {
+          "counts": [
+            3,
+            2,
+            1
+          ],
+          "triggerC": 74,
+          "backupFlowFraction": 0.5
+        },
+        "train": {
+          "scoreJ": 39.17771176573319,
+          "maxHotC": 75.24369539575359,
+          "feasible": true
+        },
+        "holdout": {
+          "scoreJ": -219.12268025222033,
+          "maxHotC": 76.82209557884215,
+          "feasible": true
+        },
+        "learningCurve": [
+          {
+            "trial": 1,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 2,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 3,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 4,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 5,
+            "scoreJ": 6.354392677214719,
+            "feasible": true
+          },
+          {
+            "trial": 6,
+            "scoreJ": 6.354392677214719,
+            "feasible": true
+          },
+          {
+            "trial": 7,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 8,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 9,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 10,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 11,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 12,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 13,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 14,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 15,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 16,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 17,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 18,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          }
+        ]
+      }
+    },
+    {
+      "seed": 6,
+      "fixed": {
+        "design": {
+          "counts": [
+            2,
+            2,
+            2
+          ],
+          "triggerC": 74,
+          "backupFlowFraction": 0.5
+        },
+        "train": {
+          "scoreJ": -11.664183265688052,
+          "maxHotC": 75.41673338369417,
+          "feasible": true
+        },
+        "holdout": {
+          "scoreJ": -385.7628400159588,
+          "maxHotC": 79.12271994917965,
+          "feasible": true
+        }
+      },
+      "ai": {
+        "design": {
+          "counts": [
+            2,
+            2,
+            2
+          ],
+          "triggerC": 74,
+          "backupFlowFraction": 0.25
+        },
+        "train": {
+          "scoreJ": 164.93559818436495,
+          "maxHotC": 77.87719970268876,
+          "feasible": true
+        },
+        "holdout": {
+          "scoreJ": 226.92216566266052,
+          "maxHotC": 83.00833699250522,
+          "feasible": false
+        },
+        "learningCurve": [
+          {
+            "trial": 1,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 2,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 3,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 4,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 5,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 6,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 7,
+            "scoreJ": 132.03273661417154,
+            "feasible": true
+          },
+          {
+            "trial": 8,
+            "scoreJ": 159.57018842270372,
+            "feasible": true
+          },
+          {
+            "trial": 9,
+            "scoreJ": 159.57018842270372,
+            "feasible": true
+          },
+          {
+            "trial": 10,
+            "scoreJ": 159.57018842270372,
+            "feasible": true
+          },
+          {
+            "trial": 11,
+            "scoreJ": 159.57018842270372,
+            "feasible": true
+          },
+          {
+            "trial": 12,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 13,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 14,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 15,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 16,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 17,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 18,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          }
+        ]
+      },
+      "random": {
+        "design": {
+          "counts": [
+            2,
+            2,
+            2
+          ],
+          "triggerC": 74,
+          "backupFlowFraction": 0.5
+        },
+        "train": {
+          "scoreJ": -11.664183265688052,
+          "maxHotC": 75.41673338369417,
+          "feasible": true
+        },
+        "holdout": {
+          "scoreJ": -385.7628400159588,
+          "maxHotC": 79.12271994917965,
+          "feasible": true
+        },
+        "learningCurve": [
+          {
+            "trial": 1,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 2,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 3,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 4,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 5,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 6,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 7,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 8,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 9,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 10,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 11,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 12,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 13,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 14,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 15,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 16,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 17,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 18,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          }
+        ]
+      },
+      "placement": {
+        "design": {
+          "counts": [
+            3,
+            2,
+            1
+          ],
+          "triggerC": 74,
+          "backupFlowFraction": 0.5
+        },
+        "train": {
+          "scoreJ": 39.17771176573319,
+          "maxHotC": 75.24369539575359,
+          "feasible": true
+        },
+        "holdout": {
+          "scoreJ": -219.12268025222033,
+          "maxHotC": 76.82209557884215,
+          "feasible": true
+        },
+        "learningCurve": [
+          {
+            "trial": 1,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 2,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 3,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 4,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 5,
+            "scoreJ": 6.354392677214719,
+            "feasible": true
+          },
+          {
+            "trial": 6,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 7,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 8,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 9,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 10,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 11,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 12,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 13,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 14,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 15,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 16,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 17,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 18,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          }
+        ]
+      }
+    },
+    {
+      "seed": 7,
+      "fixed": {
+        "design": {
+          "counts": [
+            2,
+            2,
+            2
+          ],
+          "triggerC": 74,
+          "backupFlowFraction": 0.5
+        },
+        "train": {
+          "scoreJ": -11.664183265688052,
+          "maxHotC": 75.41673338369417,
+          "feasible": true
+        },
+        "holdout": {
+          "scoreJ": -385.7628400159588,
+          "maxHotC": 79.12271994917965,
+          "feasible": true
+        }
+      },
+      "ai": {
+        "design": {
+          "counts": [
+            3,
+            2,
+            1
+          ],
+          "triggerC": 66,
+          "backupFlowFraction": 0.25
+        },
+        "train": {
+          "scoreJ": 165.12371026456879,
+          "maxHotC": 74.17638103542475,
+          "feasible": true
+        },
+        "holdout": {
+          "scoreJ": 141.0537395846211,
+          "maxHotC": 78.89803483978281,
+          "feasible": true
+        },
+        "learningCurve": [
+          {
+            "trial": 1,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 2,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 3,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 4,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 5,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 6,
+            "scoreJ": 164.85605570268592,
+            "feasible": true
+          },
+          {
+            "trial": 7,
+            "scoreJ": 164.85605570268592,
+            "feasible": true
+          },
+          {
+            "trial": 8,
+            "scoreJ": 164.85605570268592,
+            "feasible": true
+          },
+          {
+            "trial": 9,
+            "scoreJ": 164.85605570268592,
+            "feasible": true
+          },
+          {
+            "trial": 10,
+            "scoreJ": 164.85605570268592,
+            "feasible": true
+          },
+          {
+            "trial": 11,
+            "scoreJ": 164.85605570268592,
+            "feasible": true
+          },
+          {
+            "trial": 12,
+            "scoreJ": 164.85605570268592,
+            "feasible": true
+          },
+          {
+            "trial": 13,
+            "scoreJ": 164.85605570268592,
+            "feasible": true
+          },
+          {
+            "trial": 14,
+            "scoreJ": 164.85605570268592,
+            "feasible": true
+          },
+          {
+            "trial": 15,
+            "scoreJ": 164.85605570268592,
+            "feasible": true
+          },
+          {
+            "trial": 16,
+            "scoreJ": 164.85605570268592,
+            "feasible": true
+          },
+          {
+            "trial": 17,
+            "scoreJ": 164.85605570268592,
+            "feasible": true
+          },
+          {
+            "trial": 18,
+            "scoreJ": 165.12371026456879,
+            "feasible": true
+          }
+        ]
+      },
+      "random": {
+        "design": {
+          "counts": [
+            2,
+            3,
+            1
+          ],
+          "triggerC": 74,
+          "backupFlowFraction": 0.25
+        },
+        "train": {
+          "scoreJ": 147.65986493529658,
+          "maxHotC": 77.87719970268876,
+          "feasible": true
+        },
+        "holdout": {
+          "scoreJ": 153.4187600089457,
+          "maxHotC": 83.00833699250522,
+          "feasible": false
+        },
+        "learningCurve": [
+          {
+            "trial": 1,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 2,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 3,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 4,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 5,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 6,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 7,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 8,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 9,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 10,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 11,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 12,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 13,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 14,
+            "scoreJ": 101.5628005188089,
+            "feasible": true
+          },
+          {
+            "trial": 15,
+            "scoreJ": 147.65986493529658,
+            "feasible": true
+          },
+          {
+            "trial": 16,
+            "scoreJ": 147.65986493529658,
+            "feasible": true
+          },
+          {
+            "trial": 17,
+            "scoreJ": 147.65986493529658,
+            "feasible": true
+          },
+          {
+            "trial": 18,
+            "scoreJ": 147.65986493529658,
+            "feasible": true
+          }
+        ]
+      },
+      "placement": {
+        "design": {
+          "counts": [
+            3,
+            2,
+            1
+          ],
+          "triggerC": 74,
+          "backupFlowFraction": 0.5
+        },
+        "train": {
+          "scoreJ": 39.17771176573319,
+          "maxHotC": 75.24369539575359,
+          "feasible": true
+        },
+        "holdout": {
+          "scoreJ": -219.12268025222033,
+          "maxHotC": 76.82209557884215,
+          "feasible": true
+        },
+        "learningCurve": [
+          {
+            "trial": 1,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 2,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 3,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 4,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 5,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 6,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 7,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 8,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 9,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 10,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 11,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 12,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 13,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 14,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 15,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 16,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 17,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 18,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          }
+        ]
+      }
+    },
+    {
+      "seed": 8,
+      "fixed": {
+        "design": {
+          "counts": [
+            2,
+            2,
+            2
+          ],
+          "triggerC": 74,
+          "backupFlowFraction": 0.5
+        },
+        "train": {
+          "scoreJ": -11.664183265688052,
+          "maxHotC": 75.41673338369417,
+          "feasible": true
+        },
+        "holdout": {
+          "scoreJ": -385.7628400159588,
+          "maxHotC": 79.12271994917965,
+          "feasible": true
+        }
+      },
+      "ai": {
+        "design": {
+          "counts": [
+            3,
+            2,
+            1
+          ],
+          "triggerC": 66,
+          "backupFlowFraction": 0.25
+        },
+        "train": {
+          "scoreJ": 165.12371026456879,
+          "maxHotC": 74.17638103542475,
+          "feasible": true
+        },
+        "holdout": {
+          "scoreJ": 141.0537395846211,
+          "maxHotC": 78.89803483978281,
+          "feasible": true
+        },
+        "learningCurve": [
+          {
+            "trial": 1,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 2,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 3,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 4,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 5,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 6,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 7,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 8,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 9,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 10,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 11,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 12,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 13,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 14,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 15,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 16,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 17,
+            "scoreJ": 164.93559818436495,
+            "feasible": true
+          },
+          {
+            "trial": 18,
+            "scoreJ": 165.12371026456879,
+            "feasible": true
+          }
+        ]
+      },
+      "random": {
+        "design": {
+          "counts": [
+            3,
+            2,
+            1
+          ],
+          "triggerC": 66,
+          "backupFlowFraction": 0.25
+        },
+        "train": {
+          "scoreJ": 165.12371026456879,
+          "maxHotC": 74.17638103542475,
+          "feasible": true
+        },
+        "holdout": {
+          "scoreJ": 141.0537395846211,
+          "maxHotC": 78.89803483978281,
+          "feasible": true
+        },
+        "learningCurve": [
+          {
+            "trial": 1,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 2,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 3,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 4,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 5,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 6,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 7,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 8,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 9,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 10,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 11,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 12,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 13,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 14,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 15,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 16,
+            "scoreJ": 165.12371026456879,
+            "feasible": true
+          },
+          {
+            "trial": 17,
+            "scoreJ": 165.12371026456879,
+            "feasible": true
+          },
+          {
+            "trial": 18,
+            "scoreJ": 165.12371026456879,
+            "feasible": true
+          }
+        ]
+      },
+      "placement": {
+        "design": {
+          "counts": [
+            3,
+            2,
+            1
+          ],
+          "triggerC": 74,
+          "backupFlowFraction": 0.5
+        },
+        "train": {
+          "scoreJ": 39.17771176573319,
+          "maxHotC": 75.24369539575359,
+          "feasible": true
+        },
+        "holdout": {
+          "scoreJ": -219.12268025222033,
+          "maxHotC": 76.82209557884215,
+          "feasible": true
+        },
+        "learningCurve": [
+          {
+            "trial": 1,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 2,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 3,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 4,
+            "scoreJ": -11.664183265688052,
+            "feasible": true
+          },
+          {
+            "trial": 5,
+            "scoreJ": 6.354392677214719,
+            "feasible": true
+          },
+          {
+            "trial": 6,
+            "scoreJ": 6.354392677214719,
+            "feasible": true
+          },
+          {
+            "trial": 7,
+            "scoreJ": 6.354392677214719,
+            "feasible": true
+          },
+          {
+            "trial": 8,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 9,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 10,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 11,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 12,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 13,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 14,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 15,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 16,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 17,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          },
+          {
+            "trial": 18,
+            "scoreJ": 39.17771176573319,
+            "feasible": true
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+Mulberry32 provenance and dedication
+
+Component: seededRandom() in ../ai-planner.js.
+Algorithm: Tommy Ettinger, 2017.
+The JavaScript helper follows the Mulberry32 algorithm and the public-domain
+JavaScript variant published by bryc. Its mathematical state transition has
+not been modified. It is for reproducible simulation sampling, not security.
+
+Original author notice (verbatim):
+
+/*  Written in 2017 by Tommy Ettinger (tommy.ettinger@gmail.com)
+
+To the extent possible under law, the author has dedicated all copyright
+and related and neighboring rights to this software to the public domain
+worldwide. This software is distributed without any warranty.
+
+See <http://creativecommons.org/publicdomain/zero/1.0/>. */
+
+Original C source pinned revision:
+https://gist.githubusercontent.com/tommyettinger/46a874533244883189143505d203312c/raw/fc93b8ad259c09a3635d80ed12a05309120795dc/mulberry32.c
+
+JavaScript implementation provenance:
+https://raw.githubusercontent.com/bryc/code/88c1317ea6f9b25c153afa9c369c365fed11b482/jshash/PRNGs.md
+The JavaScript source explicitly states: "License: Public domain."
+Its repository uses a public-domain dedication, not an MIT license.
+
+The original author's referenced CC0-1.0 legal text is included in CC0-1.0.txt.
+No claim is made that the whole Heat Rescue project is third-party code.
