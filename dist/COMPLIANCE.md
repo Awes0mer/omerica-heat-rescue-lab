@@ -8,10 +8,12 @@ Reviewed October 22, 2026. Scope: the current `synthetic-open-v2` portable sourc
 | --- | --- | --- |
 | Project-authored JavaScript, HTML, CSS, SVG, tests and documentation | [MIT](LICENSE.txt) | Retain the copyright and permission notice. Commercial use, modification, integration, distribution and sale are permitted by this license. |
 | Synthetic simulation inputs and generated benchmark results | Project-authored; included with the MIT release | Preserve notices and identify the assumptions. These are not measured manufacturer data or validation results. |
+| Three.js 0.186.1 WebGL and core modules | [MIT](third-party/THREE-LICENSE.txt), embedded Earcut ISC and supplemental permissive upstream notices | Original official files, vendored locally. Preserve the complete `third-party/` notices; see [renderer provenance](third-party/THREE-NOTICE.md). Commercial use and integration are permitted under the identified license conditions. |
+| Original procedural assembly geometry | Project-authored; included with the MIT release | No third-party CAD models, textures or asset packs. Conceptual geometry is not a fabrication drawing or hardware validation. |
 | DM Sans and Space Grotesk font files | SIL Open Font License 1.1 | Keep their original OFL notices; bundling in a commercial app is permitted. Fonts must not be sold by themselves. No font modifications were made. |
 | Mulberry32 pseudorandom-number routine | Original author CC0 dedication; JavaScript public-domain provenance | Attribution and full CC0 text are retained in `third-party/`. No claim that this routine is newly invented. |
 
-See [third-party notices](third-party/README.md) and [pinned source hashes](third-party/asset-provenance.json). No npm packages, remote AI weights, third-party images, paper PDFs, scientific abstracts, manufacturer coefficient tables or raw Valency exports are distributed. All executable imports and font requests are local.
+See [third-party notices](third-party/README.md) and [pinned source hashes](third-party/asset-provenance.json). The two Three.js modules are copied unmodified from the pinned official npm distribution; no npm installation is required. No remote AI weights, third-party images, paper PDFs, scientific abstracts, manufacturer coefficient tables or raw Valency exports are distributed. All executable imports and font requests are local.
 
 ## Citations are not licenses
 
@@ -37,4 +39,4 @@ Disclose Omer Orman as the solo participant, AI coding/research assistance, the 
 
 ## Limits of this review
 
-This is a documented component-license and rule audit, not a legal opinion or certification of worldwide patent, trademark, contract, safety or regulatory clearance. MIT/OFL/CC0 permissions address the distributed materials under their stated terms. They do not certify a physical implementation, grant rights in cited papers, or replace a needed commercial-service agreement.
+This is a documented component-license and rule audit, not a legal opinion or certification of worldwide patent, trademark, contract, safety or regulatory clearance. MIT, ISC, supplemental renderer, OFL and CC0 permissions address the distributed materials under their stated terms. They do not certify a physical implementation, grant rights in cited papers, or replace a needed commercial-service agreement.

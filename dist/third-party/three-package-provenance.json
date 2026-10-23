@@ -1,0 +1,132 @@
+{
+  "component": "three",
+  "version": "0.186.1",
+  "license": "MIT",
+  "gitHead": "9b4a2ac29c63ccb43fd51c5661f2f873ac2c39b8",
+  "packageMetadataUrl": "https://registry.npmjs.org/three/0.186.1",
+  "tarballUrl": "https://registry.npmjs.org/three/-/three-0.186.1.tgz",
+  "npmIntegrity": "sha512-blFeqb49wRCSGUGj7gtpfnSGHy2lwDk94RhUmS1c/hTby70kvChbWpkJ4Pm1390LqzzvTmzgXKHPEafJwCb8jA==",
+  "npmShasum": "6d50f70c2c437f844179bbb56d6f5b774e1ca38a",
+  "tarballSHA256": "8cd068708ea44f2c73c944b1cead2ba2f0d5c15c8fc194e5700f4e4f4a033fe7",
+  "retrieved": "2026-10-22",
+  "assets": [
+    {
+      "file": "vendor/three/three.module.js",
+      "packagePath": "build/three.module.js",
+      "url": "https://raw.githubusercontent.com/mrdoob/three.js/9b4a2ac29c63ccb43fd51c5661f2f873ac2c39b8/build/three.module.js",
+      "sha256": "9052042d676cb0fdc1ddfefe193053f34b7ac0513a616fdac4535d49987812ea",
+      "bytes": 662772,
+      "license": "MIT",
+      "modified": false
+    },
+    {
+      "file": "vendor/three/three.core.js",
+      "packagePath": "build/three.core.js",
+      "url": "https://raw.githubusercontent.com/mrdoob/three.js/9b4a2ac29c63ccb43fd51c5661f2f873ac2c39b8/build/three.core.js",
+      "sha256": "9edde002b066a9a05676a6127f67735b62baf399bdea529f2f7e31657da769e6",
+      "bytes": 1458113,
+      "license": "MIT",
+      "modified": false
+    },
+    {
+      "file": "third-party/THREE-LICENSE.txt",
+      "packagePath": "LICENSE",
+      "url": "https://raw.githubusercontent.com/mrdoob/three.js/9b4a2ac29c63ccb43fd51c5661f2f873ac2c39b8/LICENSE",
+      "sha256": "8b378ebe60e2fe500158cb0ac71cb5e8b7d92953c2abcc63a0eb90499653b5bc",
+      "bytes": 1081,
+      "license": "MIT",
+      "modified": false
+    }
+  ],
+  "scope": "Unmodified official core and WebGL ES modules only. No addons, examples, images, textures, fonts, models, codecs, development dependencies, or node_modules copied.",
+  "additionalNotices": [
+    {
+      "file": "third-party/THREE-EARCUT-LICENSE.txt",
+      "url": "https://raw.githubusercontent.com/mapbox/earcut/v3.0.2/LICENSE",
+      "sha256": "324139c19d87af03fda38afea1590e00ca354c4159bdb2ae9e9cec070cfa46a8",
+      "bytes": 738,
+      "license": "ISC",
+      "scope": "Earcut 3.0.2 copied in Three.js core",
+      "modified": false
+    },
+    {
+      "file": "third-party/THREE-GL-MATRIX-LICENSE.txt",
+      "url": "https://raw.githubusercontent.com/toji/gl-matrix/v3.4.4/LICENSE.md",
+      "sha256": "af62d31a0cdc1bf95d5e19428c3e0de368b727d9d5b6b6cdb466f8a52e68ad06",
+      "bytes": 1083,
+      "license": "MIT",
+      "scope": "Matrix4.invert reference",
+      "modified": false
+    },
+    {
+      "file": "third-party/THREE-PAPER-LICENSE.txt",
+      "url": "https://raw.githubusercontent.com/paperjs/paper.js/v0.12.18/LICENSE.txt",
+      "sha256": "f8833a38807922b4652421eb0cf29065400c55abd6f4832b9c3250dae87e1958",
+      "bytes": 1173,
+      "license": "MIT",
+      "scope": "ShapePath interior-point and reorientation ports",
+      "modified": false
+    },
+    {
+      "file": "third-party/THREE-LIGHTGL-LICENSE.txt",
+      "url": "https://raw.githubusercontent.com/evanw/lightgl.js/2581efd1b14bc4ae864f6d0f5b387c9c4ba82069/LICENSE",
+      "sha256": "223d9247d30f9d8f842cca7de8e2454d104edb435674305ef3df473bae17d44b",
+      "bytes": 1059,
+      "license": "MIT",
+      "scope": "DirectionalLightShadow updateMatrices reference",
+      "modified": false
+    },
+    {
+      "file": "third-party/THREE-EVENTDISPATCHER-LICENSE.txt",
+      "url": "https://raw.githubusercontent.com/mrdoob/eventdispatcher.js/f31179e964ce6cd76818fd25f4152d4bcc82040c/LICENSE",
+      "sha256": "f6be4a43cdb6a751010711ed619162fcba3628739f0cbb9020141253857ed204",
+      "bytes": 1068,
+      "license": "MIT",
+      "scope": "EventDispatcher reference",
+      "modified": false
+    },
+    {
+      "file": "third-party/THREE-LTC-LICENSE.txt",
+      "url": "https://raw.githubusercontent.com/selfshadow/ltc_code/31e5e96b54f98f33098f8503003119ba2231a1c6/LICENSE",
+      "sha256": "692a54e97fcadd0f04b14027386e53809c1dcf96de3e15b15af15731b15c1e94",
+      "bytes": 1718,
+      "license": "LicenseRef-LTC-Code-BSD",
+      "scope": "ACES tone-mapping fitting source reference",
+      "modified": false
+    },
+    {
+      "file": "third-party/THREE-FILAMENT-LICENSE.txt",
+      "url": "https://raw.githubusercontent.com/google/filament/4c48fef294e3f57e946ab25eac6b09564a7b9d6f/LICENSE",
+      "sha256": "02d70b593dd8e9355dd8e1ca8d13c303bee5bcaf3065b66ff6e4f534e1e6a2c1",
+      "bytes": 11362,
+      "license": "Apache-2.0",
+      "scope": "AgX tone-mapping port reference",
+      "modified": false
+    },
+    {
+      "file": "third-party/THREE-BOOST-LICENSE.txt",
+      "url": "https://www.boost.org/LICENSE_1_0.txt",
+      "sha256": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+      "bytes": 1338,
+      "license": "BSL-1.0",
+      "scope": "GeometricTools ray/segment distance algorithm; copyright David Eberly 1998-2018",
+      "modified": false
+    }
+  ],
+  "noticeIndex": "THREE-NOTICE.md",
+  "sourceAttributions": [
+    {
+      "component": "Geometric Tools",
+      "url": "https://github.com/pmjoniak/GeometricTools/blob/master/GTEngine/Include/Mathematics/GteDistRaySegment.h",
+      "copyright": "David Eberly, 1998-2018",
+      "license": "BSL-1.0"
+    },
+    {
+      "component": "Filament ToneMapper",
+      "url": "https://github.com/google/filament/blob/4c48fef294e3f57e946ab25eac6b09564a7b9d6f/filament/src/ToneMapper.cpp",
+      "copyright": "2021 The Android Open Source Project",
+      "license": "Apache-2.0"
+    }
+  ],
+  "reviewScope": "Official package license and unmodified build integrity; embedded Earcut plus supplemental notices for identified referenced geometry and shading sources. No whole-history copyright or patent-clearance claim."
+}

@@ -2,7 +2,7 @@
 
 The complete app can run on your own computer or server using **Caddy**, an open-source HTTP server. No OpenAI account, Sites deployment, API key, Valency account, database, npm installation, Docker Desktop, or external model service is required at runtime.
 
-Caddy serves the files in `dist/`. The browser runs the simulation and AI optimizer in local Web Workers. Fonts, scripts, citations and saved benchmark data are included. The supplied server policy restricts executable resources and runtime connections to the same origin. Scientific reference links remain ordinary external links that open only when clicked.
+Caddy serves the files in `dist/`. The browser runs the simulation and AI optimizer in local Web Workers. Fonts, scripts, the vendored Three.js renderer, citations and saved benchmark data are included. The 3D assembly uses WebGL2; its non-3D controls and the separate 2D experiment remain available if graphics initialization fails. The supplied server policy restricts executable resources and runtime connections to the same origin. Scientific reference links remain ordinary external links that open only when clicked.
 
 ## Start locally
 
@@ -13,7 +13,7 @@ Caddy serves the files in `dist/`. The browser runs the simulation and AI optimi
 ./hosting/run.sh
 ```
 
-3. Open **http://127.0.0.1:8088/#ai** in a browser. Stop the foreground server with **Ctrl+C**.
+3. Open **http://127.0.0.1:8088/#assembly** in a browser. Stop the foreground server with **Ctrl+C**.
 
 The default binds only to this computer. Explicit local HTTP avoids installing a local certificate authority or changing your trust store. To use a separately downloaded Caddy executable:
 
@@ -55,14 +55,17 @@ Caddy's [automatic HTTPS](https://caddyserver.com/docs/automatic-https) obtains 
 
 - Heat Rescue source and these hosting scripts/configuration: [MIT](LICENSE).
 - Separately installed Caddy: [Apache License 2.0](https://github.com/caddyserver/caddy/blob/v2.11.7/LICENSE), with upstream dependencies retaining their own licenses. Tested server version: **2.11.7**. Use an official unmodified package; this repository does not redistribute its compiled binary.
+- Bundled Three.js 0.186.1: MIT, with embedded ISC and supplemental [upstream notices](dist/third-party/THREE-NOTICE.md). The original renderer modules are served locally; no CDN is used.
 - Bundled fonts and random routine: retained [OFL and CC0/public-domain notices](dist/third-party/README.md).
 
 The app's original authoring and optional OpenAI Sites demo are separate services. This setup removes the requirement to use OpenAI Sites for hosting; it does not claim those external services or the Mac operating system became open source. Valency's prior research role and licensing scope are documented in [COMPLIANCE.md](dist/COMPLIANCE.md).
 
 ## Verification
 
-Use `npm test` for the scientific/model tests, or serve the app and run the AI experiments in the browser. Hosting checks should verify a full worker campaign, no off-origin runtime requests, locally loaded fonts, correct JavaScript MIME types, and 404 responses for repository configuration paths. Only `dist/` is exposed; source/configuration above that directory is not served.
+Use `npm test` for the scientific/model tests, or serve the app and run the AI experiments in the browser. Hosting checks should verify the 3D assembly, part selection, tile allocation and pipe controls, a full worker campaign, no off-origin runtime requests, locally loaded fonts, correct JavaScript MIME types, and 404 responses for repository configuration paths. Only `dist/` is exposed; source/configuration above that directory is not served.
 
 Local verification on October 22, 2026 used unmodified Caddy 2.11.7 on macOS ARM64 at port 8088. With every off-origin browser request blocked, all 54 experiment observations completed, both fonts loaded, and the browser reported zero errors or attempted external requests. Blocking pipe B raised its modeled hot plate from 63.3°C to 63.9°C while total generated power changed from 1.28 W to 1.17 W during the check. JavaScript and font MIME types were correct; `.git`, `.openai`, hosting configuration and unknown paths returned HTTP 404. These checks verify the hosting path, not hardware accuracy.
 
-No physical model parameters or benchmark results are changed by this hosting setup.
+The assembly release also verified local Three.js loading, desktop/mobile layouts, visual-only layer separation, six-tile allocation, blocked-pipe flow and temperature response, backup cost, JSON export, keyboard controls and a working fallback without WebGL. Its default AI campaign completed all 54 observations with zero browser errors and zero off-origin requests, and copied the learned 3 / 2 / 1 placement into the separate 3D teaching model.
+
+No physical model parameters or benchmark results are changed by this hosting or assembly setup.

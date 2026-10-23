@@ -1,4 +1,4 @@
-# Heat Rescue — AI Experiment Lab
+# Heat Rescue — Assembly & AI Experiment Lab
 
 **Can an AI learn where to place six thermoelectric generators and when to activate backup cooling, then pass cooling failures it has not trained on?**
 
@@ -9,6 +9,16 @@ Heat Rescue runs that experiment in the browser. A Gaussian-process learning mod
 ## Independent open-source hosting
 
 Run the complete app on your own computer with open-source Caddy: `./hosting/run.sh`. See [HOSTING.md](HOSTING.md) for installation, local startup, and your own Linux server. No OpenAI Sites account, deployment, API, or cloud runtime is required. The server serves only `dist/`; the AI experiments run in the browser.
+
+## Explore the 3D assembly
+
+Open **3D assembly** to inspect an original, procedural cooling assembly. Drag to rotate, scroll or pinch to zoom, and click a part to see its modeled temperature, flow or generation. Keyboard arrows orbit the focused canvas, +/− zoom, and Home resets the view. The layer-separation slider reveals the hot plate, ceramic generator tiles and cold plate; it changes only the illustration, never thermal contact or the physics.
+
+Move tiles between servers while keeping exactly six in total, block a main pipe, and turn on the independent backup route. Moving tiles starts a fresh experiment at the new design's steady starting condition. Temperature colors follow calculated component temperatures; moving coolant markers indicate flow state, not measured velocity. Export downloads the current conceptual assembly and simulated state as JSON, not a fabrication file.
+
+The 3D teaching model uses three equal 200 W heat inputs and a fixed 0.50 W system backup cost while active. Its net power subtracts 0.90 W of assumed recovery equipment cost plus active backup pumping. The normal main pump and facility electricity are outside that incremental balance. The separate 2D experiment has independent state. After an AI campaign, **Use AI tiles** copies only the learned tile allocation into the 3D teaching model; it does not replay the AI's unequal-load benchmark or controller.
+
+Three.js **0.186.1** provides rendering only. All component shapes are original code-generated geometry; no external CAD models, textures, model packs or images are used. Dimensions, bolts and exploded positions are illustrative and do not enter the thermal calculation. This is an interactive concept assembly, not engineering CAD, CFD, a structural analysis or a hardware-validated design. See the [software inventory and retained notices](dist/third-party/README.md).
 
 ## Run and reproduce
 
@@ -30,7 +40,7 @@ npm run benchmark
 4. Open **Watch the chosen design face a held-out pipe failure**, choose a condition and replay it. Say: “These longer faults were withheld from the searches. The hot plate and water change temperature over time, and backup pumping has an electrical cost.”
 5. Open **The experiment notebook**, **Fair comparison & reproducibility**, and **What’s the research gap?** Say: “The predictions, observations, equations, assumptions and comparison results are inspectable. Some learned designs fail unfamiliar conditions; we report those failures.”
 
-For the physical intuition, the separate **Explore the physics** tab lets a viewer block a pipe and enable backup cooling directly. Its equal-load teaching setup is different from the AI benchmark; do not treat its readings as a replay of an AI design.
+For physical intuition, open **3D assembly**, separate the layers, select a generator tile, then block a pipe and enable backup cooling. The **Separate 2D experiment** tab provides another independent illustration. These equal-load teaching setups differ from the AI benchmark; do not treat their readings as replays of an AI design.
 
 ## The experiment protocol
 
@@ -126,7 +136,7 @@ The interface exports calculated experiment observations. Replay traces are comp
 
 ## Open-source release and commercial reuse
 
-Project-authored code, UI, documentation and synthetic benchmark data are released under the [MIT license](LICENSE). Preserve that notice. Bundled fonts retain SIL OFL-1.1; Mulberry32 has CC0/public-domain provenance. Preserve every file in `dist/third-party/`. See [license scope](dist/COMPLIANCE.md), [third-party inventory](dist/third-party/README.md), [citation ledger](dist/CITATIONS.md), and [BibTeX](dist/SOURCES.bib). There are no npm dependencies, external AI weights, or runtime API credentials. The runtime uses only local files and browser APIs, including local font files.
+Project-authored code, UI, documentation and synthetic benchmark data are released under the [MIT license](LICENSE). Preserve that notice. Three.js 0.186.1 retains MIT, embedded Earcut ISC and supplemental upstream notices. Bundled fonts retain SIL OFL-1.1; Mulberry32 has CC0/public-domain provenance. Preserve every file in `dist/third-party/`. See [license scope](dist/COMPLIANCE.md), [third-party inventory](dist/third-party/README.md), [citation ledger](dist/CITATIONS.md), and [BibTeX](dist/SOURCES.bib). Three.js is vendored locally; no npm installation or CDN is required. There are no external AI weights or runtime API credentials. The runtime uses only local files and browser APIs, including local fonts and renderer modules.
 
 The clean public source release excludes earlier private Git history, raw Valency exports, manufacturer coefficient tables, third-party paper PDFs and private hosting configuration. No claim is made that cited papers themselves are open source.
 

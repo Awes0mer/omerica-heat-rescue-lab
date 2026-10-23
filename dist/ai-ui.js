@@ -5,19 +5,20 @@ const format = (n, digits = 1) => Number.isFinite(n) ? n.toFixed(digits) : '—'
 let worker = null, result = null, records = [], budget = 18, replayFrame = null;
 
 function mode(name) {
-  const ai = name === 'ai';
-  $('ai-view').hidden = !ai; $('manual-view').hidden = ai;
-  for (const key of ['ai', 'manual']) {
+  if (!['assembly', 'ai', 'manual'].includes(name)) return;
+  for (const key of ['assembly', 'ai', 'manual']) {
+    $(key + '-view').hidden = name !== key;
     $('show-' + key).classList.toggle('active', name === key);
     $('show-' + key).setAttribute('aria-selected', String(name === key));
   }
   window.dispatchEvent(new CustomEvent('heat-mode', { detail: name }));
   history.replaceState(null, '', '#' + name);
 }
+$('show-assembly').addEventListener('click', () => mode('assembly'));
 $('show-ai').addEventListener('click', () => mode('ai'));
 $('show-manual').addEventListener('click', () => mode('manual'));
 window.addEventListener('hashchange', () => {
-  if (location.hash === '#ai' || location.hash === '#manual') mode(location.hash.slice(1));
+  if (['#assembly', '#ai', '#manual'].includes(location.hash)) mode(location.hash.slice(1));
 });
 
 function designView(design, label = 'STARTING DESIGN', trial = '6 tiles total') {
@@ -142,6 +143,7 @@ function finish() {
   controls(false); $('ai-results').hidden = false;
   $('ai-state').textContent = 'Complete · held-out results ready';
   designView(result.ai.best.design, 'AI’S SELECTED DESIGN', 'Locked before held-out tests');
+  window.dispatchEvent(new CustomEvent('heat-ai-design', { detail: result.ai.best.design }));
   const bestTrial = result.ai.history.find(r => JSON.stringify(r.design) === JSON.stringify(result.ai.best.design));
   const pred = bestTrial?.prediction;
   $('predicted-energy').textContent = pred ? `${format(pred.meanEnergyJ, 0)} J` : '—';
@@ -213,7 +215,7 @@ $('ai-download').addEventListener('click', () => {
 });
 
 designView({ counts: [2, 2, 2], triggerC: 74, backupFlowFraction: .5 }); learningChart();
-if (location.hash === '#manual') mode('manual');
+mode(['#ai', '#manual'].includes(location.hash) ? location.hash.slice(1) : 'assembly');
 // This is a separately recorded verification result, never an input to the optimizer.
 $('seed-benchmark').className = 'benchmark-box';
 $('seed-benchmark').innerHTML = '<strong>Recorded verification: synthetic-open-v2 · eight seeds, 18 trials each</strong><p>Positive net energy AND all six held-out temperature limits passed: joint AI 6/8 runs; random search 1/8; placement-only AI 0/8; fixed baseline 0/8. The joint AI exceeded the temperature limit in two runs. Fixed and placement-only passed temperatures in all eight, but their worst-case net energy was negative. These eight runs are a small simulation benchmark, not a reliability estimate or hardware validation.</p><a href="ai-benchmark.json" download>Download the recorded results, settings and source hashes ↓</a>';
