@@ -1,0 +1,19 @@
+# Project configuration: MIT. Caddy is a separately installed open-source server.
+{
+	admin off
+}
+
+{$HEAT_RESCUE_ADDRESS:http://127.0.0.1:8088} {
+	bind {$HEAT_RESCUE_BIND:127.0.0.1}
+	root * "{$HEAT_RESCUE_ROOT}"
+	encode zstd gzip
+	header {
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+		Content-Security-Policy "default-src 'self'; script-src 'self'; worker-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+		-Server
+	}
+	file_server {
+		hide .git .openai
+	}
+}

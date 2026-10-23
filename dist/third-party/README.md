@@ -29,6 +29,6 @@ Gaussian-process regression, expected improvement, constrained Bayesian optimiza
 
 Valency was used for literature research. No Valency client, API key, model weights, or raw paper abstracts are embedded in this app. It is not called by the deployed experiment loop.
 
-The hosted demonstration uses OpenAI Sites, a service separate from this portable source. The source can be served by another static HTTP server. This notice does not grant rights to OpenAI Sites, Valency, web browsers, operating systems, or any other external service.
+The portable source includes independent Caddy hosting configuration. Caddy is installed separately from the [official distribution](https://caddyserver.com/docs/install), under its [Apache-2.0 license](https://github.com/caddyserver/caddy/blob/v2.11.7/LICENSE) and upstream dependency notices; no Caddy binary is bundled here. The original OpenAI Sites demo is an optional service separate from this source. This notice does not grant rights to OpenAI Sites, Valency, web browsers, operating systems, or any other external service.
 
 Node.js is an optional test/benchmark development tool, not bundled in the web application. It has its own [license and third-party notices](https://github.com/nodejs/node/blob/main/LICENSE). There are no npm package dependencies or bundled AI model weights in this release.

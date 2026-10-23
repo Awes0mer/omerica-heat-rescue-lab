@@ -6,6 +6,10 @@ Heat Rescue runs that experiment in the browser. A Gaussian-process learning mod
 
 **Every temperature, watt and joule is simulated.** These are results from an uncalibrated model with example parameters, not hardware measurements, a certified cooling system, or proof of a first-ever invention. The AI method is established Bayesian optimization, not an LLM or a scripted winning design.
 
+## Independent open-source hosting
+
+Run the complete app on your own computer with open-source Caddy: `./hosting/run.sh`. See [HOSTING.md](HOSTING.md) for installation, local startup, and your own Linux server. No OpenAI Sites account, deployment, API, or cloud runtime is required. The server serves only `dist/`; the AI experiments run in the browser.
+
 ## Run and reproduce
 
 No installation or build step is required. Serve `dist/` with a static HTTP server and open it in a browser. The interface uses ES modules and workers; opening `index.html` directly as a local file is insufficient for workers on many browsers.

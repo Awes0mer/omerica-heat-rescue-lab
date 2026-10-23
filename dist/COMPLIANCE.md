@@ -25,7 +25,7 @@ Valency Bond was used to discover literature during hackathon research. The appl
 
 The [Valency terms effective September 29, 2026](https://www.valency.io/terms/) restrict the free tier and require separate commercial licensing for productization or redistribution/exposure of its functionality, content or outputs. Hackathon sponsorship and permission to use Bond in a hackathon are not a verified commercial waiver. The owner has not confirmed a separate written commercial agreement. **Commercial Valency integration is unresolved and excluded from this release's license clearance.**
 
-OpenAI Codex/ChatGPT, OpenAI Sites, GitHub and Slack are proprietary authoring, hosting or collaboration services. This repository does not license them and cannot honestly call the entire development stack open source. The portable application can run on an open-source HTTP server and browser without those services. It has no paid/proprietary experiment API dependency.
+OpenAI Codex/ChatGPT, OpenAI Sites, GitHub and Slack are proprietary authoring, hosting or collaboration services. This repository does not license them and cannot honestly call the entire development stack open source. The portable application includes an independent open-source Caddy hosting configuration and can run on Linux with an open-source browser without those services. See the [self-hosting guide](https://github.com/Awes0mer/heat-rescue/blob/main/HOSTING.md). Caddy is installed separately under its upstream Apache-2.0 license and dependency notices; no server binary is bundled in this source release. It has no paid/proprietary experiment API dependency.
 
 ## Hackathon status
 
