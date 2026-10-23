@@ -31,15 +31,15 @@ Valency was used for literature research. No Valency client, API key, model weig
 
 The hosted demonstration uses OpenAI Sites, a service separate from this portable source. The source can be served by another static HTTP server. This notice does not grant rights to OpenAI Sites, Valency, web browsers, operating systems, or any other external service.
 
-Node.js is an optional test/benchmark development tool, not bundled in the web application. It has its own [license and third-party notices](https://github.com/nodejs/node/blob/main/LICENSE). No npm install step or bundled AI model weights are required. This private preview has a locally vendored npm-origin dependency: Three.js 0.170.0, described below. The lack of a package.json dependencies field does not mean no third-party JavaScript is present.
+Node.js is an optional test/benchmark development tool, not bundled in the web application. It has its own [license and third-party notices](https://github.com/nodejs/node/blob/main/LICENSE). No npm install step or bundled AI model weights are required. This release has a locally vendored npm-origin dependency: Three.js 0.170.0, described below. The lack of a package.json dependencies field does not mean no third-party JavaScript is present.
 
 
 ## Three.js — 3D assembly view
 
 Three.js **0.170.0** is bundled in `../vendor/three/three.module.js` under the [MIT license](../vendor/three/LICENSE), copyright © 2010–2024 three.js authors. Keep that complete license with the module. It is used only to render the presentation layer; it does not replace or alter the thermal solver, AI planner or experiment protocol.
 
-Source package: [official npm tarball](https://registry.npmjs.org/three/-/three-0.170.0.tgz). The verified SHA-512 package integrity and per-file SHA-256 values are recorded in [vendor provenance](../vendor/three/provenance.json). The locally included module and LICENSE were rehashed during this preview audit and match that record.
+Source package: [official npm tarball](https://registry.npmjs.org/three/-/three-0.170.0.tgz). The verified SHA-512 package integrity and per-file SHA-256 values are recorded in [vendor provenance](../vendor/three/provenance.json). The locally included module and LICENSE were rehashed during the release audit and match that record.
 
-The original `assembly-scene.js` builds new procedural server/plate/tile/plumbing geometry and local text labels. No assets from the user's visual references, manufacturer CAD, downloaded textures, or stock images are included. It uses handwritten orbit/pinch/raycast interaction rather than an additional controls dependency. The module itself carries the project's MIT notice.
+The original `assembly-scene.js` builds new procedural server/plate/tile/plumbing geometry and local text labels. No assets from external visual references, manufacturer CAD, downloaded textures, or stock images are included. It uses handwritten orbit/pinch/raycast interaction rather than an additional controls dependency. The module itself carries the project's MIT notice.
 
 The 3D assembly view is part of this release. Three.js is used only for drawing; it does not change the physics, the optimizer or the recorded benchmark.

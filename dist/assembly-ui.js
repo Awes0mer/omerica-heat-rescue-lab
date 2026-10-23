@@ -43,7 +43,7 @@ try {
   console.warn('Assembly view unavailable:',error);
 }
 try {aiScene=mountAssembly($('ai-assembly-canvas'),{});aiScene.setDesign?.({counts:[2,2,2]});if(!aiScene.available)$('ai-assembly-canvas').hidden=true;}
-catch(error){$('ai-assembly-canvas').hidden=true;console.warn('AI assembly preview unavailable:',error);}
+catch(error){$('ai-assembly-canvas').hidden=true;console.warn('AI assembly view unavailable:',error);}
 
 window.addEventListener('heat-snapshot',({detail:s})=>{
   latest=s;selected=s.selected??selected;

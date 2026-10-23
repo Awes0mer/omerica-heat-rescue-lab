@@ -49,7 +49,6 @@
       "redistributed": "Inline adapted helper; attribution in MULBERRY32-LICENSE.txt"
     }
   ],
-  "preview": "Private local 3D assembly presentation, not published or submitted",
   "runtimeLibraries": [
     {
       "name": "three",

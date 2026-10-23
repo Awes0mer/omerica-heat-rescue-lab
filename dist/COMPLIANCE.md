@@ -31,11 +31,11 @@ OpenAI Codex/ChatGPT, OpenAI Sites, GitHub and Slack are proprietary authoring, 
 
 ## Hackathon status
 
-The [Moment participation page](https://scientificintelligence.org/hackathon) permits solo projects and requires a public repository with a README, a public project post, and submission through a Moment account/team. The [event submission page](https://llmhackathon.github.io/submission/) also requests a one-page write-up and a video of up to four minutes accessible without login. Prepare the stricter deliverable set because video wording differs across the two official pages.
+The [Moment participation page](https://scientificintelligence.org/hackathon) permits solo projects and requires a public repository with a README, a public project post, and submission through a Moment account/team. The [event submission page](https://llmhackathon.github.io/submission/) also requests a one-page write-up and a video of up to four minutes accessible without login.
 
 The organizer's October 22, 7:06 p.m. Eastern announcement on the event Slack extends the deadline to **11 p.m. CDT October 22 / midnight EDT October 23 / 04:00 UTC October 23** and allows submitted entries to be edited until then. This supersedes the older 7 p.m. Central deadline still on the event page.
 
-Disclose Omer Orman as the solo participant, AI coding/research assistance, the earlier manual simulation/UI extended during the event, actual Valency research use, and the fully simulated nature of results. Valency sponsor eligibility is conditional on actual Bond use and organizer verification; no award or eligibility ruling is claimed. No Moment submission, social post or terms acceptance is performed by this code release.
+Omer Orman is the solo participant; the entry discloses AI coding/research assistance, the earlier manual simulation/UI extended during the event, actual Valency research use, and the fully simulated nature of results. Valency sponsor eligibility is conditional on actual Bond use and organizer verification; no award or eligibility ruling is claimed. No Moment submission, social post or terms acceptance is performed by this code release.
 
 ## Limits of this review
 

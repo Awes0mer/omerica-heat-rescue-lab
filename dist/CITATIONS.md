@@ -70,7 +70,7 @@ External publications keep their own rights. Citation does not make them open so
 
 ## 3D assembly view
 
-The additional assembly scene uses [Three.js 0.170.0](https://registry.npmjs.org/three/-/three-0.170.0.tgz) as a local MIT-licensed renderer; see [license and provenance](vendor/three/provenance.json) and [full MIT notice](vendor/three/LICENSE). Server geometry, plumbing, labels and camera controls are original procedural presentation code. No reference-project mesh, texture or source code was reused. This is a local, unpublished graphics preview.
+The additional assembly scene uses [Three.js 0.170.0](https://registry.npmjs.org/three/-/three-0.170.0.tgz) as a local MIT-licensed renderer; see [license and provenance](vendor/three/provenance.json) and [full MIT notice](vendor/three/LICENSE). Server geometry, plumbing, labels and camera controls are original procedural presentation code. No reference-project mesh, texture or source code was reused.
 
 Visual mood references (a hobbyist router build and a data-center assembly illustration) informed materials, lighting and camera framing only; no geometry, images or code from them were used.
 

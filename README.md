@@ -34,13 +34,13 @@ The manual teaching view shows three equal-load server branches with circuit boa
 
 ## Quick tour
 
-1. Open **AI experiment lab** and click **Run AI experiments**. We give each search 18 design experiments. Each design uses the same six tiles and the same test conditions.
+1. Open **Let AI experiment** and click **Run AI experiments**. We give each search 18 design experiments. Each design uses the same six tiles and the same test conditions.
 2. Point to **AI predicted** and **Physics calculated**. The AI predicts a result, runs that experiment, then learns from the difference. It chooses where the tiles go, the temperature that starts backup cooling, and the backup flow.
 3. Compare the learning curves and final cards. More generated electricity is not enough. We subtract extra pumping energy and separately check the temperature limit.
 4. Open **Watch the chosen design face a held-out pipe failure**, choose a condition and replay it. These longer faults were withheld from the searches. The hot plate and water change temperature over time, and backup pumping has an electrical cost.
 5. Open **The experiment notebook**, **Fair comparison & reproducibility**, and **What’s the research gap?** The predictions, observations, equations, assumptions and comparison results are inspectable. Some learned designs fail unfamiliar conditions; we report those failures.
 
-For the physical intuition, the separate **Explore the physics** tab lets a viewer block a pipe and enable backup cooling directly. Its equal-load teaching setup is different from the AI benchmark; do not treat its readings as a replay of an AI design.
+For the physical intuition, the separate **Explore the assembly** tab lets a viewer block a pipe and enable backup cooling directly. Its equal-load teaching setup is different from the AI benchmark; do not treat its readings as a replay of an AI design.
 
 ## The experiment protocol
 
@@ -136,14 +136,14 @@ The interface exports calculated experiment observations. Replay traces are comp
 
 ## Open-source release and commercial reuse
 
-Project-authored code, UI, documentation and synthetic benchmark data are released under the [MIT license](LICENSE). Preserve that notice. Bundled fonts retain SIL OFL-1.1; Mulberry32 has CC0/public-domain provenance. Preserve every file in `dist/third-party/`. See [license scope](dist/COMPLIANCE.md), [third-party inventory](dist/third-party/README.md), [citation ledger](dist/CITATIONS.md), and [BibTeX](dist/SOURCES.bib). No package installation is required, but this preview does bundle the third-party Three.js 0.170.0 renderer under MIT in `dist/vendor/three/`; retain its LICENSE and provenance. There are no external AI weights or runtime API credentials. All module and font requests use local files.
+Project-authored code, UI, documentation and synthetic benchmark data are released under the [MIT license](LICENSE). Preserve that notice. Bundled fonts retain SIL OFL-1.1; Mulberry32 has CC0/public-domain provenance. Preserve every file in `dist/third-party/`. See [license scope](dist/COMPLIANCE.md), [third-party inventory](dist/third-party/README.md), [citation ledger](dist/CITATIONS.md), and [BibTeX](dist/SOURCES.bib). No package installation is required, but this release does bundle the third-party Three.js 0.170.0 renderer under MIT in `dist/vendor/three/`; retain its LICENSE and provenance. There are no external AI weights or runtime API credentials. All module and font requests use local files.
 
-The frozen public source release excludes earlier private Git history, raw Valency exports, manufacturer coefficient tables, third-party paper PDFs and private hosting configuration. This separate graphics preview remains local and private; its additional Three.js renderer and original assembly scene are not claimed to have been published. No claim is made that cited papers themselves are open source.
+The frozen public source release excludes earlier private Git history, raw Valency exports, manufacturer coefficient tables, third-party paper PDFs and private hosting configuration. The 3D assembly view bundles Three.js 0.170.0 under MIT; the scene code is original. No claim is made that cited papers themselves are open source.
 
 Valency was used only at the research stage. It is not integrated into the executable app or required to rerun it. A separate commercial Valency license has **not** been verified, so no Valency integration is offered for sale and no Valency content or outputs are redistributed on the strength of hackathon sponsorship. OpenAI Codex/ChatGPT, OpenAI Sites, GitHub and Slack are proprietary development/hosting/collaboration services, not dependencies licensed by this repository. The portable app can be served with open-source Python on Linux and viewed in Firefox without those services.
 
 ## Hackathon disclosure
 
-Solo project prepared by Omer Orman with AI coding and research assistance in OpenAI Codex/ChatGPT. Valency Bond was used for literature discovery; primary sources were checked independently. Existing event-period manual simulation/UI were extended with the AI experiment loop, benchmark, and license-clean release. Do not claim an LLM runtime, manufacturer validation, proven first-ever novelty, or an entirely open-source authoring/hosting stack.
+Solo project prepared by Omer Orman with AI coding and research assistance in OpenAI Codex/ChatGPT. Valency Bond was used for literature discovery; primary sources were checked independently. Existing event-period manual simulation/UI were extended with the AI experiment loop, benchmark, and license-clean release. This project does not claim an LLM runtime, manufacturer validation, first-ever novelty, or an entirely open-source authoring/hosting stack.
 
-The [current Moment instructions](https://scientificintelligence.org/hackathon) allow solo participation and require a public repository, README, public project post and submission on Moment. [Organizer extension (event Slack login required)](https://llmsformateri-0lw8517.slack.com/archives/C04TLL1RSGH/p1792710369058659): 11 p.m. CDT October 22 = midnight EDT October 23, 2026. The [event submission page](https://llmhackathon.github.io/submission/) retains earlier timing and a mandatory video of at most four minutes, while Moment phrases video as optional; prepare the video to satisfy both. This repository is not evidence that a Moment entry has been submitted.
+The [current Moment instructions](https://scientificintelligence.org/hackathon) allow solo participation and require a public repository, README, public project post and submission on Moment. Organizer extension announced in the event Slack: 11 p.m. CDT October 22 = midnight EDT October 23, 2026: 11 p.m. CDT October 22 = midnight EDT October 23, 2026. The [event submission page](https://llmhackathon.github.
