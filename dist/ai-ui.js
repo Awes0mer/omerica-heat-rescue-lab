@@ -1,3 +1,4 @@
+import { telemetry } from './telemetry-bootstrap.mjs';
 const $ = id => document.getElementById(id);
 const names = { ai: 'Joint AI', random: 'Random search', placement: 'Placement-only AI', fixed: 'Fixed baseline' };
 const colors = { ai: '#eed084', random: '#8c9b97', placement: '#83bdc5' };
@@ -123,11 +124,11 @@ function start() {
         $('ai-state').textContent = data.stage.stage === 'holdout' ? 'Designs locked · testing new conditions' : data.stage.stage === 'complete' ? 'Experiment complete' : 'Running simulated experiments';
       } else if (data.type === 'complete') {
         result = data.result; finish(); worker.terminate(); worker = null;
-      } else if (data.type === 'error') fail(data.message);
+      } else if (data.type === 'error') { telemetry.captureError(new Error('AI worker failed'), 'ai_worker'); fail(data.message); }
     };
-    worker.onerror = () => fail('The experiment could not finish. Reload the page and retry; no result is being claimed.');
+    worker.onerror = event => { telemetry.captureError(event.error || new Error('AI worker failed'), 'ai_worker'); fail('The experiment could not finish. Reload the page and retry; no result is being claimed.'); };
     worker.postMessage({ type: 'start', seed, budget });
-  } catch (error) { fail(error.message); }
+  } catch (error) { telemetry.captureError(error, 'ai_worker'); fail(error.message); }
 }
 function fail(message) {
   worker?.terminate(); worker = null; controls(false);
@@ -147,6 +148,7 @@ $('ai-seed').addEventListener('input', () => { if ($('ai-state').textContent.sta
 function finish() {
   controls(false); $('ai-results').hidden = false;
   $('ai-state').textContent = 'Complete · held-out results ready';
+  telemetry.capture('ai_run_completed');
   designView(result.ai.best.design, 'AI’S SELECTED DESIGN', 'Locked before held-out tests');
   const bestTrial = result.ai.history.find(r => JSON.stringify(r.design) === JSON.stringify(result.ai.best.design));
   const pred = bestTrial?.prediction;

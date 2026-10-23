@@ -1,3 +1,4 @@
+import { telemetry } from './telemetry-bootstrap.mjs';
 import { PARAMS, createSimulation, step, setBlocked, setBackupCooling, snapshot } from './model.js';
 import { isTileAllocation, allocationForAction, createAssemblyExport } from './assembly-state.js';
 import { createDemoRun } from './assembly-demo-state.js';
@@ -50,11 +51,11 @@ $('rack').innerHTML = rackMarkup();
 function download(name, content, type){const url=URL.createObjectURL(new Blob([content],{type}));const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 function takeSample(s, force=false){if(!force && s.time-lastSample<1)return;lastSample=s.time;samples.push({time:s.time,layout:counts.join('/'),blocked:s.branches.filter(b=>b.blocked).map(b=>letters[b.id]).join(''),backup:s.backupActive,grossW:s.totalPowerW,pumpW:s.pumpPowerW,extraPumpW:s.incrementalPumpW,netW:s.netRecoveryW,hotC:s.maxHotC,branches:s.branches.map(b=>({...b}))});}
 function markEvent(label){events.push({time:sim.time,label});takeSample(snapshot(sim),true);}
-function togglePipe(index){if(demoActive)return;selected=index;const close=!sim.branches[index].blocked;for(let i=0;i<3;i++)setBlocked(sim,i,i===index&&close);markEvent(close?`${letters[index]} blocked`:'Flow restored');render();}
+function togglePipe(index){if(demoActive)return;selected=index;const close=!sim.branches[index].blocked;for(let i=0;i<3;i++)setBlocked(sim,i,i===index&&close);markEvent(close?`${letters[index]} blocked`:'Flow restored');render();telemetry.capture('pipe_toggled',{pipe:letters[index]});}
 for(const valve of document.querySelectorAll('[data-pipe]')){valve.addEventListener('click',()=>togglePipe(Number(valve.dataset.pipe)));valve.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();togglePipe(Number(valve.dataset.pipe));}});}
 for(const button of document.querySelectorAll('[data-mobile-pipe]'))button.addEventListener('click',()=>togglePipe(Number(button.dataset.mobilePipe)));
 $('main-action').addEventListener('click',()=>{const blocked=sim.branches.findIndex(b=>b.blocked);togglePipe(blocked<0?selected:blocked);});
-$('backup').addEventListener('click',()=>{if(demoActive)return;setBackupCooling(sim,!sim.backupCooling);markEvent(sim.backupCooling?'Backup on':'Backup off');render();});
+$('backup').addEventListener('click',()=>{if(demoActive)return;setBackupCooling(sim,!sim.backupCooling);markEvent(sim.backupCooling?'Backup on':'Backup off');render();telemetry.capture('backup_toggled');});
 function updatePause(){put('pause',running?'Pause':'Play');$('pause').setAttribute('aria-label',running?'Pause simulation':'Play simulation');document.querySelector('.lab').classList.toggle('paused',!running);}
 $('pause').addEventListener('click',()=>{if(demoActive)return;if(sim.time>=1800){reset();return;}running=!running;updatePause();});
 $('speed').addEventListener('change',e=>{speed=Number(e.target.value);});

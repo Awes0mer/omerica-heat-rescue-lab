@@ -1,4 +1,5 @@
 import { mountAssembly } from './assembly-scene.js';
+import { telemetry } from './telemetry-bootstrap.mjs';
 import { PARAMS } from './model.js';
 import { DEMO_INTERVAL_MS, DEMO_STEPS, createDemoState, transitionDemo } from './assembly-demo.js';
 
@@ -33,6 +34,7 @@ function inspectPart({index=selected,component:nextComponent,label}) {
   updateComponentReadings();
 }
 function showFallback() {
+  telemetry.capture('renderer_fallback', { reason: 'webgl_unavailable' });
   host.closest('.scene-wrap').classList.add('assembly-failed');
   $('assembly-loading').hidden=false;
   $('assembly-loading').textContent='3D is unavailable here. The interactive schematic below uses the same simulation.';
@@ -48,10 +50,11 @@ try {
   else showFallback();
 } catch(error) {
   showFallback();
+  telemetry.captureError(error, 'renderer_init');
   console.warn('Assembly view unavailable:',error);
 }
 try {aiScene=mountAssembly($('ai-assembly-canvas'),{});aiScene.setDesign?.({counts:[2,2,2]});if(!aiScene.available)$('ai-assembly-canvas').hidden=true;}
-catch(error){$('ai-assembly-canvas').hidden=true;console.warn('AI assembly view unavailable:',error);}
+catch(error){$('ai-assembly-canvas').hidden=true;telemetry.captureError(error,'renderer_init');console.warn('AI assembly view unavailable:',error);}
 
 window.addEventListener('heat-snapshot',({detail:s})=>{
   latest=s;selected=s.selected??selected;

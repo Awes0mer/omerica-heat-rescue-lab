@@ -20,6 +20,14 @@ npm run benchmark
 
 `npm test` runs all `*.test.mjs` files with Node's built-in test runner. `npm run benchmark` reruns the frozen eight-seed comparison and writes `dist/ai-benchmark.json`, including scenario definitions, individual results, learning curves and SHA-256 hashes of the planner and experimental physics source. The benchmark needs no network, API key or external model service.
 
+## Usage monitoring and browser errors
+
+The browser app loads the PostHog JavaScript SDK from PostHog's US asset service and sends selected usage events and sanitized browser-error metadata to `https://us.i.posthog.com` when analytics is enabled. The public PostHog project token routes these events; it is not a personal API key. The physics solver and optimizer still run in the browser.
+
+This integration disables automatic interaction capture and session recording. It does not send raw simulation inputs, identify a named user, or create person profiles. Analytics identifiers use memory persistence. Browser-error reports retain restricted stack metadata rather than arbitrary error messages or values. The footer's **Disable analytics** button turns off event collection for this browser. A single opt-out preference is saved in local storage when available; analytics identifiers still use memory. Disabling collection does not remove events already received by PostHog. Hosts and network services may retain their own logs.
+
+See the [PostHog JavaScript configuration reference](https://posthog.com/docs/libraries/js/config), [web error-tracking documentation](https://posthog.com/docs/error-tracking/installation/web), and [third-party inventory](dist/third-party/README.md). Installing the SDK alone does not select Inbox signals or prove that a deployed page has delivered events; verify those separately in the intended PostHog project.
+
 ## Explore the new assembly view
 
 The manual teaching view shows three equal-load server branches with circuit boards, copper heat spreaders, thermoelectric tiles, cold plates, supply/return manifolds, clickable valves, a separate backup route, and an electrical load. The assembly is original procedural geometry, not a manufacturer CAD model or a dimensionally verified installation.
@@ -154,7 +162,7 @@ The interface exports calculated experiment observations. Replay traces are comp
 
 ## Open-source release and commercial reuse
 
-Project-authored code, UI, documentation and synthetic benchmark data are released under the [MIT license](LICENSE). Preserve that notice. Bundled fonts retain SIL OFL-1.1; Mulberry32 has CC0/public-domain provenance. Preserve every file in `dist/third-party/`. See [license scope](dist/COMPLIANCE.md), [third-party inventory](dist/third-party/README.md), [citation ledger](dist/CITATIONS.md), and [BibTeX](dist/SOURCES.bib). No package installation is required, but this release does bundle the third-party Three.js 0.170.0 renderer under MIT in `dist/vendor/three/`; retain its LICENSE, provenance and [supplemental upstream notices](dist/third-party/THREE-NOTICE.md). There are no external AI weights or runtime API credentials. All module and font requests use local files.
+Project-authored code, UI, documentation and synthetic benchmark data are released under the [MIT license](LICENSE). Preserve that notice. Bundled fonts retain SIL OFL-1.1; Mulberry32 has CC0/public-domain provenance. Preserve every file in `dist/third-party/`. See [license scope](dist/COMPLIANCE.md), [third-party inventory](dist/third-party/README.md), [citation ledger](dist/CITATIONS.md), and [BibTeX](dist/SOURCES.bib). No package installation is required, but this release does bundle the third-party Three.js 0.170.0 renderer under MIT in `dist/vendor/three/`; retain its LICENSE, provenance and [supplemental upstream notices](dist/third-party/THREE-NOTICE.md). The simulator has no external AI weights or AI API credentials. App modules and fonts use local files; the analytics integration additionally loads PostHog's remote SDK and uses a public project token. That SDK has its own [Apache-2.0 license and supplemental third-party notices](https://github.com/PostHog/posthog-js/blob/main/LICENSE).
 
 The portable source archive excludes development history, raw Valency exports, manufacturer coefficient tables, third-party paper PDFs and machine-specific hosting configuration. The 3D assembly view bundles Three.js 0.170.0 under MIT; the scene code is original. No claim is made that cited papers themselves are open source.
 
