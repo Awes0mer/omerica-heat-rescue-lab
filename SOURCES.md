@@ -13,6 +13,7 @@
 
 - [PostHog JavaScript configuration](https://posthog.com/docs/libraries/js/config): supported capture, persistence, profile and outgoing-filter configuration.
 - [PostHog JavaScript persistence](https://posthog.com/docs/libraries/js/persistence): browser storage modes.
+- [PostHog event-data redaction](https://posthog.com/tutorials/web-redact-properties): the project-level Discard client IP data control; removing an event property alone does not prevent IP detection.
 - [PostHog web error tracking](https://posthog.com/docs/error-tracking/installation/web): the SDK-loading protocol, exception capture and received-event verification.
 - [PostHog JavaScript upstream source](https://github.com/PostHog/posthog-js) and [LICENSE](https://github.com/PostHog/posthog-js/blob/main/LICENSE): Apache-2.0 with separate incorporated-code notices, including MIT portions. The SDK is remotely loaded from PostHog US rather than vendored or pinned in the local asset manifest.
 - The app-specific event allowlist, payload filtering and footer controls are project-authored integration code. See [monitoring setup and data boundaries](dist/MONITORING.md) and the [third-party inventory](dist/third-party/README.md). The SDK license does not license PostHog's hosted service or establish a legal compliance determination.
