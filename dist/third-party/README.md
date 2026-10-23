@@ -1,6 +1,6 @@
 # Third-party components and provenance
 
-Checked October 22, 2026. These notices describe material actually included in the distributable. The project's own source license does not replace the font licenses below.
+Checked October 22, 2026; PostHog runtime-service entry added October 23, 2026. These notices distinguish bundled material from remotely loaded software. The project's own source license does not replace the component licenses below.
 
 ## Fonts
 
@@ -32,6 +32,14 @@ Valency was used for literature research. No Valency client, API key, model weig
 The hosted demonstration uses OpenAI Sites, a service separate from this portable source. The source can be served by another static HTTP server. This notice does not grant rights to OpenAI Sites, Valency, web browsers, operating systems, or any other external service.
 
 Node.js is an optional test/benchmark development tool, not bundled in the web application. It has its own [license and third-party notices](https://github.com/nodejs/node/blob/main/LICENSE). No npm install step or bundled AI model weights are required. This release has a locally vendored npm-origin dependency: Three.js 0.170.0, described below. The lack of a package.json dependencies field does not mean no third-party JavaScript is present.
+
+## PostHog JavaScript SDK — remotely loaded monitoring
+
+When analytics is enabled, the app loads the SDK from `https://us-assets.i.posthog.com/static/array.js` and sends selected usage events and sanitized browser-error metadata to PostHog US at `https://us.i.posthog.com`. It uses a public project token. The application configuration disables session recording, automatic interaction capture and person profiles, excludes raw simulation inputs, and keeps analytics identifiers in memory. The footer includes a control to disable collection for this browser. The opt-out preference alone is saved in local storage when available.
+
+The SDK is fetched at runtime, not bundled in this source archive or included in `asset-provenance.json`; the remotely served version may change. [PostHog's upstream LICENSE](https://github.com/PostHog/posthog-js/blob/main/LICENSE) identifies Apache-2.0 for the JavaScript SDK and retains separate incorporated-code notices, including MIT-licensed portions. Retain the full applicable upstream license and notices when redistributing SDK files. This project's MIT license does not relicense the SDK or the hosted PostHog service.
+
+Official references: [JavaScript web configuration](https://posthog.com/docs/libraries/js/config), [web error tracking](https://posthog.com/docs/error-tracking/installation/web), and [upstream source](https://github.com/PostHog/posthog-js).
 
 
 ## Three.js — 3D assembly view

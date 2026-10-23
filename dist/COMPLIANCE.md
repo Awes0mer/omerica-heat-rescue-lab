@@ -2,6 +2,8 @@
 
 Reviewed October 22, 2026. Scope: this release, which adds a 3D assembly view to the `synthetic-open-v2` portable source release; not all earlier development history and not the legal status of a future hardware product.
 
+Analytics addendum: October 23, 2026. The optional runtime monitoring integration described below introduces a remote PostHog SDK and event destination. The earlier local-only runtime description no longer applies when monitoring is enabled.
+
 ## What may be reused commercially
 
 | Distributed component | License / provenance | Conditions |
@@ -13,7 +15,13 @@ Reviewed October 22, 2026. Scope: this release, which adds a 3D assembly view to
 | Original procedural 3D geometry and interaction code | Project-authored, MIT | No external meshes, textures, stock photos, or reference-project code/assets are included. Geometry and particles are illustrative. |
 | Mulberry32 pseudorandom-number routine | Original author CC0 dedication; JavaScript public-domain provenance | Attribution and full CC0 text are retained in `third-party/`. No claim that this routine is newly invented. |
 
-See [third-party notices](third-party/README.md) and [pinned source hashes](third-party/asset-provenance.json). Three.js is an included npm-origin third-party renderer; no package installation is needed because its module and MIT notice are vendored. No remote AI weights, third-party images, paper PDFs, scientific abstracts, manufacturer coefficient tables or raw Valency exports are included. All executable imports and font requests are local.
+See [third-party notices](third-party/README.md) and [pinned source hashes](third-party/asset-provenance.json). Three.js is an included npm-origin third-party renderer; no package installation is needed because its module and MIT notice are vendored. No remote AI weights, third-party images, paper PDFs, scientific abstracts, manufacturer coefficient tables or raw Valency exports are included. Simulation modules, renderer and fonts are local. Analytics additionally loads the PostHog JavaScript SDK remotely; it is not part of the pinned local-asset manifest.
+
+## PostHog runtime monitoring
+
+When analytics is enabled, the browser loads the SDK from PostHog's US asset service and sends selected usage events and sanitized browser-error metadata to `https://us.i.posthog.com`. The application disables session recording and automatic interaction capture, excludes raw simulation inputs, and makes no identify or person-profile calls. Analytics identifiers use memory persistence. The footer provides a control to disable collection for this browser. A single opt-out preference is saved in local storage when available; analytics identifiers still use memory. Previously received events are unaffected. Host and network logging are separate from this application setting.
+
+The [upstream PostHog JavaScript license](https://github.com/PostHog/posthog-js/blob/main/LICENSE) is Apache-2.0, with separate notices for incorporated components, including MIT-licensed portions. It is not covered by this project's MIT license. The SDK is loaded from a remote service rather than vendored here, and its served version may change. Preserve the appropriate upstream license and notices if distributing a copy. PostHog's hosted service has separate terms; this inventory does not establish consent, legal compliance, or a service agreement. Configuration and error-reporting behavior are documented in the [JavaScript configuration reference](https://posthog.com/docs/libraries/js/config) and [web error-tracking guide](https://posthog.com/docs/error-tracking/installation/web).
 
 ## Citations are not licenses
 

@@ -7,4 +7,12 @@
 - The guided component tour, camera focus and collapsible explanation panels are original additions using the existing teaching solver. Its benefit language describes possible uses and hardware-validation limits, supported by the existing citation ledger; it makes no new measured performance claim.
 - Equations and research sources: [citation ledger](dist/CITATIONS.md), [bibliography](dist/SOURCES.bib), and [research comparison](dist/research-gap.md).
 - Bundled renderer, fonts and seeded random routine: [third-party notices](dist/third-party/README.md), [asset provenance](dist/third-party/asset-provenance.json), and [Three.js provenance](dist/vendor/three/provenance.json), and [version-specific upstream notices](dist/third-party/THREE-NOTICE.md).
-- New controls and procedural geometry use the repository MIT license. No new dependency, mesh, image, font or reference-project asset was added.
+- New assembly controls and procedural geometry use the repository MIT license. Those assembly changes added no new dependency, mesh, image, font or reference-project asset. The later monitoring addition below introduces a remote SDK.
+
+## PostHog monitoring addition — October 23, 2026
+
+- [PostHog JavaScript configuration](https://posthog.com/docs/libraries/js/config): supported capture, persistence, profile and outgoing-filter configuration.
+- [PostHog JavaScript persistence](https://posthog.com/docs/libraries/js/persistence): browser storage modes.
+- [PostHog web error tracking](https://posthog.com/docs/error-tracking/installation/web): the SDK-loading protocol, exception capture and received-event verification.
+- [PostHog JavaScript upstream source](https://github.com/PostHog/posthog-js) and [LICENSE](https://github.com/PostHog/posthog-js/blob/main/LICENSE): Apache-2.0 with separate incorporated-code notices, including MIT portions. The SDK is remotely loaded from PostHog US rather than vendored or pinned in the local asset manifest.
+- The app-specific event allowlist, payload filtering and footer controls are project-authored integration code. See [monitoring setup and data boundaries](dist/MONITORING.md) and the [third-party inventory](dist/third-party/README.md). The SDK license does not license PostHog's hosted service or establish a legal compliance determination.
