@@ -1,5 +1,5 @@
 /**
- * Experimental plant for Heat Rescue's design-search demonstration.
+ * Experimental plant for Omerica Heat Rescue's design-search demonstration.
  * Shares the original, constant-property thermoelectric equations and module
  * assumptions with model.js. All scenario values are hypothetical, not field
  * measurements. No global state is mutated between candidate experiments.

@@ -5,23 +5,23 @@ const format = (n, digits = 1) => Number.isFinite(n) ? n.toFixed(digits) : '—'
 let worker = null, result = null, records = [], budget = 18, replayFrame = null;
 
 function mode(name) {
-  if (!['assembly', 'ai', 'manual'].includes(name)) return;
-  for (const key of ['assembly', 'ai', 'manual']) {
-    $(key + '-view').hidden = name !== key;
+  const ai = name === 'ai';
+  $('ai-view').hidden = !ai; $('manual-view').hidden = ai;
+  for (const key of ['ai', 'manual']) {
     $('show-' + key).classList.toggle('active', name === key);
-    $('show-' + key).setAttribute('aria-selected', String(name === key));
+    $('show-' + key).setAttribute('aria-pressed', String(name === key));
   }
   window.dispatchEvent(new CustomEvent('heat-mode', { detail: name }));
   history.replaceState(null, '', '#' + name);
 }
-$('show-assembly').addEventListener('click', () => mode('assembly'));
 $('show-ai').addEventListener('click', () => mode('ai'));
 $('show-manual').addEventListener('click', () => mode('manual'));
 window.addEventListener('hashchange', () => {
-  if (['#assembly', '#ai', '#manual'].includes(location.hash)) mode(location.hash.slice(1));
+  if (location.hash === '#ai' || location.hash === '#manual') mode(location.hash.slice(1));
 });
 
 function designView(design, label = 'STARTING DESIGN', trial = '6 tiles total') {
+  window.dispatchEvent(new CustomEvent('heat-ai-design', {detail:{design,label,trial}}));
   $('bench-label').textContent = label; $('bench-trial').textContent = trial;
   $('ai-design').replaceChildren(...design.counts.map((count, i) => {
     const row = document.createElement('div'); row.className = 'bench-row';
@@ -72,7 +72,7 @@ function observe(record) {
   $('observed-temperature').classList.toggle('bad', !outcome.feasible);
   $('temperature-verdict').textContent = outcome.feasible ? 'Passes all training temperature limits' : 'Fails at least one temperature limit';
   $('ai-progress-fill').style.width = `${records.length / (budget * 3) * 100}%`;
-  $('ai-stage-count').textContent = `${records.length} / ${budget * 3}`;
+  $('ai-stage-count').textContent = `${records.length} / ${budget * 3} design trials · 3 searches`;
   if (records.length === 1) $('trial-log').replaceChildren();
   const row = document.createElement('tr'); row.className = 'method-' + method;
   const cells = [names[method], trial, design.counts.join(' / '), design.triggerC + '°C', design.backupFlowFraction * 100 + '%', prediction ? format(prediction.meanEnergyJ) + ' J' : '—', format(outcome.scoreJ) + ' J', format(outcome.maxHotC), outcome.feasible ? 'Pass' : 'FAIL'];
@@ -109,7 +109,7 @@ function start() {
   worker?.terminate(); cancelAnimationFrame(replayFrame);
   records = []; result = null; budget = Number($('ai-budget').value);
   $('ai-results').hidden = true; $('ai-progress-fill').style.width = '0%';
-  $('trial-log').replaceChildren(); $('ai-stage-count').textContent = `0 / ${budget * 3}`;
+  $('trial-log').replaceChildren(); $('ai-stage-count').textContent = `0 / ${budget * 3} design trials · 3 searches`;
   $('ai-state').textContent = 'Starting the physics engine…';
   controls(true); learningChart();
   window.dispatchEvent(new CustomEvent('heat-ai-start'));
@@ -132,18 +132,22 @@ function start() {
 function fail(message) {
   worker?.terminate(); worker = null; controls(false);
   $('ai-state').textContent = 'Run did not finish'; $('ai-stage-text').textContent = message;
+  if ($('observed-energy').textContent === '…') { $('observed-energy').textContent = '—'; $('observed-temperature').textContent = '—'; $('observation-note').textContent = 'Stopped before this design was calculated'; $('temperature-verdict').textContent = 'Not calculated'; }
 }
 $('ai-run').addEventListener('click', start);
 $('ai-stop').addEventListener('click', () => fail('Stopped. Partial observations remain in the notebook; no final design has been evaluated.'));
 $('ai-budget').addEventListener('change', () => {
   document.querySelector('.ai-brief h2').innerHTML = `Give it ${Number($('ai-budget').value)} experiments.<br>See what it learns.`;
+  const b = Number($('ai-budget').value);
+  $('ai-stage-text').textContent = `448 possible designs. ${b} design trials per search; 3 faults per design. Held-out tests come last.`;
+  $('ai-stage-count').textContent = `0 / ${b * 3} design trials · 3 searches`;
 });
+$('ai-seed').addEventListener('input', () => { if ($('ai-state').textContent.startsWith('Enter a whole-number seed')) $('ai-state').textContent = "Ready for experiments"; });
 
 function finish() {
   controls(false); $('ai-results').hidden = false;
   $('ai-state').textContent = 'Complete · held-out results ready';
   designView(result.ai.best.design, 'AI’S SELECTED DESIGN', 'Locked before held-out tests');
-  window.dispatchEvent(new CustomEvent('heat-ai-design', { detail: result.ai.best.design }));
   const bestTrial = result.ai.history.find(r => JSON.stringify(r.design) === JSON.stringify(result.ai.best.design));
   const pred = bestTrial?.prediction;
   $('predicted-energy').textContent = pred ? `${format(pred.meanEnergyJ, 0)} J` : '—';
@@ -180,7 +184,7 @@ function finish() {
 function selectedReplay() { return result?.replays[Number($('replay-scenario').value)]; }
 function renderReplay(index) {
   const trial = selectedReplay(); if (!trial) return;
-  const point = trial.trace[Math.min(index, trial.trace.length - 1)];
+  const point = trial.trace[Math.max(0, Math.min(index, trial.trace.length - 1))];
   $('replay-time').textContent = point.time.toFixed(0) + ' s';
   $('replay-hot').textContent = format(Math.max(...point.branches.map(b => b.hotC))) + '°C';
   $('replay-power').textContent = format(point.totalPowerW, 2) + ' W';
@@ -194,7 +198,7 @@ function renderReplay(index) {
   ['#ad7049', '#4c777b', '#6c7d42'].forEach((color, i) => {
     svg += `<path d="${traces.map((p, j) => `${j ? 'L' : 'M'}${x(p.time)},${y(p.branches[i].hotC)}`).join(' ')}" fill="none" stroke="${color}" stroke-width="2"/><text x="${290 + i * 110}" y="165" fill="${color}" font-size="10">● Server ${'ABC'[i]}</text>`;
   });
-  svg += `<line x1="${x(trial.faultStartS)}" x2="${x(trial.faultStartS)}" y1="18" y2="136" stroke="#ad7049" stroke-dasharray="2 4"/><text x="${x(trial.faultStartS) + 6}" y="30" fill="#9c6549" font-size="9">Pipe ${'ABC'[trial.faultBranch]} blocked</text><line x1="${x(point.time)}" x2="${x(point.time)}" y1="18" y2="136" stroke="#516746" opacity=".4"/><text x="42" y="152" fill="#748168" font-size="9">0 s</text><text x="855" y="152" text-anchor="end" fill="#748168" font-size="9">${trial.durationS} s</text>`;
+  svg += `<line x1="${x(trial.faultStartS)}" x2="${x(trial.faultStartS)}" y1="18" y2="136" stroke="#ad7049" stroke-dasharray="2 4"/><text x="${x(trial.faultStartS) + 6}" y="30" fill="#9c6549" font-size="9">Pipe ${'ABC'[trial.faultBranch]} ${trial.remainingFlowFraction > 0 ? 'partly blocked' : 'blocked'}</text><line x1="${x(point.time)}" x2="${x(point.time)}" y1="18" y2="136" stroke="#516746" opacity=".4"/><text x="42" y="152" fill="#748168" font-size="9">0 s</text><text x="855" y="152" text-anchor="end" fill="#748168" font-size="9">${trial.durationS} s</text>`;
   $('replay-chart').innerHTML = svg;
   const active = point.branches.flatMap((b, i) => b.backupOn ? ['ABC'[i]] : []);
   $('replay-caption').textContent = `${point.faultActive ? `Pipe ${'ABC'[trial.faultBranch]} has ${Math.round(trial.remainingFlowFraction * 100)}% of its normal flow.` : 'All main pipes are open; the fault starts at 30 s.'} Backup active on ${active.length ? active.join(', ') : 'no branches'}. Net recovery now: ${format(point.netRecoveryW, 2)} W after backup and 0.90 W recovery pumping. This is a replay of computed simulation data, not a live measurement.`;
@@ -202,7 +206,7 @@ function renderReplay(index) {
 $('replay-play').addEventListener('click', () => {
   cancelAnimationFrame(replayFrame); const trial = selectedReplay(); if (!trial) return;
   const start = performance.now(); $('replay-play').textContent = 'Replay from start ↻';
-  function frame(now) { const i = Math.min(trial.trace.length - 1, Math.floor((now - start) / 16000 * (trial.trace.length - 1))); renderReplay(i); if (i < trial.trace.length - 1) replayFrame = requestAnimationFrame(frame); }
+  function frame(now) { const i = Math.max(0, Math.min(trial.trace.length - 1, Math.floor((now - start) / 16000 * (trial.trace.length - 1)))); renderReplay(i); if (i < trial.trace.length - 1) replayFrame = requestAnimationFrame(frame); }
   replayFrame = requestAnimationFrame(frame);
 });
 $('replay-scenario').addEventListener('change', () => { cancelAnimationFrame(replayFrame); renderReplay(0); });
@@ -210,12 +214,12 @@ $('ai-download').addEventListener('click', () => {
   if (!result) return;
   const blob = new Blob([JSON.stringify(result, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob), link = document.createElement('a');
-  link.href = url; link.download = `heat-rescue-seed-${result.seed}-budget-${result.budget}.json`; link.click();
+  link.href = url; link.download = `omerica-heat-rescue-seed-${result.seed}-budget-${result.budget}.json`; link.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 });
 
 designView({ counts: [2, 2, 2], triggerC: 74, backupFlowFraction: .5 }); learningChart();
-mode(['#ai', '#manual'].includes(location.hash) ? location.hash.slice(1) : 'assembly');
+mode(location.hash === '#ai' ? 'ai' : 'manual');
 // This is a separately recorded verification result, never an input to the optimizer.
 $('seed-benchmark').className = 'benchmark-box';
 $('seed-benchmark').innerHTML = '<strong>Recorded verification: synthetic-open-v2 · eight seeds, 18 trials each</strong><p>Positive net energy AND all six held-out temperature limits passed: joint AI 6/8 runs; random search 1/8; placement-only AI 0/8; fixed baseline 0/8. The joint AI exceeded the temperature limit in two runs. Fixed and placement-only passed temperatures in all eight, but their worst-case net energy was negative. These eight runs are a small simulation benchmark, not a reliability estimate or hardware validation.</p><a href="ai-benchmark.json" download>Download the recorded results, settings and source hashes ↓</a>';

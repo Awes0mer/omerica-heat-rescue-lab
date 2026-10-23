@@ -1,5 +1,5 @@
 /**
- * Heat Rescue: an illustrative, uncalibrated lumped thermal model.
+ * Omerica Heat Rescue: an illustrative, uncalibrated lumped thermal model.
  * This is not a CFD model, device certification, or prediction for a real rack.
  *
  * Equations: Ferrotec Thermoelectric Reference Guide §§11,13.

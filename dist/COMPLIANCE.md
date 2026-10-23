@@ -1,6 +1,6 @@
-# Heat Rescue — license and citation review
+# Omerica Heat Rescue — license and citation review
 
-Reviewed October 22, 2026. Scope: the current `synthetic-open-v2` portable source release, not all earlier development history and not the legal status of a future hardware product.
+Reviewed October 22, 2026. Scope: this release, which adds a 3D assembly view to the `synthetic-open-v2` portable source release; not all earlier development history and not the legal status of a future hardware product.
 
 ## What may be reused commercially
 
@@ -8,12 +8,12 @@ Reviewed October 22, 2026. Scope: the current `synthetic-open-v2` portable sourc
 | --- | --- | --- |
 | Project-authored JavaScript, HTML, CSS, SVG, tests and documentation | [MIT](LICENSE.txt) | Retain the copyright and permission notice. Commercial use, modification, integration, distribution and sale are permitted by this license. |
 | Synthetic simulation inputs and generated benchmark results | Project-authored; included with the MIT release | Preserve notices and identify the assumptions. These are not measured manufacturer data or validation results. |
-| Three.js 0.186.1 WebGL and core modules | [MIT](third-party/THREE-LICENSE.txt), embedded Earcut ISC and supplemental permissive upstream notices | Original official files, vendored locally. Preserve the complete `third-party/` notices; see [renderer provenance](third-party/THREE-NOTICE.md). Commercial use and integration are permitted under the identified license conditions. |
-| Original procedural assembly geometry | Project-authored; included with the MIT release | No third-party CAD models, textures or asset packs. Conceptual geometry is not a fabrication drawing or hardware validation. |
 | DM Sans and Space Grotesk font files | SIL Open Font License 1.1 | Keep their original OFL notices; bundling in a commercial app is permitted. Fonts must not be sold by themselves. No font modifications were made. |
+| Three.js 0.170.0 WebGL renderer | [MIT](vendor/three/LICENSE), embedded Earcut ISC and [supplemental upstream notices](third-party/THREE-NOTICE.md), locally vendored from the official npm package | Retain the original copyright and permission notice and all supplemental notice files. Vendor hashes and package integrity are in `vendor/three/provenance.json`. |
+| Original procedural 3D geometry and interaction code | Project-authored, MIT | No external meshes, textures, stock photos, or reference-project code/assets are included. Geometry and particles are illustrative. |
 | Mulberry32 pseudorandom-number routine | Original author CC0 dedication; JavaScript public-domain provenance | Attribution and full CC0 text are retained in `third-party/`. No claim that this routine is newly invented. |
 
-See [third-party notices](third-party/README.md) and [pinned source hashes](third-party/asset-provenance.json). The two Three.js modules are copied unmodified from the pinned official npm distribution; no npm installation is required. No remote AI weights, third-party images, paper PDFs, scientific abstracts, manufacturer coefficient tables or raw Valency exports are distributed. All executable imports and font requests are local.
+See [third-party notices](third-party/README.md) and [pinned source hashes](third-party/asset-provenance.json). Three.js is an included npm-origin third-party renderer; no package installation is needed because its module and MIT notice are vendored. No remote AI weights, third-party images, paper PDFs, scientific abstracts, manufacturer coefficient tables or raw Valency exports are included. All executable imports and font requests are local.
 
 ## Citations are not licenses
 
@@ -25,18 +25,18 @@ The current TEG constants (0.05 V/K, 2.5 ohm and 0.6 W/K) are independent round 
 
 Valency Bond was used to discover literature during hackathon research. The application does not call Valency or require its account, API, search corpus, or outputs at runtime. No Valency result payload is bundled. The research comparison is independently written from the primary sources linked in the citation ledger.
 
-The [Valency terms effective September 29, 2026](https://www.valency.io/terms/) restrict the free tier and require separate commercial licensing for productization or redistribution/exposure of its functionality, content or outputs. Hackathon sponsorship and permission to use Bond in a hackathon are not a verified commercial waiver. The owner has not confirmed a separate written commercial agreement. **Commercial Valency integration is unresolved and excluded from this release's license clearance.**
+The [Valency terms effective September 29, 2026](https://www.valency.io/terms/) restrict hackathon and trial use and require separate commercial licensing for productization or redistribution/exposure of its functionality, content or outputs. Hackathon sponsorship and permission to use Bond in a hackathon are not a verified commercial waiver. The owner has not confirmed a separate written commercial agreement. **Commercial Valency integration is unresolved and excluded from this release's license clearance.**
 
-OpenAI Codex/ChatGPT, OpenAI Sites, GitHub and Slack are proprietary authoring, hosting or collaboration services. This repository does not license them and cannot honestly call the entire development stack open source. The portable application includes an independent open-source Caddy hosting configuration and can run on Linux with an open-source browser without those services. See the [self-hosting guide](https://github.com/Awes0mer/heat-rescue/blob/main/HOSTING.md). Caddy is installed separately under its upstream Apache-2.0 license and dependency notices; no server binary is bundled in this source release. It has no paid/proprietary experiment API dependency.
+OpenAI Codex/ChatGPT, OpenAI Sites, GitHub and Slack are proprietary authoring, hosting or collaboration services. This repository does not license them and cannot honestly call the entire development stack open source. The portable application can run on an open-source HTTP server and browser without those services. It has no proprietary experiment API dependency.
 
 ## Hackathon status
 
-The [Moment participation page](https://scientificintelligence.org/hackathon) permits solo projects and requires a public repository with a README, a public project post, and submission through a Moment account/team. The [event submission page](https://llmhackathon.github.io/submission/) also requests a one-page write-up and a video of up to four minutes accessible without login. Prepare the stricter deliverable set because video wording differs across the two official pages.
+The [Moment participation page](https://scientificintelligence.org/hackathon) permits solo projects and requires a public repository with a README, a public project post, and submission through a Moment account/team. The [event submission page](https://llmhackathon.github.io/submission/) also requests a one-page write-up and a video of up to four minutes accessible without login.
 
-The [organizer's October 22, 7:06 p.m. Eastern announcement (event Slack login required)](https://llmsformateri-0lw8517.slack.com/archives/C04TLL1RSGH/p1792710369058659) extends the deadline to **11 p.m. CDT October 22 / midnight EDT October 23 / 04:00 UTC October 23** and allows submitted entries to be edited until then. This supersedes the older 7 p.m. Central deadline still on the event page.
+The organizer's October 22, 7:06 p.m. Eastern announcement on the event Slack extends the deadline to **11 p.m. CDT October 22 / midnight EDT October 23 / 04:00 UTC October 23** and allows submitted entries to be edited until then. This supersedes the older 7 p.m. Central deadline still on the event page.
 
-Disclose Omer Orman as the solo participant, AI coding/research assistance, the earlier manual simulation/UI extended during the event, actual Valency research use, and the fully simulated nature of results. Valency sponsor eligibility is conditional on actual Bond use and organizer verification; no award or eligibility ruling is claimed. No Moment submission, social post or terms acceptance is performed by this code release.
+Omer Orman is the solo participant; the entry discloses AI coding/research assistance, the earlier manual simulation/UI extended during the event, actual Valency research use, and the fully simulated nature of results. Valency sponsor eligibility is conditional on actual Bond use and organizer verification; no award or eligibility ruling is claimed. No Moment submission, social post or terms acceptance is performed by this code release.
 
 ## Limits of this review
 
-This is a documented component-license and rule audit, not a legal opinion or certification of worldwide patent, trademark, contract, safety or regulatory clearance. MIT, ISC, supplemental renderer, OFL and CC0 permissions address the distributed materials under their stated terms. They do not certify a physical implementation, grant rights in cited papers, or replace a needed commercial-service agreement.
+This is a documented component-license and rule audit, not a legal opinion or certification of worldwide patent, trademark, contract, safety or regulatory clearance. MIT/OFL/CC0 permissions address the distributed materials under their stated terms. They do not certify a physical implementation, grant rights in cited papers, or replace a needed commercial-service agreement.

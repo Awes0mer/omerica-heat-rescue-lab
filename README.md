@@ -1,24 +1,12 @@
-# Heat Rescue — Assembly & AI Experiment Lab
+# Omerica Heat Rescue — AI experiment lab with a 3D cooling assembly
+
+This combined release keeps the audited 3D cooling bench and adds a guided component tour, editable tile placement, component readings, continuous layer separation, and assembly-state export. The physics, optimizer and recorded benchmark remain unchanged from audited commit `e56c199` (`synthetic-open-v2`).
 
 **Can an AI learn where to place six thermoelectric generators and when to activate backup cooling, then pass cooling failures it has not trained on?**
 
-Heat Rescue runs that experiment in the browser. A Gaussian-process learning model proposes designs, a thermal simulator calculates their results, and the learner updates before choosing its next experiment. Random search and placement-only AI receive the same experiment budget. The selected designs then face held-out conditions.
+Omerica Heat Rescue runs that experiment in the browser. A Gaussian-process learning model proposes designs, a thermal simulator calculates their results, and the learner updates before choosing its next experiment. Random search and placement-only AI receive the same experiment budget. The selected designs then face held-out conditions.
 
 **Every temperature, watt and joule is simulated.** These are results from an uncalibrated model with example parameters, not hardware measurements, a certified cooling system, or proof of a first-ever invention. The AI method is established Bayesian optimization, not an LLM or a scripted winning design.
-
-## Independent open-source hosting
-
-Run the complete app on your own computer with open-source Caddy: `./hosting/run.sh`. See [HOSTING.md](HOSTING.md) for installation, local startup, and your own Linux server. No OpenAI Sites account, deployment, API, or cloud runtime is required. The server serves only `dist/`; the AI experiments run in the browser.
-
-## Explore the 3D assembly
-
-Open **3D assembly** to inspect an original, procedural cooling assembly. Drag to rotate, scroll or pinch to zoom, and click a part to see its modeled temperature, flow or generation. Keyboard arrows orbit the focused canvas, +/− zoom, and Home resets the view. The layer-separation slider reveals the hot plate, ceramic generator tiles and cold plate; it changes only the illustration, never thermal contact or the physics.
-
-Move tiles between servers while keeping exactly six in total, block a main pipe, and turn on the independent backup route. Moving tiles starts a fresh experiment at the new design's steady starting condition. Temperature colors follow calculated component temperatures; moving coolant markers indicate flow state, not measured velocity. Export downloads the current conceptual assembly and simulated state as JSON, not a fabrication file.
-
-The 3D teaching model uses three equal 200 W heat inputs and a fixed 0.50 W system backup cost while active. Its net power subtracts 0.90 W of assumed recovery equipment cost plus active backup pumping. The normal main pump and facility electricity are outside that incremental balance. The separate 2D experiment has independent state. After an AI campaign, **Use AI tiles** copies only the learned tile allocation into the 3D teaching model; it does not replay the AI's unequal-load benchmark or controller.
-
-Three.js **0.186.1** provides rendering only. All component shapes are original code-generated geometry; no external CAD models, textures, model packs or images are used. Dimensions, bolts and exploded positions are illustrative and do not enter the thermal calculation. This is an interactive concept assembly, not engineering CAD, CFD, a structural analysis or a hardware-validated design. See the [software inventory and retained notices](dist/third-party/README.md).
 
 ## Run and reproduce
 
@@ -32,15 +20,45 @@ npm run benchmark
 
 `npm test` runs all `*.test.mjs` files with Node's built-in test runner. `npm run benchmark` reruns the frozen eight-seed comparison and writes `dist/ai-benchmark.json`, including scenario definitions, individual results, learning curves and SHA-256 hashes of the planner and experimental physics source. The benchmark needs no network, API key or external model service.
 
-## A short demonstration for judges
+## Explore the new assembly view
 
-1. Open **AI experiment lab** and click **Run AI experiments**. Say: “We give each search 18 design experiments. Each design uses the same six tiles and the same test conditions.”
-2. Point to **AI predicted** and **Physics calculated**. Say: “The AI predicts a result, runs that experiment, then learns from the difference. It chooses where the tiles go, the temperature that starts backup cooling, and the backup flow.”
-3. Compare the learning curves and final cards. Say: “More generated electricity is not enough. We subtract extra pumping energy and separately check the temperature limit.”
-4. Open **Watch the chosen design face a held-out pipe failure**, choose a condition and replay it. Say: “These longer faults were withheld from the searches. The hot plate and water change temperature over time, and backup pumping has an electrical cost.”
-5. Open **The experiment notebook**, **Fair comparison & reproducibility**, and **What’s the research gap?** Say: “The predictions, observations, equations, assumptions and comparison results are inspectable. Some learned designs fail unfamiliar conditions; we report those failures.”
+The manual teaching view shows three equal-load server branches with circuit boards, copper heat spreaders, thermoelectric tiles, cold plates, supply/return manifolds, clickable valves, a separate backup route, and an electrical load. The assembly is original procedural geometry, not a manufacturer CAD model or a dimensionally verified installation.
 
-For physical intuition, open **3D assembly**, separate the layers, select a generator tile, then block a pipe and enable backup cooling. The **Separate 2D experiment** tab provides another independent illustration. These equal-load teaching setups differ from the AI benchmark; do not treat their readings as replays of an AI design.
+- Drag to orbit; scroll or pinch to zoom. Camera buttons and arrow/plus/minus keys provide alternatives.
+- Select a server component to inspect it. Clicking a valve uses the existing pipe-control callback. Exploding the assembly moves only the visible layers; it does not change the experiment.
+- Heat colors and electrical pulse brightness use the current model snapshot. Main-path pulses stop on a blocked branch; the secondary path uses the model's backup-active state. Particle size/speed and machine geometry are illustrative, not calibrated flow or dimensions. Pause/reduced-motion settings stop ambient particle/fan motion.
+- The small AI proposal view shows tile placement only. Its proposal labels do not claim computed temperatures or electricity before an experiment runs.
+- WebGL is needed for the 3D renderer; the existing 2D view/live controls remain the fallback. Hidden and offscreen scenes skip rendering.
+
+`dist/assembly-scene.js` contains the original scene and handwritten camera/picking controls. It imports a locally vendored MIT copy of **Three.js 0.170.0**. No external meshes, textures, stock photos, reference-project assets, or additional controls library are used. Text labels are generated locally; page fonts retain their existing OFL notices. See [third-party notices](dist/third-party/README.md).
+
+## Follow the guided 3D demo
+
+Start the guide beneath the camera controls to inspect all the assembly components, a blocked branch, backup cooling, tile placement, the AI experiment and potential benefits. The 13 steps use focused camera views and separated layers. Previous and Next pause automatic progression; Play advances every 12 seconds and stops at the last step. Changing tabs or hiding the page pauses the guide without automatically resuming.
+
+Every step starts a fresh balanced teaching example. Component steps show all-open equilibrium. The blockage and backup steps each calculate an independent 120-second example from that same equilibrium; the backup comparison starts with backup enabled. These are paused solver results, not a continuation between steps. End returns to a fresh running experiment. Manual run, pipe and layout controls are disabled while the guide is active.
+
+Step explanations, component readings and supporting text sit outside the canvas in collapsible panels. Floating labels are hidden during the guide and can be toggled. The benefits discussion explains possible research and teaching uses; this simulation does not establish real energy savings, emissions reductions, water savings or hardware safety.
+
+## Build and inspect a layout
+
+Open **Build your tile layout** beneath the cooling bench. Move a tile between servers or balance the six tiles. A changed allocation starts from that layout’s all-open equilibrium, clears faults and backup, and preserves whether the simulation is playing or paused. Invalid moves and an empty source cannot break the six-tile budget.
+
+Use **Layer separation** for any amount between assembled and fully separated; the toolbar **Explode assembly** button remains available. Select a branch and component for its computed readings, including plate/water temperature, branch generation, main/backup flow or pumping draw. The circuit board and processor geometry do not claim separately modeled sensor temperatures.
+
+After a completed AI experiment, **Use AI tiles** copies only the selected final allocation into this equal-load illustration. Intermediate proposals are never offered as the selected design. The AI’s unequal loads, backup trigger, pump policy and benchmark scores are not transferred. Starting another AI run clears this transfer until that run completes.
+
+**Export assembly** downloads the current computed state, six-tile allocation, exact parameters, play/pause state, selected branch and display settings as JSON, with the teaching-model limitations included. The existing readings CSV, parameter JSON and full AI experiment export remain available.
+
+## Quick tour
+
+1. Open **Let AI experiment** and click **Run AI experiments**. We give each search 18 design experiments. Each design uses the same six tiles and the same test conditions.
+2. Point to **AI predicted** and **Physics calculated**. The AI predicts a result, runs that experiment, then learns from the difference. It chooses where the tiles go, the temperature that starts backup cooling, and the backup flow.
+3. Compare the learning curves and final cards. More generated electricity is not enough. We subtract extra pumping energy and separately check the temperature limit.
+4. Open **Watch the chosen design face a held-out pipe failure**, choose a condition and replay it. These longer faults were withheld from the searches. The hot plate and water change temperature over time, and backup pumping has an electrical cost.
+5. Open **The experiment notebook**, **Fair comparison & reproducibility**, and **What’s the research gap?** The predictions, observations, equations, assumptions and comparison results are inspectable. Some learned designs fail unfamiliar conditions; we report those failures.
+
+For the physical intuition, the separate **Explore the assembly** tab lets a viewer block a pipe and enable backup cooling directly. Its equal-load teaching setup is different from the AI benchmark; do not treat its readings as a replay of an AI design.
 
 ## The experiment protocol
 
@@ -136,14 +154,14 @@ The interface exports calculated experiment observations. Replay traces are comp
 
 ## Open-source release and commercial reuse
 
-Project-authored code, UI, documentation and synthetic benchmark data are released under the [MIT license](LICENSE). Preserve that notice. Three.js 0.186.1 retains MIT, embedded Earcut ISC and supplemental upstream notices. Bundled fonts retain SIL OFL-1.1; Mulberry32 has CC0/public-domain provenance. Preserve every file in `dist/third-party/`. See [license scope](dist/COMPLIANCE.md), [third-party inventory](dist/third-party/README.md), [citation ledger](dist/CITATIONS.md), and [BibTeX](dist/SOURCES.bib). Three.js is vendored locally; no npm installation or CDN is required. There are no external AI weights or runtime API credentials. The runtime uses only local files and browser APIs, including local fonts and renderer modules.
+Project-authored code, UI, documentation and synthetic benchmark data are released under the [MIT license](LICENSE). Preserve that notice. Bundled fonts retain SIL OFL-1.1; Mulberry32 has CC0/public-domain provenance. Preserve every file in `dist/third-party/`. See [license scope](dist/COMPLIANCE.md), [third-party inventory](dist/third-party/README.md), [citation ledger](dist/CITATIONS.md), and [BibTeX](dist/SOURCES.bib). No package installation is required, but this release does bundle the third-party Three.js 0.170.0 renderer under MIT in `dist/vendor/three/`; retain its LICENSE, provenance and [supplemental upstream notices](dist/third-party/THREE-NOTICE.md). There are no external AI weights or runtime API credentials. All module and font requests use local files.
 
-The clean public source release excludes earlier private Git history, raw Valency exports, manufacturer coefficient tables, third-party paper PDFs and private hosting configuration. No claim is made that cited papers themselves are open source.
+The portable source archive excludes development history, raw Valency exports, manufacturer coefficient tables, third-party paper PDFs and machine-specific hosting configuration. The 3D assembly view bundles Three.js 0.170.0 under MIT; the scene code is original. No claim is made that cited papers themselves are open source.
 
-Valency was a research-stage service. It is not integrated into the executable app or required to rerun it. A separate commercial Valency license has **not** been verified; do not sell a Valency integration or redistribute its content/outputs on the strength of hackathon sponsorship. OpenAI Codex/ChatGPT, OpenAI Sites, GitHub and Slack are proprietary development/hosting/collaboration services, not dependencies licensed by this repository. The portable app can be served with open-source Python on Linux and viewed in Firefox without those services.
+Valency was used only at the research stage. It is not integrated into the executable app or required to rerun it. A separate commercial Valency license has **not** been verified, so no Valency integration is offered for sale and no Valency content or outputs are redistributed on the strength of hackathon sponsorship. OpenAI Codex/ChatGPT, OpenAI Sites, GitHub and Slack are proprietary development/hosting/collaboration services, not dependencies licensed by this repository. The portable app can be served with open-source Python on Linux and viewed in Firefox without those services.
 
 ## Hackathon disclosure
 
-Solo project prepared by Omer Orman with AI coding and research assistance in OpenAI Codex/ChatGPT. Valency Bond was used for literature discovery; primary sources were checked independently. Existing event-period manual simulation/UI were extended with the AI experiment loop, benchmark, and license-clean release. Do not claim an LLM runtime, manufacturer validation, proven first-ever novelty, or an entirely open-source authoring/hosting stack.
+Solo project prepared by Omer Orman with AI coding and research assistance in OpenAI Codex/ChatGPT and Claude Code. Valency Bond was used for literature discovery; primary sources were checked independently. Existing event-period manual simulation/UI were extended with the AI experiment loop, benchmark, and license-clean release. This project does not claim an LLM runtime, manufacturer validation, first-ever novelty, or an entirely open-source authoring/hosting stack.
 
-The [current Moment instructions](https://scientificintelligence.org/hackathon) allow solo participation and require a public repository, README, public project post and submission on Moment. [Organizer extension (event Slack login required)](https://llmsformateri-0lw8517.slack.com/archives/C04TLL1RSGH/p1792710369058659): 11 p.m. CDT October 22 = midnight EDT October 23, 2026. The [event submission page](https://llmhackathon.github.io/submission/) retains earlier timing and a mandatory video of at most four minutes, while Moment phrases video as optional; prepare the video to satisfy both. This repository is not evidence that a Moment entry has been submitted.
+The [current Moment instructions](https://scientificintelligence.org/hackathon) allow solo participation and require a public repository, README, public project post and submission on Moment. The organizers announced on the event Slack an extension to 11 p.m. CDT October 22 (midnight EDT October 23, 2026). The [event submission page](https://llmhackathon.github.io/submission/) keeps the earlier timing and asks for a video of at most four minutes, while Moment treats the video as optional.

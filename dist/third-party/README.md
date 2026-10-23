@@ -1,14 +1,6 @@
 # Third-party components and provenance
 
-Checked October 22, 2026. These notices describe material actually included in the distributable. The project's own source license does not replace the third-party licenses below.
-
-## 3D rendering
-
-Three.js **0.186.1** is bundled as the original `three.module.js` and `three.core.js` ES modules in `dist/vendor/three/`. The app imports `./vendor/three/three.module.js`; it does not request a CDN or install packages at runtime. This official release provides unminified build files, so their original filenames and bytes are preserved. No Three.js addons, examples, models, images, or textures are included.
-
-Three.js is distributed under [MIT](THREE-LICENSE.txt), which permits commercial use, modification, integration, and sale while retaining its copyright and license notice. Its embedded Earcut 3.0.2 triangulator has an [ISC notice](THREE-EARCUT-LICENSE.txt). Additional source attributions and accompanying permissive notices are collected in [THREE-NOTICE.md](THREE-NOTICE.md). Preserve this notice directory with the renderer when redistributing it.
-
-The official npm archive was verified against its published SHA-512 integrity and SHA-1 checksum before extraction. Pinned source URLs, archive integrity, file sizes, and SHA-256 hashes are in [three-package-provenance.json](three-package-provenance.json) and [asset-provenance.json](asset-provenance.json). Three.js provides visualization, not validation of the thermal simulation or a CAD/manufacturing model.
+Checked October 22, 2026. These notices describe material actually included in the distributable. The project's own source license does not replace the font licenses below.
 
 ## Fonts
 
@@ -37,6 +29,17 @@ Gaussian-process regression, expected improvement, constrained Bayesian optimiza
 
 Valency was used for literature research. No Valency client, API key, model weights, or raw paper abstracts are embedded in this app. It is not called by the deployed experiment loop.
 
-The portable source includes independent Caddy hosting configuration. Caddy is installed separately from the [official distribution](https://caddyserver.com/docs/install), under its [Apache-2.0 license](https://github.com/caddyserver/caddy/blob/v2.11.7/LICENSE) and upstream dependency notices; no Caddy binary is bundled here. The original OpenAI Sites demo is an optional service separate from this source. This notice does not grant rights to OpenAI Sites, Valency, web browsers, operating systems, or any other external service.
+The hosted demonstration uses OpenAI Sites, a service separate from this portable source. The source can be served by another static HTTP server. This notice does not grant rights to OpenAI Sites, Valency, web browsers, operating systems, or any other external service.
 
-Node.js is an optional test/benchmark development tool, not bundled in the web application. It has its own [license and third-party notices](https://github.com/nodejs/node/blob/main/LICENSE). No npm install is required to run the app: the Three.js runtime files are vendored locally. No AI model weights are bundled.
+Node.js is an optional test/benchmark development tool, not bundled in the web application. It has its own [license and third-party notices](https://github.com/nodejs/node/blob/main/LICENSE). No npm install step or bundled AI model weights are required. This release has a locally vendored npm-origin dependency: Three.js 0.170.0, described below. The lack of a package.json dependencies field does not mean no third-party JavaScript is present.
+
+
+## Three.js — 3D assembly view
+
+Three.js **0.170.0** is bundled in `../vendor/three/three.module.js` under the [MIT license](../vendor/three/LICENSE), copyright © 2010–2024 three.js authors. Keep that complete license with the module and preserve the [version-specific supplemental notices](THREE-NOTICE.md), including embedded Earcut 2.2.4 (ISC) and upstream shader/math credits. [Notice provenance](three-0.170.0-notice-provenance.json) records exact source pins and hashes. It is used only to render the presentation layer; it does not replace or alter the thermal solver, AI planner or experiment protocol.
+
+Source package: [official npm tarball](https://registry.npmjs.org/three/-/three-0.170.0.tgz). The verified SHA-512 package integrity and per-file SHA-256 values are recorded in [vendor provenance](../vendor/three/provenance.json). The locally included module and LICENSE were rehashed during the release audit and match that record.
+
+The original `assembly-scene.js` builds new procedural server/plate/tile/plumbing geometry and local text labels. No assets from external visual references, manufacturer CAD, downloaded textures, or stock images are included. It uses handwritten orbit/pinch/raycast interaction rather than an additional controls dependency. The module itself carries the project's MIT notice.
+
+The 3D assembly view is part of this release. Three.js is used only for drawing; it does not change the physics, the optimizer or the recorded benchmark.

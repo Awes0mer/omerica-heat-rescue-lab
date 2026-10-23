@@ -37,7 +37,7 @@ export function candidateDesigns() {
 }
 
 /** Mulberry32: Tommy Ettinger (2017), CC0; JavaScript adaptation published
- * in bryc/code under its public-domain dedication. Attribution and full
+ * in bryc/code under its public-domain dedication (MIT fallback). Attribution and full
  * license: third-party/MULBERRY32-LICENSE.txt and third-party/CC0-1.0.txt.
  * https://gist.github.com/tommyettinger/46a874533244883189143505d203312c
  * https://github.com/bryc/code/blob/master/jshash/PRNGs.md
@@ -233,14 +233,14 @@ export async function runExperimentCampaign({ evaluateDesign, budget = 18, seed 
     return record;
   };
 
-  await stage('warmup', 'Run four shared starting experiments. Both searches receive exactly the same initial observations.');
+  await stage('warmup', 'Running four shared starting experiments. Both searches receive exactly the same initial observations.');
   for (const design of initial) {
     const observed = await observe('ai', aiHistory, design, 'warmup', null, 'Shared starting experiment; no learned prediction yet.');
     await observe('random', randomHistory, design, 'warmup', null, 'Same starting observation supplied to both methods.', observed.outcome);
   }
 
   if (includePlacement) {
-    await stage('placement', 'Initialize the placement-only comparison: the same six tiles, with trigger fixed at 74 C and backup flow fixed at 50%.');
+    await stage('placement', 'Starting the placement-only comparison: the same six tiles, with trigger fixed at 74 C and backup flow fixed at 50%.');
     const placementInitial = [clone(DEFAULT_DESIGN), ...shuffled(placementCandidates.filter(d => designKey(d) !== designKey(DEFAULT_DESIGN)), seededRandom(seed ^ 0x241E351B)).slice(0, PLANNER_PROTOCOL.warmupTrials - 1)];
     for (const design of placementInitial) {
       const sameObservation = aiHistory.find(record => designKey(record.design) === designKey(design));
@@ -267,7 +267,7 @@ export async function runExperimentCampaign({ evaluateDesign, budget = 18, seed 
   const randomSelected = clone(bestRecord(randomHistory));
   const placementSelected = includePlacement ? clone(bestRecord(placementHistory)) : null;
   const fixedTrain = clone(aiHistory[0].outcome);
-  await stage('holdout', 'Freeze every selected design. Now test the fixed baseline and search winners on previously unused fault scenarios.');
+  await stage('holdout', 'Designs frozen. Testing the fixed baseline and search winners on previously unused fault scenarios.');
   const heldoutCache = new Map();
   const heldout = async design => {
     stopCheck();
@@ -285,6 +285,6 @@ export async function runExperimentCampaign({ evaluateDesign, budget = 18, seed 
   const random = { history: randomHistory, best: { design: randomSelected.design, outcome: randomSelected.outcome }, holdout: await heldout(randomSelected.design) };
   const placement = includePlacement ? { history: placementHistory, best: { design: placementSelected.design, outcome: placementSelected.outcome }, holdout: await heldout(placementSelected.design) } : null;
   const result = { seed, budget, candidateCount: candidates.length, placementCandidateCount: placementCandidates.length, fixed, ai, random, placement, metadata: { protocol: PLANNER_PROTOCOL, simulated: true, method: 'Constrained Bayesian optimization with two Gaussian-process surrogates and expected improvement', objectiveUnits: 'joules of incremental net electrical recovery', uncertaintyMeaning: 'Predictive uncertainty of the fitted surrogate, not real-world safety or measurement uncertainty.', sharedStartingTrials: PLANNER_PROTOCOL.warmupTrials, evaluatedDesignsPerMethod: budget, placementAblation: includePlacement, heldoutUsedForSelection: false, optimalityProven: false, aiWinGuaranteed: false } };
-  await stage('complete', 'Experiment complete. Report observed outcomes, including failures; no improvement or global optimum is guaranteed.');
+  await stage('complete', 'Experiment complete. Observed outcomes, including failures, are reported below; no improvement or global optimum is claimed.');
   return result;
 }

@@ -1,0 +1,173 @@
+{
+  "component": "three",
+  "version": "0.170.0",
+  "sourceTag": "r170",
+  "gitHead": "beab9e845f9e5ae11d648f55b24a0e910b56a85a",
+  "retrieved": "2026-10-22",
+  "packageMetadataUrl": "https://registry.npmjs.org/three/0.170.0",
+  "tarballUrl": "https://registry.npmjs.org/three/-/three-0.170.0.tgz",
+  "npmIntegrity": "sha512-FQK+LEpYc0fBD+J8g6oSEyyNzjp+Q7Ks1C568WWaoMRLW+TkNNWmenWeGgJjV105Gd+p/2ql1ZcjYvNiPZBhuQ==",
+  "computedIntegrity": "sha512-FQK+LEpYc0fBD+J8g6oSEyyNzjp+Q7Ks1C568WWaoMRLW+TkNNWmenWeGgJjV105Gd+p/2ql1ZcjYvNiPZBhuQ==",
+  "npmShasum": "6087f97aab79e9e9312f9c89fcef6808642dfbb7",
+  "tarballSHA256": "4a608a355dcaba72e0e5383cdc814303f5b6060b43c238cdf6932dceb699238d",
+  "packageVerification": {
+    "sha512Matches": true,
+    "rootLicense": "LICENSE",
+    "separateRootNotice": false,
+    "moduleByteForByteMatchesPackage": true,
+    "licenseByteForByteMatchesPackage": true
+  },
+  "assets": [
+    {
+      "file": "vendor/three/three.module.js",
+      "packagePath": "build/three.module.js",
+      "sha256": "ce1fa418de16a19495a9f72495580e3015d7745c296d3ce0485897f902ddedfb",
+      "bytes": 1314681,
+      "modified": false
+    },
+    {
+      "file": "vendor/three/LICENSE",
+      "packagePath": "LICENSE",
+      "sha256": "4c40a1ef62450b857c3b2aaf294936304cd552d965fbcd9d32d4c5bcf4ba4454",
+      "bytes": 1081,
+      "modified": false
+    }
+  ],
+  "additionalNotices": [
+    {
+      "file": "third-party/THREE-EARCUT-LICENSE.txt",
+      "url": "https://raw.githubusercontent.com/mapbox/earcut/v2.2.4/LICENSE",
+      "license": "ISC",
+      "scope": "Earcut 2.2.4 port in Three.js 0.170.0",
+      "sha256": "cd661c432ea8243974e6fde6fc433ebee3e96525ca8b66321b9d9971674ede60",
+      "bytes": 738,
+      "modified": false
+    },
+    {
+      "file": "third-party/THREE-LIGHTGL-LICENSE.txt",
+      "url": "https://raw.githubusercontent.com/evanw/lightgl.js/2581efd1b14bc4ae864f6d0f5b387c9c4ba82069/LICENSE",
+      "sha256": "223d9247d30f9d8f842cca7de8e2454d104edb435674305ef3df473bae17d44b",
+      "bytes": 1059,
+      "license": "MIT",
+      "scope": "CameraHelper frustum visualization reference to the lightgl.js shadowmap example",
+      "modified": false
+    },
+    {
+      "file": "third-party/THREE-EVENTDISPATCHER-LICENSE.txt",
+      "url": "https://raw.githubusercontent.com/mrdoob/eventdispatcher.js/f31179e964ce6cd76818fd25f4152d4bcc82040c/LICENSE",
+      "sha256": "f6be4a43cdb6a751010711ed619162fcba3628739f0cbb9020141253857ed204",
+      "bytes": 1068,
+      "license": "MIT",
+      "scope": "EventDispatcher reference",
+      "modified": false
+    },
+    {
+      "file": "third-party/THREE-LTC-LICENSE.txt",
+      "url": "https://raw.githubusercontent.com/selfshadow/ltc_code/31e5e96b54f98f33098f8503003119ba2231a1c6/LICENSE",
+      "sha256": "692a54e97fcadd0f04b14027386e53809c1dcf96de3e15b15af15731b15c1e94",
+      "bytes": 1718,
+      "license": "LicenseRef-LTC-Code-BSD",
+      "scope": "ACES tone-mapping fitting and rectangular-light shading code references",
+      "modified": false
+    },
+    {
+      "file": "third-party/THREE-FILAMENT-LICENSE.txt",
+      "url": "https://raw.githubusercontent.com/google/filament/fc6744ba7555b37371cc05924ef851fbc72456e3/LICENSE",
+      "sha256": "02d70b593dd8e9355dd8e1ca8d13c303bee5bcaf3065b66ff6e4f534e1e6a2c1",
+      "bytes": 11362,
+      "license": "Apache-2.0",
+      "scope": "AgX adaptation and physical-shading references in r170 shaders; license pinned to the AgX PR merge explicitly cited by r170",
+      "modified": false
+    },
+    {
+      "file": "third-party/THREE-BOOST-LICENSE.txt",
+      "url": "https://www.boost.org/LICENSE_1_0.txt",
+      "sha256": "c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566",
+      "bytes": 1338,
+      "license": "BSL-1.0",
+      "scope": "Geometric Tools ray-to-segment distance and ray/triangle intersection references; David Eberly, copyright 1998-2018",
+      "modified": false
+    },
+    {
+      "file": "third-party/THREE-MODELVIEWER-LICENSE.txt",
+      "url": "https://raw.githubusercontent.com/google/model-viewer/3ed05fa99e8f0051caabd32d7e4527f154d0500e/LICENSE",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "bytes": 11358,
+      "license": "Apache-2.0",
+      "scope": "NeutralToneMapping reference to model-viewer CommerceToneMapping example; source header copyright 2020 Google Inc.",
+      "modified": false
+    }
+  ],
+  "noticeIndex": "THREE-NOTICE.md",
+  "noticeIndexSHA256": "279360bc9a876c43b6fa4d809471dc238f9aba28ea26bb535064676a58acdbc6",
+  "sourceEvidence": [
+    {
+      "packagePath": "src/extras/Earcut.js",
+      "url": "https://raw.githubusercontent.com/mrdoob/three.js/beab9e845f9e5ae11d648f55b24a0e910b56a85a/src/extras/Earcut.js",
+      "sha256": "42f2cbfd931818b726466688ba1a1aba739182fe4058772194e53df34985c4b2"
+    },
+    {
+      "packagePath": "src/math/Ray.js",
+      "url": "https://raw.githubusercontent.com/mrdoob/three.js/beab9e845f9e5ae11d648f55b24a0e910b56a85a/src/math/Ray.js",
+      "sha256": "bd0ec641a8ee0cf8538471f0065dcdc698bb72f892b5b29e1c40874d3ae57975"
+    },
+    {
+      "packagePath": "src/math/Matrix4.js",
+      "url": "https://raw.githubusercontent.com/mrdoob/three.js/beab9e845f9e5ae11d648f55b24a0e910b56a85a/src/math/Matrix4.js",
+      "sha256": "109ca3543942be6fb3563c4df95dc3988e41f865e7017f1f2e6cd4c6d86069ab"
+    },
+    {
+      "packagePath": "src/extras/core/ShapePath.js",
+      "url": "https://raw.githubusercontent.com/mrdoob/three.js/beab9e845f9e5ae11d648f55b24a0e910b56a85a/src/extras/core/ShapePath.js",
+      "sha256": "7bfc893442c00e681f5f29ef5cf78b54233f5e7ae691d2f4da9829e5efa83d44"
+    },
+    {
+      "packagePath": "src/helpers/CameraHelper.js",
+      "url": "https://raw.githubusercontent.com/mrdoob/three.js/beab9e845f9e5ae11d648f55b24a0e910b56a85a/src/helpers/CameraHelper.js",
+      "sha256": "12f3ba80b21be7ea4148adefb7c576eb8fbef73c3c4027d29ab8ba19f08b3573"
+    },
+    {
+      "packagePath": "src/renderers/shaders/ShaderChunk/tonemapping_pars_fragment.glsl.js",
+      "url": "https://raw.githubusercontent.com/mrdoob/three.js/beab9e845f9e5ae11d648f55b24a0e910b56a85a/src/renderers/shaders/ShaderChunk/tonemapping_pars_fragment.glsl.js",
+      "sha256": "447958b93d07616c83d9273829ed810eb734d02ebbe60f12fc9bdda4f7928f44"
+    },
+    {
+      "packagePath": "src/renderers/shaders/ShaderChunk/lights_physical_pars_fragment.glsl.js",
+      "url": "https://raw.githubusercontent.com/mrdoob/three.js/beab9e845f9e5ae11d648f55b24a0e910b56a85a/src/renderers/shaders/ShaderChunk/lights_physical_pars_fragment.glsl.js",
+      "sha256": "8228e12d6904efecff76ef21f217836bcf57100ab8c53326b74a8a6f273b04a8"
+    }
+  ],
+  "referenceEvidence": [
+    {
+      "key": "filament-agx-source",
+      "url": "https://raw.githubusercontent.com/google/filament/fc6744ba7555b37371cc05924ef851fbc72456e3/filament/src/ToneMapper.cpp",
+      "sha256": "d4d8b108666c6e52c79841dea1e30d5e1f1f5369401f36b1f7e010eb09023654",
+      "bytes": 15567
+    },
+    {
+      "key": "filament-brdf-source",
+      "url": "https://raw.githubusercontent.com/google/filament/fc6744ba7555b37371cc05924ef851fbc72456e3/shaders/src/brdf.fs",
+      "sha256": "9d81b2ea2b8aa559aba7508d1145d97ff07a5614d048f8d4cd0e398b52d4b475",
+      "bytes": 9254
+    },
+    {
+      "key": "modelviewer-source",
+      "url": "https://raw.githubusercontent.com/google/model-viewer/3ed05fa99e8f0051caabd32d7e4527f154d0500e/packages/modelviewer.dev/examples/tone-mapping.html",
+      "sha256": "418f94b9be07fca2a9a4836e2ff1ccf5302670c125e614de2778421bdf1e931a",
+      "bytes": 36147
+    },
+    {
+      "key": "geometric-ray-segment",
+      "url": "https://raw.githubusercontent.com/pmjoniak/GeometricTools/55cd0526fa5587347f6a5fa8f34eb546ebee6224/GTEngine/Include/Mathematics/GteDistRaySegment.h",
+      "sha256": "dbcd828fe9de30655100adfb8585c47f02dda065d94ef4a387053a6e28466ff4",
+      "bytes": 4880
+    },
+    {
+      "key": "geometric-ray-triangle",
+      "url": "https://raw.githubusercontent.com/pmjoniak/GeometricTools/55cd0526fa5587347f6a5fa8f34eb546ebee6224/GTEngine/Include/Mathematics/GteIntrRay3Triangle3.h",
+      "sha256": "294677bf03561ee45609d35b37382dfa95e90aa10a066c90cc9deb88c31a6be2",
+      "bytes": 5708
+    }
+  ],
+  "scope": "Unmodified official Three.js 0.170.0 WebGL module and identified embedded/ported/reference material. Source and license texts were inspected; no addons, assets, fonts, node_modules, examples or renderer upgrades are added by this notice update. A source citation alone is not a legal finding about the referenced work. No complete historical copyright or patent-clearance claim."
+}

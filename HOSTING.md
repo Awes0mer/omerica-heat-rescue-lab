@@ -1,8 +1,8 @@
-# Run Heat Rescue without OpenAI Sites
+# Run Omerica Heat Rescue without OpenAI Sites
 
 The complete app can run on your own computer or server using **Caddy**, an open-source HTTP server. No OpenAI account, Sites deployment, API key, Valency account, database, npm installation, Docker Desktop, or external model service is required at runtime.
 
-Caddy serves the files in `dist/`. The browser runs the simulation and AI optimizer in local Web Workers. Fonts, scripts, the vendored Three.js renderer, citations and saved benchmark data are included. The 3D assembly uses WebGL2; its non-3D controls and the separate 2D experiment remain available if graphics initialization fails. The supplied server policy restricts executable resources and runtime connections to the same origin. Scientific reference links remain ordinary external links that open only when clicked.
+Caddy serves the files in `dist/`. The browser runs the simulation and AI optimizer in local Web Workers. Fonts, scripts, the locally bundled Three.js 0.170.0 renderer, citations and saved benchmark data are included. The assembly needs WebGL2; if graphics initialization fails, the same teaching simulation remains usable through its 2D schematic and controls. The supplied server policy restricts executable resources and runtime connections to the same origin. Scientific reference links remain ordinary external links that open only when clicked.
 
 ## Start locally
 
@@ -13,7 +13,7 @@ Caddy serves the files in `dist/`. The browser runs the simulation and AI optimi
 ./hosting/run.sh
 ```
 
-3. Open **http://127.0.0.1:8088/#assembly** in a browser. Stop the foreground server with **Ctrl+C**.
+3. Open **http://127.0.0.1:8088/#manual** in a browser. Stop the foreground server with **Ctrl+C**.
 
 The default binds only to this computer. Explicit local HTTP avoids installing a local certificate authority or changing your trust store. To use a separately downloaded Caddy executable:
 
@@ -53,19 +53,19 @@ Caddy's [automatic HTTPS](https://caddyserver.com/docs/automatic-https) obtains 
 
 ## Licenses and boundaries
 
-- Heat Rescue source and these hosting scripts/configuration: [MIT](LICENSE).
+- Omerica Heat Rescue source and these hosting scripts/configuration: [MIT](LICENSE).
 - Separately installed Caddy: [Apache License 2.0](https://github.com/caddyserver/caddy/blob/v2.11.7/LICENSE), with upstream dependencies retaining their own licenses. Tested server version: **2.11.7**. Use an official unmodified package; this repository does not redistribute its compiled binary.
-- Bundled Three.js 0.186.1: MIT, with embedded ISC and supplemental [upstream notices](dist/third-party/THREE-NOTICE.md). The original renderer modules are served locally; no CDN is used.
+- Bundled Three.js 0.170.0: MIT with retained version-specific upstream notices; see [renderer notices](dist/third-party/THREE-NOTICE.md).
 - Bundled fonts and random routine: retained [OFL and CC0/public-domain notices](dist/third-party/README.md).
 
 The app's original authoring and optional OpenAI Sites demo are separate services. This setup removes the requirement to use OpenAI Sites for hosting; it does not claim those external services or the Mac operating system became open source. Valency's prior research role and licensing scope are documented in [COMPLIANCE.md](dist/COMPLIANCE.md).
 
 ## Verification
 
-Use `npm test` for the scientific/model tests, or serve the app and run the AI experiments in the browser. Hosting checks should verify the 3D assembly, part selection, tile allocation and pipe controls, a full worker campaign, no off-origin runtime requests, locally loaded fonts, correct JavaScript MIME types, and 404 responses for repository configuration paths. Only `dist/` is exposed; source/configuration above that directory is not served.
+Use `npm test` for the scientific/model tests, or serve the app and run the AI experiments in the browser. Hosting checks should verify the assembly, component selection, tile moves, pipe controls, layer separation and export, as well as a full worker campaign, no off-origin runtime requests, locally loaded fonts, correct JavaScript MIME types, and 404 responses for repository configuration paths. Only `dist/` is exposed; source/configuration above that directory is not served.
 
 Local verification on October 22, 2026 used unmodified Caddy 2.11.7 on macOS ARM64 at port 8088. With every off-origin browser request blocked, all 54 experiment observations completed, both fonts loaded, and the browser reported zero errors or attempted external requests. Blocking pipe B raised its modeled hot plate from 63.3°C to 63.9°C while total generated power changed from 1.28 W to 1.17 W during the check. JavaScript and font MIME types were correct; `.git`, `.openai`, hosting configuration and unknown paths returned HTTP 404. These checks verify the hosting path, not hardware accuracy.
 
-The assembly release also verified local Three.js loading, desktop/mobile layouts, visual-only layer separation, six-tile allocation, blocked-pipe flow and temperature response, backup cost, JSON export, keyboard controls and a working fallback without WebGL. Its default AI campaign completed all 54 observations with zero browser errors and zero off-origin requests, and copied the learned 3 / 2 / 1 placement into the separate 3D teaching model.
+The combined assembly was separately checked through a loopback Python static server at port 8093: desktop and 390/320-pixel layouts, stable stage height during inspection, fullscreen, six-tile edits, final AI allocation transfer, JSON export, cancellation and a working schematic with WebGL disabled. Its default AI run retained the 3 / 2 / 1 layout, 141 J displayed held-out result and 78.90°C displayed peak. The 3D view and schematic share one teaching simulation. No physical model parameters or benchmark results are changed by this hosting or assembly setup.
 
-No physical model parameters or benchmark results are changed by this hosting or assembly setup.
+The guided-demo update was checked at desktop width and at 390 and 320 pixels: all 13 steps, independent blockage/backup examples, camera focus, collapsible text outside the canvas, manual navigation, 12-second autoplay, pause on switching views, a simulated visibility-change event, restored manual controls, fullscreen, tile edits and JSON export. The WebGL-disabled schematic also completed the backup step. Explanations start collapsed on phones; expanding them leaves the 365-pixel mobile stage unchanged. These targeted browser checks accompany 39 passing Node tests.
