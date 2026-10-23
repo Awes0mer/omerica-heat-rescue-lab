@@ -1,4 +1,5 @@
 import { PARAMS, createSimulation, step, setBlocked, setBackupCooling, snapshot } from './model.js';
+import { isTileAllocation, allocationForAction, createAssemblyExport } from './assembly-state.js';
 
 const $ = id => document.getElementById(id);
 const letters = ['A','B','C'];
@@ -55,7 +56,7 @@ $('backup').addEventListener('click',()=>{setBackupCooling(sim,!sim.backupCoolin
 function updatePause(){put('pause',running?'Pause':'Play');$('pause').setAttribute('aria-label',running?'Pause simulation':'Play simulation');document.querySelector('.lab').classList.toggle('paused',!running);}
 $('pause').addEventListener('click',()=>{if(sim.time>=1800){reset();return;}running=!running;updatePause();});
 $('speed').addEventListener('change',e=>{speed=Number(e.target.value);});
-function reset(nextCounts=[2,2,2]){counts=[...nextCounts];sim=createSimulation({counts});samples=[];events=[];lastSample=-1;selected=1;running=true;updatePause();for(const b of document.querySelectorAll('[data-counts]'))b.classList.toggle('active',b.dataset.counts===counts.join(','));takeSample(snapshot(sim),true);render();}
+function reset(nextCounts=[2,2,2], {run=true,select=1}={}){if(!isTileAllocation(nextCounts))return false;counts=[...nextCounts];sim=createSimulation({counts});samples=[];events=[];lastSample=-1;selected=select;running=run;updatePause();for(const b of document.querySelectorAll('[data-counts]'))b.classList.toggle('active',b.dataset.counts===counts.join(','));takeSample(snapshot(sim),true);render();return true;}
 $('reset').addEventListener('click',()=>reset());
 for(const button of document.querySelectorAll('[data-counts]'))button.addEventListener('click',()=>reset(button.dataset.counts.split(',').map(Number)));
 $('download').addEventListener('click',()=>{takeSample(snapshot(sim),true);const header=['simulated_seconds','tiles_A_B_C','blocked_pipe','backup_active','generated_W','total_pump_W','additional_pump_W','recovery_minus_additional_pump_W','hottest_plate_C',...letters.flatMap(l=>[`${l}_hot_C`,`${l}_cold_C`,`${l}_water_C`,`${l}_flow_kg_s`,`${l}_generated_W`])];const rows=samples.map(r=>[f(r.time,3),r.layout,r.blocked,r.backup?1:0,f(r.grossW,6),f(r.pumpW,3),f(r.extraPumpW,3),f(r.netW,6),f(r.hotC,4),...r.branches.flatMap(b=>[f(b.hotC,4),f(b.coldC,4),f(b.waterC,4),f(b.flowKgS,4),f(b.powerW,6)])].join(','));download('heat-rescue-SIMULATED-readings.csv',[header.join(','),...rows].join('\n'),'text/csv');});
@@ -64,7 +65,7 @@ $('download-parameters').addEventListener('click',()=>download('heat-rescue-exam
 function renderChart(s){const svg=$('chart'),w=580,h=150,padL=34,padR=9,top=17,bottom=27;const minT=Math.max(0,s.time-300),maxT=Math.max(30,s.time);const visible=samples.filter(r=>r.time>=minT);const ymax=Math.max(s.baseline.totalPowerW*1.3,...visible.map(r=>r.grossW*1.15),0.1);const x=t=>padL+(t-minT)/(maxT-minT)*(w-padL-padR),y=p=>h-bottom-p/ymax*(h-top-bottom);const path=visible.map((r,i)=>`${i?'L':'M'}${x(r.time).toFixed(2)},${y(r.grossW).toFixed(2)}`).join(' ');const ticks=[0,ymax/2,ymax];svg.innerHTML=ticks.map(t=>`<path d="M${padL} ${y(t)}H${w-padR}" stroke="#e4e7dc"/><text x="${padL-7}" y="${y(t)+3}" text-anchor="end" fill="#88917f" font-size="9">${f(t,1)}</text>`).join('')+`<text x="4" y="9" fill="#88917f" font-size="8">W</text><path d="M${padL} ${y(s.baseline.totalPowerW)}H${w-padR}" stroke="#a0b299" stroke-dasharray="4 4" fill="none"/>`+events.filter(e=>e.time>=minT).slice(-3).map(e=>`<path d="M${x(e.time)} ${top+8}V${h-bottom}" stroke="#c6cdbb" stroke-dasharray="2 3"/><text x="${Math.max(70,Math.min(w-60,x(e.time)))}" y="11" font-size="8" text-anchor="middle" fill="#7d8a70">${e.label}</text>`).join('')+`<path d="${path}" stroke="#b38b39" stroke-width="2.5" fill="none"/><circle cx="${x(s.time)}" cy="${y(s.totalPowerW)}" r="3" fill="#b38b39"/><text x="${padL}" y="${h-7}" fill="#8b9483" font-size="9">${Math.round(minT)}s</text><text x="${w-padR}" y="${h-7}" text-anchor="end" fill="#8b9483" font-size="9">${Math.round(maxT)}s</text>`;put('chart-duration',`${Math.floor(s.time)} seconds simulated${minT>0?' · last 5 minutes shown':''}`);}
 function render(){
  latest=snapshot(sim);
- window.dispatchEvent(new CustomEvent("heat-snapshot", {detail: {...latest, selected, _running:running}}));const s=latest,b=s.branches[selected];const blocked=s.branches.some(b=>b.blocked);const baseline=s.baseline.totalPowerW;const rawChange=100*(s.totalPowerW/baseline-1);const change=Math.abs(rawChange)<0.05?0:rawChange;put('clock',timeText(s.time));put('power',f(s.totalPowerW,2));put('scene-power',`${f(s.totalPowerW,2)} W`);put('power-comparison',`All open: ${f(baseline,2)} W · ${change>=0?'+':''}${f(change,1)}%`);put('temperature',f(s.maxHotC));put('temperature-comparison',`All open: ${f(s.baseline.maxHotC)}°C · modeled plate`);put('selected-branch',letters[selected]);put('gap',f(b.deltaC));put('gap-detail',`${f(b.hotC)}° hot − ${f(b.coldC)}° cold`);put('budget-gross',`${f(s.totalPowerW,2)} W`);put('budget-pump',`${f(s.incrementalPumpW,2)} W`);put('budget-net',`${f(s.netRecoveryW,2)} W`);put('total-pump',`Total modeled pump draw: ${f(s.pumpPowerW,2)} W.`);
+ window.dispatchEvent(new CustomEvent("heat-snapshot", {detail: {...latest, counts:[...counts], selected, _running:running}}));const s=latest,b=s.branches[selected];const blocked=s.branches.some(b=>b.blocked);const baseline=s.baseline.totalPowerW;const rawChange=100*(s.totalPowerW/baseline-1);const change=Math.abs(rawChange)<0.05?0:rawChange;put('clock',timeText(s.time));put('power',f(s.totalPowerW,2));put('scene-power',`${f(s.totalPowerW,2)} W`);put('power-comparison',`All open: ${f(baseline,2)} W · ${change>=0?'+':''}${f(change,1)}%`);put('temperature',f(s.maxHotC));put('temperature-comparison',`All open: ${f(s.baseline.maxHotC)}°C · modeled plate`);put('selected-branch',letters[selected]);put('gap',f(b.deltaC));put('gap-detail',`${f(b.hotC)}° hot − ${f(b.coldC)}° cold`);put('budget-gross',`${f(s.totalPowerW,2)} W`);put('budget-pump',`${f(s.incrementalPumpW,2)} W`);put('budget-net',`${f(s.netRecoveryW,2)} W`);put('total-pump',`Total modeled pump draw: ${f(s.pumpPowerW,2)} W.`);
  put('experiment-status',blocked?`Pipe ${letters[s.branches.find(b=>b.blocked).id]} blocked${s.backupActive?' · backup on':''}`:'All pipes open');document.querySelector('.lab-title').classList.toggle('blocked',blocked);$('main-action').classList.toggle('restore',blocked);$('main-action').innerHTML=blocked?'Restore main flow <span>↻</span>':`Block pipe ${letters[selected]} <span>⊘</span>`;put('action-instruction',sim.time>=1800?'30 simulated minutes reached. Reset to try again.':blocked?'Watch both sides warm up.':'Try blocking a cooling pipe.');$('backup-row').hidden=!blocked;$('backup').textContent=sim.backupCooling?'Turn backup off':'Enable backup cooling';$('backup').classList.toggle('enabled',sim.backupCooling);put('backup-description',s.backupActive?'Backup is supplying half the normal flow. It adds 0.50 W of assumed pumping.':'Try a separate cooling path: half flow, plus 0.50 W of assumed pumping.');
  $('limit-note').classList.toggle('warning',!s.withinIllustrativeLimit);put('limit-note',s.withinIllustrativeLimit?'80°C is an illustrative limit, not a hardware rating.':'Over the illustrative 80°C limit. This trial fails the temperature constraint.');
  if(s.backupActive){put('explanation-kicker','TESTING A WORKAROUND');put('explanation-title','Backup flow removes heat—at a cost.');put('explanation-text','A separate path carries water through the affected cold plate. Watch the temperature gap recover. The extra pump cost is counted below, so cooling can improve while net recovery gets worse.');}
@@ -85,6 +86,25 @@ window.addEventListener("heat-ai-start", () => { running = false; updatePause();
 
 // Presentation-only bridge: the 3D controls use the existing simulation actions.
 window.addEventListener('heat-scene-action', ({detail}) => {
+  if (!detail || typeof detail !== 'object' || Array.isArray(detail)) return;
   if (detail.type === 'pipe' && Number.isInteger(detail.index) && detail.index >= 0 && detail.index < 3) togglePipe(detail.index);
   if (detail.type === 'select' && Number.isInteger(detail.index) && detail.index >= 0 && detail.index < 3) { selected = detail.index; render(); }
+  if (detail.type === 'request-snapshot') render();
+  if (['move-tile', 'balance-tiles', 'apply-ai-layout'].includes(detail.type)) {
+    const result = allocationForAction(counts, detail);
+    if (result.ok && result.changed) reset(result.counts, {run:running,select:selected});
+    window.dispatchEvent(new CustomEvent('heat-scene-action-result', {detail: {
+      type:detail.type, ...result, reset:Boolean(result.ok && result.changed),
+      message:result.ok ? (result.changed ? 'Allocation changed. Time, temperatures, pipes, and backup cooling have reset to the all-open starting state.' : 'This allocation is already on the assembly. The current run is unchanged.') : result.reason
+    }}));
+  }
+  if (detail.type === 'export-assembly') {
+    try {
+      const data=createAssemblyExport({snapshot:snapshot(sim),counts,parameters:PARAMS,selected,running,metadata:detail.metadata??null});
+      download('heat-rescue-SIMULATED-assembly.json',JSON.stringify(data,null,2),'application/json');
+      window.dispatchEvent(new CustomEvent('heat-scene-action-result',{detail:{type:detail.type,ok:true,message:'Exported the current simulated assembly and model limitations.'}}));
+    } catch(error) {
+      window.dispatchEvent(new CustomEvent('heat-scene-action-result',{detail:{type:detail.type,ok:false,reason:'Assembly export could not be created.',message:'Assembly export could not be created.'}}));
+    }
+  }
 });

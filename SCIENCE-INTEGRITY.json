@@ -1,0 +1,51 @@
+{
+  "checked_at_utc": "2026-10-23T02:18:00.356173+00:00",
+  "base_commit": "e56c199",
+  "files": [
+    {
+      "file": "dist/model.js",
+      "sha256": "d9e503d53e2c97ad4d7ba23585af05251bd2bbe143e55a41abd52cea064d0d06",
+      "identical_to_e56c199": true
+    },
+    {
+      "file": "dist/experiment-model.js",
+      "sha256": "a55a1688c0ec71a0c8f06912d7736db75b8d6628d86e0a1fd3bb074dac44fc62",
+      "identical_to_e56c199": true
+    },
+    {
+      "file": "dist/ai-planner.js",
+      "sha256": "db361b1dd48447bfefbc38c507bd4058e10670a26f4dd83fc363d19beb63626c",
+      "identical_to_e56c199": true
+    },
+    {
+      "file": "dist/ai-benchmark.json",
+      "sha256": "4bd86acf340a93016a78b4adb7d25d5e743bd9da8664cbe334c0e8f287079e34",
+      "identical_to_e56c199": true
+    },
+    {
+      "file": "dist/ai-ui.js",
+      "sha256": "213a09e59c0872d27d9855db699a8ebec3c5b04cc011f3603bba511e6c957727",
+      "identical_to_e56c199": true
+    },
+    {
+      "file": "dist/ai-worker.js",
+      "sha256": "b6275f3e09426c2e6a0308229cb2aa07043784c31c7e38006739294c172687b4",
+      "identical_to_e56c199": true
+    },
+    {
+      "file": "dist/layout-worker.js",
+      "sha256": "0645b0aa55af6674655cb8517033ad567a572848515cb55e6f3af11cd4710673",
+      "identical_to_e56c199": true
+    },
+    {
+      "file": "dist/vendor/three/three.module.js",
+      "sha256": "ce1fa418de16a19495a9f72495580e3015d7745c296d3ce0485897f902ddedfb",
+      "identical_to_e56c199": true
+    },
+    {
+      "file": "dist/vendor/three/LICENSE",
+      "sha256": "4c40a1ef62450b857c3b2aaf294936304cd552d965fbcd9d32d4c5bcf4ba4454",
+      "identical_to_e56c199": true
+    }
+  ]
+}

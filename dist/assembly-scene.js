@@ -342,7 +342,7 @@ export function mountAssembly(host, {onSelect, onTogglePipe, onInspect} = {}) {
     const rect=host.getBoundingClientRect();hasSize=rect.width>0&&rect.height>0;
     if(!hasSize)return;
     const w=rect.width,h=rect.height;
-    renderer.setSize(w,h,false);camera.aspect=w/h;
+    renderer.setSize(w,h,false);camera.aspect=w/h;camera.zoom=camera.aspect>1.5?1.12:1;
     camera.fov=Math.min(80,THREE.MathUtils.radToDeg(2*Math.atan(Math.tan(THREE.MathUtils.degToRad(40)/2)*Math.max(1,1.3/camera.aspect))));
     camera.updateProjectionMatrix();
   }
@@ -412,7 +412,7 @@ export function mountAssembly(host, {onSelect, onTogglePipe, onInspect} = {}) {
     const mix=reduced.matches?1:1-Math.exp(-dt*8);
     actual.azimuth=THREE.MathUtils.lerp(actual.azimuth,desired.azimuth,mix);actual.elevation=THREE.MathUtils.lerp(actual.elevation,desired.elevation,mix);actual.radius=THREE.MathUtils.lerp(actual.radius,desired.radius,mix);actual.target.lerp(desired.target,mix);
     camera.position.set(actual.target.x+actual.radius*Math.sin(actual.azimuth)*Math.cos(actual.elevation),actual.target.y+actual.radius*Math.sin(actual.elevation),actual.target.z+actual.radius*Math.cos(actual.azimuth)*Math.cos(actual.elevation));camera.lookAt(actual.target);
-    explodeAmount=THREE.MathUtils.lerp(explodeAmount,exploded?1:0,mix);
+    explodeAmount=THREE.MathUtils.lerp(explodeAmount,Number(exploded),mix);
     for(const p of parts) {
       p.tray.position.z=explodeAmount*.38;p.pcb.position.y=.76+explodeAmount*.15;p.processors.position.y=.88+explodeAmount*.43;
       p.hot.position.y=1.12+explodeAmount*.90;p.teg.position.y=1.30+explodeAmount*1.42;p.cold.position.y=1.57+explodeAmount*2.0;
@@ -452,5 +452,5 @@ export function mountAssembly(host, {onSelect, onTogglePipe, onInspect} = {}) {
     canvas.removeEventListener('pointerdown',down);canvas.removeEventListener('pointermove',move);canvas.removeEventListener('pointerup',up);canvas.removeEventListener('pointercancel',cancel);canvas.removeEventListener('wheel',wheel);canvas.removeEventListener('keydown',keyboard);
     for(const g of geometries)g.dispose();for(const m of materials)m.dispose();for(const t of textures)t.dispose();renderer.dispose();canvas.remove();
   }
-  return {available:true,setSnapshot,setDesign,setExploded(value){exploded=Boolean(value);if(exploded&&desired.radius>10)desired.target.y=1.35;else if(!exploded)desired.target.y=.8;},setThermal(value){thermal=Boolean(value);if(latest&&!designOnly)setSnapshot(latest,selected);},setView,resize,dispose};
+  return {available:true,setSnapshot,setDesign,setExploded(value){exploded=clamp(Number(value)||0,0,1);if(exploded&&desired.radius>10)desired.target.y=1.35;else if(!exploded)desired.target.y=.8;},setThermal(value){thermal=Boolean(value);if(latest&&!designOnly)setSnapshot(latest,selected);},setView,resize,dispose};
 }

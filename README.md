@@ -1,6 +1,6 @@
 # Omerica Heat Rescue — AI experiment lab with a 3D cooling assembly
 
-This release adds an original procedural 3D assembly view to the `synthetic-open-v2` application. The physics, optimizer and recorded benchmark are unchanged from that release.
+This combined release keeps the audited 3D cooling bench and adds editable tile placement, component readings, continuous layer separation, and assembly-state export. The physics, optimizer and recorded benchmark remain unchanged from audited commit `e56c199` (`synthetic-open-v2`).
 
 **Can an AI learn where to place six thermoelectric generators and when to activate backup cooling, then pass cooling failures it has not trained on?**
 
@@ -31,6 +31,16 @@ The manual teaching view shows three equal-load server branches with circuit boa
 - WebGL is needed for the 3D renderer; the existing 2D view/live controls remain the fallback. Hidden and offscreen scenes skip rendering.
 
 `dist/assembly-scene.js` contains the original scene and handwritten camera/picking controls. It imports a locally vendored MIT copy of **Three.js 0.170.0**. No external meshes, textures, stock photos, reference-project assets, or additional controls library are used. Text labels are generated locally; page fonts retain their existing OFL notices. See [third-party notices](dist/third-party/README.md).
+
+## Build and inspect a layout
+
+Open **Build your tile layout** beneath the cooling bench. Move a tile between servers or balance the six tiles. A changed allocation starts from that layout’s all-open equilibrium, clears faults and backup, and preserves whether the simulation is playing or paused. Invalid moves and an empty source cannot break the six-tile budget.
+
+Use **Layer separation** for any amount between assembled and fully separated; the toolbar **Explode assembly** button remains available. Select a branch and component for its computed readings, including plate/water temperature, branch generation, main/backup flow or pumping draw. The circuit board and processor geometry do not claim separately modeled sensor temperatures.
+
+After a completed AI experiment, **Use AI tiles** copies only the selected final allocation into this equal-load illustration. Intermediate proposals are never offered as the selected design. The AI’s unequal loads, backup trigger, pump policy and benchmark scores are not transferred. Starting another AI run clears this transfer until that run completes.
+
+**Export assembly** downloads the current computed state, six-tile allocation, exact parameters, play/pause state, selected branch and display settings as JSON, with the teaching-model limitations included. The existing readings CSV, parameter JSON and full AI experiment export remain available.
 
 ## Quick tour
 
@@ -138,7 +148,7 @@ The interface exports calculated experiment observations. Replay traces are comp
 
 Project-authored code, UI, documentation and synthetic benchmark data are released under the [MIT license](LICENSE). Preserve that notice. Bundled fonts retain SIL OFL-1.1; Mulberry32 has CC0/public-domain provenance. Preserve every file in `dist/third-party/`. See [license scope](dist/COMPLIANCE.md), [third-party inventory](dist/third-party/README.md), [citation ledger](dist/CITATIONS.md), and [BibTeX](dist/SOURCES.bib). No package installation is required, but this release does bundle the third-party Three.js 0.170.0 renderer under MIT in `dist/vendor/three/`; retain its LICENSE and provenance. There are no external AI weights or runtime API credentials. All module and font requests use local files.
 
-The frozen public source release excludes earlier private Git history, raw Valency exports, manufacturer coefficient tables, third-party paper PDFs and private hosting configuration. The 3D assembly view bundles Three.js 0.170.0 under MIT; the scene code is original. No claim is made that cited papers themselves are open source.
+The portable source archive excludes development history, raw Valency exports, manufacturer coefficient tables, third-party paper PDFs and machine-specific hosting configuration. The 3D assembly view bundles Three.js 0.170.0 under MIT; the scene code is original. No claim is made that cited papers themselves are open source.
 
 Valency was used only at the research stage. It is not integrated into the executable app or required to rerun it. A separate commercial Valency license has **not** been verified, so no Valency integration is offered for sale and no Valency content or outputs are redistributed on the strength of hackathon sponsorship. OpenAI Codex/ChatGPT, OpenAI Sites, GitHub and Slack are proprietary development/hosting/collaboration services, not dependencies licensed by this repository. The portable app can be served with open-source Python on Linux and viewed in Firefox without those services.
 
