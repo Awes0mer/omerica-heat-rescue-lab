@@ -1,4 +1,4 @@
-# Run Heat Rescue without OpenAI Sites
+# Run Omerica Heat Rescue without OpenAI Sites
 
 The complete app can run on your own computer or server using **Caddy**, an open-source HTTP server. No OpenAI account, Sites deployment, API key, Valency account, database, npm installation, Docker Desktop, or external model service is required at runtime.
 
@@ -53,7 +53,7 @@ Caddy's [automatic HTTPS](https://caddyserver.com/docs/automatic-https) obtains 
 
 ## Licenses and boundaries
 
-- Heat Rescue source and these hosting scripts/configuration: [MIT](LICENSE).
+- Omerica Heat Rescue source and these hosting scripts/configuration: [MIT](LICENSE).
 - Separately installed Caddy: [Apache License 2.0](https://github.com/caddyserver/caddy/blob/v2.11.7/LICENSE), with upstream dependencies retaining their own licenses. Tested server version: **2.11.7**. Use an official unmodified package; this repository does not redistribute its compiled binary.
 - Bundled fonts and random routine: retained [OFL and CC0/public-domain notices](dist/third-party/README.md).
 

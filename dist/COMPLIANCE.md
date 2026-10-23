@@ -1,4 +1,4 @@
-# Heat Rescue — license and citation review
+# Omerica Heat Rescue — license and citation review
 
 Reviewed October 22, 2026. Scope: this release, which adds a 3D assembly view to the `synthetic-open-v2` portable source release; not all earlier development history and not the legal status of a future hardware product.
 

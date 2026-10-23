@@ -1,4 +1,4 @@
-# Heat Rescue: research-gap assessment
+# Omerica Heat Rescue: research-gap assessment
 Checked October 22, 2026. Nine Valency searches were used, followed by original-paper inspection. Valency's corpus did not contain every close paper; a zero result is not proof of novelty.
 
 ## Recommendation

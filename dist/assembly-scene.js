@@ -1,4 +1,4 @@
-/** Original procedural Heat Rescue assembly visualization. MIT, Omer Orman.
+/** Original procedural Omerica Heat Rescue assembly visualization. MIT, Omer Orman.
  * Three.js is separately MIT licensed in vendor/three/LICENSE.
  * Geometry, coolant traces and electricity pulses are illustrative, not a
  * dimensional engineering drawing or a calibrated flow-speed measurement.
@@ -127,7 +127,7 @@ export function mountAssembly(host, {onSelect, onTogglePipe, onInspect} = {}) {
     screw(root,x,.335,z);
   }
   for(const x of [-5.25,5.25])box(root,.07,.08,5.6,silver,x,.36,0);
-  const frontTag=plateLabel(root,'HEAT RESCUE  /  THERMAL EXPERIMENT 01',3.5,.26,0,.2,3.14,'#c5d0d7');
+  const frontTag=plateLabel(root,'OMERICA HEAT RESCUE  /  THERMAL EXPERIMENT 01',3.5,.26,0,.2,3.14,'#c5d0d7');
   frontTag.rotation.x=-.10;
   for(const x of [-5.4,5.4])for(const z of [-2.9,2.9])screw(root,x,.315,z);
 

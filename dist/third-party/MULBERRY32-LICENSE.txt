@@ -25,7 +25,7 @@ The JavaScript source explicitly states: "License: Public domain."
 Its repository LICENSE.md dedicates the code to the public domain and, as a fallback where public domain is unavailable, grants the MIT license (Copyright (c) 2024 bryc).
 
 The original author's referenced CC0-1.0 legal text is included in CC0-1.0.txt.
-No claim is made that the whole Heat Rescue project is third-party code.
+No claim is made that the whole Omerica Heat Rescue project is third-party code.
 
 ---- bryc/code LICENSE.md (fetched 2026-10-22, https://github.com/bryc/code/blob/master/LICENSE.md) ----
 Public domain. Software licenses are annoying. If your code is sacred, don't publish it. If your country lacks a public domain, you should probably start a revolution.

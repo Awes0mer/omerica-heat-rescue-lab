@@ -1,10 +1,10 @@
-# Heat Rescue — AI experiment lab with a 3D cooling assembly
+# Omerica Heat Rescue — AI experiment lab with a 3D cooling assembly
 
 This release adds an original procedural 3D assembly view to the `synthetic-open-v2` application. The physics, optimizer and recorded benchmark are unchanged from that release.
 
 **Can an AI learn where to place six thermoelectric generators and when to activate backup cooling, then pass cooling failures it has not trained on?**
 
-Heat Rescue runs that experiment in the browser. A Gaussian-process learning model proposes designs, a thermal simulator calculates their results, and the learner updates before choosing its next experiment. Random search and placement-only AI receive the same experiment budget. The selected designs then face held-out conditions.
+Omerica Heat Rescue runs that experiment in the browser. A Gaussian-process learning model proposes designs, a thermal simulator calculates their results, and the learner updates before choosing its next experiment. Random search and placement-only AI receive the same experiment budget. The selected designs then face held-out conditions.
 
 **Every temperature, watt and joule is simulated.** These are results from an uncalibrated model with example parameters, not hardware measurements, a certified cooling system, or proof of a first-ever invention. The AI method is established Bayesian optimization, not an LLM or a scripted winning design.
 

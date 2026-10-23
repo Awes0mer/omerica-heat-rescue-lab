@@ -1,4 +1,4 @@
-# Heat Rescue: scientific citations and parameter provenance
+# Omerica Heat Rescue: scientific citations and parameter provenance
 
 Reviewed 22 October 2026. This ledger distinguishes established mathematics from this project's synthetic assumptions. A cited scientific publication is a reference, not a bundled software dependency, a commercial license, or validation of this simulator. No paper PDFs, figures, abstracts, experimental datasets, pretrained weights, or Valency search-result exports are included in this release. Bibliographic records are available in [SOURCES.bib](SOURCES.bib).
 
