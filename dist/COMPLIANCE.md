@@ -1,6 +1,6 @@
 # Heat Rescue — license and citation review
 
-Reviewed October 22, 2026. Scope: the current `synthetic-open-v2` portable source release, not all earlier development history and not the legal status of a future hardware product.
+Reviewed October 22, 2026. Scope: this release, which adds a 3D assembly view to the `synthetic-open-v2` portable source release; not all earlier development history and not the legal status of a future hardware product.
 
 ## What may be reused commercially
 
@@ -9,9 +9,11 @@ Reviewed October 22, 2026. Scope: the current `synthetic-open-v2` portable sourc
 | Project-authored JavaScript, HTML, CSS, SVG, tests and documentation | [MIT](LICENSE.txt) | Retain the copyright and permission notice. Commercial use, modification, integration, distribution and sale are permitted by this license. |
 | Synthetic simulation inputs and generated benchmark results | Project-authored; included with the MIT release | Preserve notices and identify the assumptions. These are not measured manufacturer data or validation results. |
 | DM Sans and Space Grotesk font files | SIL Open Font License 1.1 | Keep their original OFL notices; bundling in a commercial app is permitted. Fonts must not be sold by themselves. No font modifications were made. |
+| Three.js 0.170.0 WebGL renderer | [MIT](vendor/three/LICENSE), locally vendored from the official npm package | Retain the original copyright and permission notice. Vendor hashes and package integrity are in `vendor/three/provenance.json`. |
+| Original procedural 3D geometry and interaction code | Project-authored, MIT | No external meshes, textures, stock photos, or reference-project code/assets are included. Geometry and particles are illustrative. |
 | Mulberry32 pseudorandom-number routine | Original author CC0 dedication; JavaScript public-domain provenance | Attribution and full CC0 text are retained in `third-party/`. No claim that this routine is newly invented. |
 
-See [third-party notices](third-party/README.md) and [pinned source hashes](third-party/asset-provenance.json). No npm packages, remote AI weights, third-party images, paper PDFs, scientific abstracts, manufacturer coefficient tables or raw Valency exports are distributed. All executable imports and font requests are local.
+See [third-party notices](third-party/README.md) and [pinned source hashes](third-party/asset-provenance.json). Three.js is an included npm-origin third-party renderer; no package installation is needed because its module and MIT notice are vendored. No remote AI weights, third-party images, paper PDFs, scientific abstracts, manufacturer coefficient tables or raw Valency exports are included. All executable imports and font requests are local.
 
 ## Citations are not licenses
 
@@ -25,7 +27,7 @@ Valency Bond was used to discover literature during hackathon research. The appl
 
 The [Valency terms effective September 29, 2026](https://www.valency.io/terms/) restrict hackathon and trial use and require separate commercial licensing for productization or redistribution/exposure of its functionality, content or outputs. Hackathon sponsorship and permission to use Bond in a hackathon are not a verified commercial waiver. The owner has not confirmed a separate written commercial agreement. **Commercial Valency integration is unresolved and excluded from this release's license clearance.**
 
-OpenAI Codex/ChatGPT, OpenAI Sites, GitHub and Slack are proprietary authoring, hosting or collaboration services. This repository does not license them and cannot honestly call the entire development stack open source. The portable application includes an independent open-source Caddy hosting configuration and can run on Linux with an open-source browser without those services. See the [self-hosting guide](https://github.com/Awes0mer/heat-rescue/blob/main/HOSTING.md). Caddy is installed separately under its upstream Apache-2.0 license and dependency notices; no server binary is bundled in this source release. It has no proprietary experiment API dependency.
+OpenAI Codex/ChatGPT, OpenAI Sites, GitHub and Slack are proprietary authoring, hosting or collaboration services. This repository does not license them and cannot honestly call the entire development stack open source. The portable application can run on an open-source HTTP server and browser without those services. It has no proprietary experiment API dependency.
 
 ## Hackathon status
 

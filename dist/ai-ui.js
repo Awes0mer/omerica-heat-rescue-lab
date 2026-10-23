@@ -21,6 +21,7 @@ window.addEventListener('hashchange', () => {
 });
 
 function designView(design, label = 'STARTING DESIGN', trial = '6 tiles total') {
+  window.dispatchEvent(new CustomEvent('heat-ai-design', {detail:{design,label,trial}}));
   $('bench-label').textContent = label; $('bench-trial').textContent = trial;
   $('ai-design').replaceChildren(...design.counts.map((count, i) => {
     const row = document.createElement('div'); row.className = 'bench-row';
@@ -218,7 +219,7 @@ $('ai-download').addEventListener('click', () => {
 });
 
 designView({ counts: [2, 2, 2], triggerC: 74, backupFlowFraction: .5 }); learningChart();
-if (location.hash === '#manual') mode('manual');
+mode(location.hash === '#ai' ? 'ai' : 'manual');
 // This is a separately recorded verification result, never an input to the optimizer.
 $('seed-benchmark').className = 'benchmark-box';
 $('seed-benchmark').innerHTML = '<strong>Recorded verification: synthetic-open-v2 · eight seeds, 18 trials each</strong><p>Positive net energy AND all six held-out temperature limits passed: joint AI 6/8 runs; random search 1/8; placement-only AI 0/8; fixed baseline 0/8. The joint AI exceeded the temperature limit in two runs. Fixed and placement-only passed temperatures in all eight, but their worst-case net energy was negative. These eight runs are a small simulation benchmark, not a reliability estimate or hardware validation.</p><a href="ai-benchmark.json" download>Download the recorded results, settings and source hashes ↓</a>';

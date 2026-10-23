@@ -1,0 +1,11 @@
+{
+  "package": "three",
+  "version": "0.170.0",
+  "license": "MIT",
+  "source": "https://registry.npmjs.org/three/-/three-0.170.0.tgz",
+  "integrity": "sha512-FQK+LEpYc0fBD+J8g6oSEyyNzjp+Q7Ks1C568WWaoMRLW+TkNNWmenWeGgJjV105Gd+p/2ql1ZcjYvNiPZBhuQ==",
+  "files": {
+    "three.module.js": "ce1fa418de16a19495a9f72495580e3015d7745c296d3ce0485897f902ddedfb",
+    "LICENSE": "4c40a1ef62450b857c3b2aaf294936304cd552d965fbcd9d32d4c5bcf4ba4454"
+  }
+}

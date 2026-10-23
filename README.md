@@ -1,14 +1,12 @@
-# Heat Rescue — AI Experiment Lab
+# Heat Rescue — AI experiment lab with a 3D cooling assembly
+
+This release adds an original procedural 3D assembly view to the `synthetic-open-v2` application. The physics, optimizer and recorded benchmark are unchanged from that release.
 
 **Can an AI learn where to place six thermoelectric generators and when to activate backup cooling, then pass cooling failures it has not trained on?**
 
 Heat Rescue runs that experiment in the browser. A Gaussian-process learning model proposes designs, a thermal simulator calculates their results, and the learner updates before choosing its next experiment. Random search and placement-only AI receive the same experiment budget. The selected designs then face held-out conditions.
 
 **Every temperature, watt and joule is simulated.** These are results from an uncalibrated model with example parameters, not hardware measurements, a certified cooling system, or proof of a first-ever invention. The AI method is established Bayesian optimization, not an LLM or a scripted winning design.
-
-## Independent open-source hosting
-
-Run the complete app on your own computer with open-source Caddy: `./hosting/run.sh`. See [HOSTING.md](HOSTING.md) for installation, local startup, and your own Linux server. No OpenAI Sites account, deployment, API, or cloud runtime is required. The server serves only `dist/`; the AI experiments run in the browser.
 
 ## Run and reproduce
 
@@ -21,6 +19,18 @@ npm run benchmark
 ```
 
 `npm test` runs all `*.test.mjs` files with Node's built-in test runner. `npm run benchmark` reruns the frozen eight-seed comparison and writes `dist/ai-benchmark.json`, including scenario definitions, individual results, learning curves and SHA-256 hashes of the planner and experimental physics source. The benchmark needs no network, API key or external model service.
+
+## Explore the new assembly view
+
+The manual teaching view shows three equal-load server branches with circuit boards, copper heat spreaders, thermoelectric tiles, cold plates, supply/return manifolds, clickable valves, a separate backup route, and an electrical load. The assembly is original procedural geometry, not a manufacturer CAD model or a dimensionally verified installation.
+
+- Drag to orbit; scroll or pinch to zoom. Camera buttons and arrow/plus/minus keys provide alternatives.
+- Select a server component to inspect it. Clicking a valve uses the existing pipe-control callback. Exploding the assembly moves only the visible layers; it does not change the experiment.
+- Heat colors and electrical pulse brightness use the current model snapshot. Main-path pulses stop on a blocked branch; the secondary path uses the model's backup-active state. Particle size/speed and machine geometry are illustrative, not calibrated flow or dimensions. Pause/reduced-motion settings stop ambient particle/fan motion.
+- The small AI proposal view shows tile placement only. Its proposal labels do not claim computed temperatures or electricity before an experiment runs.
+- WebGL is needed for the 3D renderer; the existing 2D view/live controls remain the fallback. Hidden and offscreen scenes skip rendering.
+
+`dist/assembly-scene.js` contains the original scene and handwritten camera/picking controls. It imports a locally vendored MIT copy of **Three.js 0.170.0**. No external meshes, textures, stock photos, reference-project assets, or additional controls library are used. Text labels are generated locally; page fonts retain their existing OFL notices. See [third-party notices](dist/third-party/README.md).
 
 ## Quick tour
 
@@ -126,9 +136,9 @@ The interface exports calculated experiment observations. Replay traces are comp
 
 ## Open-source release and commercial reuse
 
-Project-authored code, UI, documentation and synthetic benchmark data are released under the [MIT license](LICENSE). Preserve that notice. Bundled fonts retain SIL OFL-1.1; Mulberry32 has CC0/public-domain provenance. Preserve every file in `dist/third-party/`. See [license scope](dist/COMPLIANCE.md), [third-party inventory](dist/third-party/README.md), [citation ledger](dist/CITATIONS.md), and [BibTeX](dist/SOURCES.bib). There are no npm dependencies, external AI weights, or runtime API credentials. The runtime uses only local files and browser APIs, including local font files.
+Project-authored code, UI, documentation and synthetic benchmark data are released under the [MIT license](LICENSE). Preserve that notice. Bundled fonts retain SIL OFL-1.1; Mulberry32 has CC0/public-domain provenance. Preserve every file in `dist/third-party/`. See [license scope](dist/COMPLIANCE.md), [third-party inventory](dist/third-party/README.md), [citation ledger](dist/CITATIONS.md), and [BibTeX](dist/SOURCES.bib). No package installation is required, but this preview does bundle the third-party Three.js 0.170.0 renderer under MIT in `dist/vendor/three/`; retain its LICENSE and provenance. There are no external AI weights or runtime API credentials. All module and font requests use local files.
 
-The clean public source release excludes earlier private Git history, raw Valency exports, manufacturer coefficient tables, third-party paper PDFs and private hosting configuration. No claim is made that cited papers themselves are open source.
+The frozen public source release excludes earlier private Git history, raw Valency exports, manufacturer coefficient tables, third-party paper PDFs and private hosting configuration. This separate graphics preview remains local and private; its additional Three.js renderer and original assembly scene are not claimed to have been published. No claim is made that cited papers themselves are open source.
 
 Valency was used only at the research stage. It is not integrated into the executable app or required to rerun it. A separate commercial Valency license has **not** been verified, so no Valency integration is offered for sale and no Valency content or outputs are redistributed on the strength of hackathon sponsorship. OpenAI Codex/ChatGPT, OpenAI Sites, GitHub and Slack are proprietary development/hosting/collaboration services, not dependencies licensed by this repository. The portable app can be served with open-source Python on Linux and viewed in Firefox without those services.
 
