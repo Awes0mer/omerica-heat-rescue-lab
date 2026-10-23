@@ -1,5 +1,6 @@
 import { PARAMS, createSimulation, step, setBlocked, setBackupCooling, snapshot } from './model.js';
 import { isTileAllocation, allocationForAction, createAssemblyExport } from './assembly-state.js';
+import { createDemoRun } from './assembly-demo-state.js';
 
 const $ = id => document.getElementById(id);
 const letters = ['A','B','C'];
@@ -15,6 +16,7 @@ let lastSample = -1;
 let lastPaint = 0;
 let lastFrame = performance.now();
 let worker;
+let demoActive = false;
 const f = (v,d=1) => Number(v).toFixed(d);
 const put = (id,text) => { $(id).textContent = text; };
 const timeText = t => `${Math.floor(t/60)}:${String(Math.floor(t%60)).padStart(2,'0')}`;
@@ -48,15 +50,15 @@ $('rack').innerHTML = rackMarkup();
 function download(name, content, type){const url=URL.createObjectURL(new Blob([content],{type}));const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 function takeSample(s, force=false){if(!force && s.time-lastSample<1)return;lastSample=s.time;samples.push({time:s.time,layout:counts.join('/'),blocked:s.branches.filter(b=>b.blocked).map(b=>letters[b.id]).join(''),backup:s.backupActive,grossW:s.totalPowerW,pumpW:s.pumpPowerW,extraPumpW:s.incrementalPumpW,netW:s.netRecoveryW,hotC:s.maxHotC,branches:s.branches.map(b=>({...b}))});}
 function markEvent(label){events.push({time:sim.time,label});takeSample(snapshot(sim),true);}
-function togglePipe(index){selected=index;const close=!sim.branches[index].blocked;for(let i=0;i<3;i++)setBlocked(sim,i,i===index&&close);markEvent(close?`${letters[index]} blocked`:'Flow restored');render();}
+function togglePipe(index){if(demoActive)return;selected=index;const close=!sim.branches[index].blocked;for(let i=0;i<3;i++)setBlocked(sim,i,i===index&&close);markEvent(close?`${letters[index]} blocked`:'Flow restored');render();}
 for(const valve of document.querySelectorAll('[data-pipe]')){valve.addEventListener('click',()=>togglePipe(Number(valve.dataset.pipe)));valve.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();togglePipe(Number(valve.dataset.pipe));}});}
 for(const button of document.querySelectorAll('[data-mobile-pipe]'))button.addEventListener('click',()=>togglePipe(Number(button.dataset.mobilePipe)));
 $('main-action').addEventListener('click',()=>{const blocked=sim.branches.findIndex(b=>b.blocked);togglePipe(blocked<0?selected:blocked);});
-$('backup').addEventListener('click',()=>{setBackupCooling(sim,!sim.backupCooling);markEvent(sim.backupCooling?'Backup on':'Backup off');render();});
+$('backup').addEventListener('click',()=>{if(demoActive)return;setBackupCooling(sim,!sim.backupCooling);markEvent(sim.backupCooling?'Backup on':'Backup off');render();});
 function updatePause(){put('pause',running?'Pause':'Play');$('pause').setAttribute('aria-label',running?'Pause simulation':'Play simulation');document.querySelector('.lab').classList.toggle('paused',!running);}
-$('pause').addEventListener('click',()=>{if(sim.time>=1800){reset();return;}running=!running;updatePause();});
+$('pause').addEventListener('click',()=>{if(demoActive)return;if(sim.time>=1800){reset();return;}running=!running;updatePause();});
 $('speed').addEventListener('change',e=>{speed=Number(e.target.value);});
-function reset(nextCounts=[2,2,2], {run=true,select=1}={}){if(!isTileAllocation(nextCounts))return false;counts=[...nextCounts];sim=createSimulation({counts});samples=[];events=[];lastSample=-1;selected=select;running=run;updatePause();for(const b of document.querySelectorAll('[data-counts]'))b.classList.toggle('active',b.dataset.counts===counts.join(','));takeSample(snapshot(sim),true);render();return true;}
+function reset(nextCounts=[2,2,2], {run=true,select=1}={}){if(demoActive)return false;if(!isTileAllocation(nextCounts))return false;counts=[...nextCounts];sim=createSimulation({counts});samples=[];events=[];lastSample=-1;selected=select;running=run;updatePause();for(const b of document.querySelectorAll('[data-counts]'))b.classList.toggle('active',b.dataset.counts===counts.join(','));takeSample(snapshot(sim),true);render();return true;}
 $('reset').addEventListener('click',()=>reset());
 for(const button of document.querySelectorAll('[data-counts]'))button.addEventListener('click',()=>reset(button.dataset.counts.split(',').map(Number)));
 $('download').addEventListener('click',()=>{takeSample(snapshot(sim),true);const header=['simulated_seconds','tiles_A_B_C','blocked_pipe','backup_active','generated_W','total_pump_W','additional_pump_W','recovery_minus_additional_pump_W','hottest_plate_C',...letters.flatMap(l=>[`${l}_hot_C`,`${l}_cold_C`,`${l}_water_C`,`${l}_flow_kg_s`,`${l}_generated_W`])];const rows=samples.map(r=>[f(r.time,3),r.layout,r.blocked,r.backup?1:0,f(r.grossW,6),f(r.pumpW,3),f(r.extraPumpW,3),f(r.netW,6),f(r.hotC,4),...r.branches.flatMap(b=>[f(b.hotC,4),f(b.coldC,4),f(b.waterC,4),f(b.flowKgS,4),f(b.powerW,6)])].join(','));download('omerica-heat-rescue-SIMULATED-readings.csv',[header.join(','),...rows].join('\n'),'text/csv');});
@@ -76,17 +78,31 @@ function render(){
  put('energy-check',`${f(s.serverHeatW,2)} W in = ${f(s.totalPowerW,2)} W electricity + ${f(s.waterExportW,2)} W water export + ${f(s.ambientLossW,2)} W room loss + ${f(s.storedHeatRateW,2)} W stored. Numerical residual: ${s.energyBalanceW.toExponential(1)} W.`);renderChart(s);
 }
 function parameterTable(){const p=PARAMS;const entries=[['Servers / tiles',`${p.branchCount} / ${p.totalTiles}`,'Assumed design'],['Heat input per server',`${p.serverHeatW} W`,'Fixed external heat input'],['Supply / room temperature',`${p.inletC} / ${p.ambientC} °C`,'Imposed boundaries'],['Main flow per open branch',`${p.flowKgS} kg/s (0.60 L/min)`,'Assumed regulated flow; water density ≈ 1 kg/L'],['Backup flow per blocked branch',`${p.backupFlowKgS} kg/s (0.30 L/min)`,'Assumed separate path'],['Water specific heat',`${p.waterCpJkgK} J/(kg·K)`,'Constant water approximation'],['Heat capacity: hot / cold / water',`${p.hotCapacityJK} / ${p.coldCapacityJK} / ${p.waterCapacityJK} J/K`,'Assumed lumped masses'],['Metal bypass conductance',`${p.bypassConductanceWK} W/K`,'Assumed parallel cooling path'],['Cold plate → water conductance',`${p.coldWaterConductanceWK} W/K`,'Assumed heat exchange'],['Room conductances: hot / cold / water',`${p.hotAmbientConductanceWK} / ${p.coldAmbientConductanceWK} / ${p.waterAmbientConductanceWK} W/K`,'Assumed passive heat loss'],['Module Seebeck coefficient α',`${f(p.alphaVK,6)} V/K`,'Independent synthetic assumption'],['Module electrical resistance R',`${f(p.resistanceOhm,5)} Ω`,'Synthetic assumption; matched Rᴸ = R'],['Module thermal conductance K',`${f(p.conductanceWK,5)} W/K`,'Synthetic assumption; held constant'],['Normal pump + added recovery cost',`${p.basePumpW} + ${p.extraPumpW} W`,'Assumed electrical draw; remains on'],['Additional backup pump draw',`${p.backupPumpW} W`,'Assumed cost when backup supplies a blocked branch'],['Illustrative plate limit',`${p.illustrativeLimitC}°C`,'Comparison rule, not certified safety'],['Integration / time step',`Runge–Kutta 4 / ≤ ${p.maximumStepS} s`,'Numerical method'],['Fault trial length / sample interval','120 s / 1 s','Fixed for every layout comparison']];$('parameter-table').innerHTML='<table class="parameter-table"><thead><tr><th>Parameter</th><th>Value</th><th>Basis</th></tr></thead><tbody>'+entries.map(e=>'<tr>'+e.map(v=>`<td>${v}</td>`).join('')+'</tr>').join('')+'</tbody></table>';}
-$('optimize').addEventListener('click',()=>{if(worker)return;const button=$('optimize');button.disabled=true;put('layout-result','Testing the same six tiles, one blocked pipe at a time…');worker=new Worker('./layout-worker.js',{type:'module'});worker.onmessage=({data})=>{if(data.progress){button.textContent=`Testing ${data.progress} / 28…`;return;}if(data.error){put('layout-result','The comparison could not complete. '+data.error);}else{const {best,spread,grouped,validCount}=data;const signed=v=>`${f(v,3)} W`;const intro=best?`Best allocation in this model: A ${best.counts[0]}, B ${best.counts[1]}, C ${best.counts[2]}. Worst recovery after extra pump cost: ${signed(best.worstNetRecoveryW)}.`:'No allocation stayed below the illustrative temperature limit in every trial.';put('layout-result',`${intro} Spread: ${signed(spread.worstNetRecoveryW)}. Grouped: ${signed(grouped.worstNetRecoveryW)}. ${validCount}/28 allocations met the illustrative limit for 120 seconds. Backup cooling was off in every trial. The layout on screen has not changed.`);if(best){const apply=document.createElement('button');apply.className='text-button apply-best';apply.textContent='Try this allocation →';apply.addEventListener('click',()=>reset(best.counts));$('layout-result').append(document.createElement('br'),apply);}}button.disabled=false;button.textContent='Test all 28 layouts →';worker.terminate();worker=null;};worker.onerror=()=>{put('layout-result','The comparison could not complete. The interactive pipe experiment still works.');button.disabled=false;button.textContent='Test all 28 layouts →';worker.terminate();worker=null;};worker.postMessage({run:true});});
+$('optimize').addEventListener('click',()=>{if(demoActive||worker)return;const button=$('optimize');button.disabled=true;put('layout-result','Testing the same six tiles, one blocked pipe at a time…');worker=new Worker('./layout-worker.js',{type:'module'});worker.onmessage=({data})=>{if(data.progress){button.textContent=`Testing ${data.progress} / 28…`;return;}if(data.error){put('layout-result','The comparison could not complete. '+data.error);}else{const {best,spread,grouped,validCount}=data;const signed=v=>`${f(v,3)} W`;const intro=best?`Best allocation in this model: A ${best.counts[0]}, B ${best.counts[1]}, C ${best.counts[2]}. Worst recovery after extra pump cost: ${signed(best.worstNetRecoveryW)}.`:'No allocation stayed below the illustrative temperature limit in every trial.';put('layout-result',`${intro} Spread: ${signed(spread.worstNetRecoveryW)}. Grouped: ${signed(grouped.worstNetRecoveryW)}. ${validCount}/28 allocations met the illustrative limit for 120 seconds. Backup cooling was off in every trial. The layout on screen has not changed.`);if(best){const apply=document.createElement('button');apply.className='text-button apply-best';apply.textContent='Try this allocation →';apply.addEventListener('click',()=>reset(best.counts));$('layout-result').append(document.createElement('br'),apply);}}button.disabled=demoActive;button.textContent='Test all 28 layouts →';worker.terminate();worker=null;};worker.onerror=()=>{put('layout-result','The comparison could not complete. The interactive pipe experiment still works.');button.disabled=demoActive;button.textContent='Test all 28 layouts →';worker.terminate();worker=null;};worker.postMessage({run:true});});
 parameterTable();takeSample(latest,true);render();updatePause();
 function frame(now){const realDt=Math.max(0,Math.min(.15,(now-lastFrame)/1000));lastFrame=now;if(running){step(sim,realDt*speed);takeSample(snapshot(sim));if(sim.time>=1800){running=false;updatePause();put('action-instruction','30 simulated minutes reached. Reset to try again.');}}if(now-lastPaint>120){render();lastPaint=now;}requestAnimationFrame(frame);}
 requestAnimationFrame(frame);
 
-window.addEventListener("heat-mode", e => { running = e.detail === "manual"; updatePause(); });
+window.addEventListener("heat-mode", e => { running = !demoActive && e.detail === "manual"; updatePause(); });
 window.addEventListener("heat-ai-start", () => { running = false; updatePause(); });
 
 // Presentation-only bridge: the 3D controls use the existing simulation actions.
 window.addEventListener('heat-scene-action', ({detail}) => {
   if (!detail || typeof detail !== 'object' || Array.isArray(detail)) return;
+  if (detail.type === 'demo-step') {
+    let example;
+    try { example = createDemoRun(detail); } catch { return; }
+    demoActive = true;
+    counts = [2,2,2]; sim = example.sim; selected = 1; running = false;
+    samples = []; lastSample = -1;
+    events = detail.scenario === 'baseline' ? [] : [{time:0,label:detail.scenario === 'backup' ? 'B blocked + backup on' : 'B blocked'}];
+    for (const frame of example.frames) takeSample(frame,true);
+    for (const button of document.querySelectorAll('[data-counts]')) button.classList.toggle('active',button.dataset.counts === counts.join(','));
+    updatePause(); render();
+    return;
+  }
+  if (detail.type === 'demo-end') { demoActive = false; reset(); return; }
+  if (demoActive && ['pipe','move-tile','balance-tiles','apply-ai-layout'].includes(detail.type)) return;
   if (detail.type === 'pipe' && Number.isInteger(detail.index) && detail.index >= 0 && detail.index < 3) togglePipe(detail.index);
   if (detail.type === 'select' && Number.isInteger(detail.index) && detail.index >= 0 && detail.index < 3) { selected = detail.index; render(); }
   if (detail.type === 'request-snapshot') render();

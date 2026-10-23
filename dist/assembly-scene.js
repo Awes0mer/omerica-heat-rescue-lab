@@ -12,7 +12,7 @@ const clamp = THREE.MathUtils.clamp;
 
 export function mountAssembly(host, {onSelect, onTogglePipe, onInspect} = {}) {
   const noOp = () => {};
-  const empty = {available:false,setSnapshot:noOp,setDesign:noOp,setExploded:noOp,setThermal:noOp,setView:noOp,resize:noOp,dispose:noOp};
+  const empty = {available:false,setSnapshot:noOp,setDesign:noOp,setExploded:noOp,setThermal:noOp,setView:noOp,focusPart:noOp,setLabelsVisible:noOp,resize:noOp,dispose:noOp};
   let renderer;
   try {
     renderer = new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'});
@@ -38,6 +38,7 @@ export function mountAssembly(host, {onSelect, onTogglePipe, onInspect} = {}) {
   const geometries=new Set(),materials=new Set(),textures=new Set(),pickables=[];
   const parts=[],flowPaths=[],fans=[],pulseLights=[];
   let disposed=false,latest=null,selected=1,exploded=false,thermal=false,explodeAmount=0,designOnly=false;
+  let labelsVisible=true,focusedPart=null;
   let hasSize=true,onScreen=true;
   let clock=0,previous=performance.now(),frameId=0;
   const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -295,6 +296,11 @@ export function mountAssembly(host, {onSelect, onTogglePipe, onInspect} = {}) {
 
   const desired={azimuth:.56,elevation:.67,radius:14.5,target:new THREE.Vector3(0,.8,0)};
   const actual={...desired,target:desired.target.clone()};
+  const focusBounds=new THREE.Box3(),partBounds=new THREE.Box3(),focusSize=new THREE.Vector3();
+  const focusOutline=new THREE.Box3Helper(focusBounds,0xf3cf72);
+  focusOutline.visible=false;scene.add(focusOutline);
+  geometries.add(focusOutline.geometry);materials.add(focusOutline.material);
+  function clearFocus(){focusedPart=null;focusOutline.visible=false;}
   let hover=null,dragDistance=0,lastDistance=0,lastPipeExplode=-1;
   const pointers=new Map(),raycaster=new THREE.Raycaster(),pointer=new THREE.Vector2();
   function rayPick(event) {
@@ -303,6 +309,7 @@ export function mountAssembly(host, {onSelect, onTogglePipe, onInspect} = {}) {
     return raycaster.intersectObjects(pickables,false).find(hit=>hit.object.visible&&hit.object.parent?.visible)?.object||null;
   }
   function down(event) {
+    clearFocus();
     canvas.focus({preventScroll:true});pointers.set(event.pointerId,{x:event.clientX,y:event.clientY});canvas.setPointerCapture(event.pointerId);dragDistance=0;
     if(pointers.size===2){const p=[...pointers.values()];lastDistance=Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y);}
   }
@@ -330,11 +337,12 @@ export function mountAssembly(host, {onSelect, onTogglePipe, onInspect} = {}) {
     pointers.delete(event.pointerId);if(canvas.hasPointerCapture(event.pointerId))canvas.releasePointerCapture(event.pointerId);canvas.style.cursor='grab';
   }
   function cancel(event){pointers.delete(event.pointerId);canvas.style.cursor='grab';}
-  function wheel(event){event.preventDefault();desired.radius=clamp(desired.radius*Math.exp(event.deltaY*.001),5,23);}
+  function wheel(event){clearFocus();event.preventDefault();desired.radius=clamp(desired.radius*Math.exp(event.deltaY*.001),5,23);}
   function keyboard(event) {
     if(event.key==='ArrowLeft')desired.azimuth-=.12;else if(event.key==='ArrowRight')desired.azimuth+=.12;
     else if(event.key==='ArrowUp')desired.elevation=clamp(desired.elevation+.1,.12,1.49);else if(event.key==='ArrowDown')desired.elevation=clamp(desired.elevation-.1,.12,1.49);
     else if(event.key==='+'||event.key==='=')desired.radius=clamp(desired.radius-.7,5,23);else if(event.key==='-')desired.radius=clamp(desired.radius+.7,5,23);else return;
+    clearFocus();
     event.preventDefault();
   }
   canvas.addEventListener('pointerdown',down);canvas.addEventListener('pointermove',move);canvas.addEventListener('pointerup',up);canvas.addEventListener('pointercancel',cancel);canvas.addEventListener('wheel',wheel,{passive:false});canvas.addEventListener('keydown',keyboard);
@@ -356,10 +364,10 @@ export function mountAssembly(host, {onSelect, onTogglePipe, onInspect} = {}) {
   }
   function setSnapshot(snapshot,selectedIndex=selected) {
     canvas.setAttribute('aria-label','Interactive simulated cooling assembly. Drag to rotate, scroll to zoom. Select a server or click a valve to change its pipe.');
-    latest=snapshot;designOnly=false;totalLabel.sprite.visible=true;selected=clamp(Number.isInteger(selectedIndex)?selectedIndex:1,0,2);
+    latest=snapshot;designOnly=false;totalLabel.sprite.visible=labelsVisible;selected=clamp(Number.isInteger(selectedIndex)?selectedIndex:1,0,2);
     for(const p of parts) {
       const b=snapshot?.branches?.[p.index];if(!b)continue;
-      p.valveLabel.sprite.visible=true;
+      p.valveLabel.sprite.visible=labelsVisible;p.status.sprite.visible=labelsVisible;
       const count=clamp(Math.floor(b.count||0),0,6);
       for(let i=0;i<p.tiles.length;i++) {
         const tile=p.tiles[i];tile.visible=i<count;
@@ -399,9 +407,43 @@ export function mountAssembly(host, {onSelect, onTogglePipe, onInspect} = {}) {
     pumpLight.emissiveIntensity=0;
   }
   function setView(view) {
+    clearFocus();
     const presets={orbit:[.56,.67,14.5,0,.8,0],top:[0,1.48,13.8,0,.7,0],front:[.05,.23,13.3,0,1,0],component:[.5,.7,7.1,parts[selected].x,1.3,0]};
     const p=presets[view]||presets.orbit;
     [desired.azimuth,desired.elevation,desired.radius]=p;desired.target.set(p[3],p[4],p[5]);
+  }
+  function setLabelsVisible(value) {
+    labelsVisible=Boolean(value);
+    totalLabel.sprite.visible=labelsVisible&&!designOnly;
+    for(const p of parts){p.status.sprite.visible=labelsVisible;p.valveLabel.sprite.visible=labelsVisible&&!designOnly;}
+  }
+  function focusPart({component='overview',index=selected}={}) {
+    if(component==='overview'){setView('orbit');return;}
+    selected=clamp(Number.isInteger(index)?index:selected,0,2);
+    const componentTag=component==='pipe'?'valve':component;
+    const shared=component==='pump'||component==='load';
+    let targets=pickables.filter(mesh=>mesh.userData.component===componentTag&&(shared||mesh.userData.index===selected));
+    if(!targets.length){setView('component');return;}
+    focusedPart={targets};
+    desired.azimuth=component==='pipe'?.2:.45;
+    // Look through the exploded gaps instead of looking down through the plates.
+    desired.elevation=component==='processor'?.35:['board','hotplate','teg'].includes(component)?.4:.55;
+  }
+  function updateFocus() {
+    if(!focusedPart)return;
+    root.updateMatrixWorld(true);focusBounds.makeEmpty();
+    for(const target of focusedPart.targets){
+      let visible=true;
+      for(let ancestor=target;ancestor;ancestor=ancestor.parent)if(!ancestor.visible){visible=false;break;}
+      if(visible)focusBounds.union(partBounds.setFromObject(target));
+    }
+    if(focusBounds.isEmpty()){clearFocus();return;}
+    focusBounds.getCenter(desired.target);focusBounds.getSize(focusSize);
+    // Fit both axes, including the narrower portrait view, with room for context.
+    const vertical=camera.getEffectiveFOV()*Math.PI/180;
+    const horizontal=2*Math.atan(Math.tan(vertical/2)*camera.aspect);
+    desired.radius=clamp(focusSize.length()/(2*Math.sin(Math.min(vertical,horizontal)/2))*1.35,4.2,16);
+    focusBounds.expandByScalar(.06);focusOutline.visible=true;
   }
   function animate(now) {
     if(disposed)return;frameId=requestAnimationFrame(animate);
@@ -418,6 +460,7 @@ export function mountAssembly(host, {onSelect, onTogglePipe, onInspect} = {}) {
       p.hot.position.y=1.12+explodeAmount*.90;p.teg.position.y=1.30+explodeAmount*1.42;p.cold.position.y=1.57+explodeAmount*2.0;
       p.guides.visible=explodeAmount>.06;p.status.sprite.position.y=2.1+explodeAmount*2.0;
     }
+    updateFocus();
     if(Math.abs(explodeAmount-lastPipeExplode)>.018) {
       lastPipeExplode=explodeAmount;
       for(const p of parts) {
@@ -452,5 +495,5 @@ export function mountAssembly(host, {onSelect, onTogglePipe, onInspect} = {}) {
     canvas.removeEventListener('pointerdown',down);canvas.removeEventListener('pointermove',move);canvas.removeEventListener('pointerup',up);canvas.removeEventListener('pointercancel',cancel);canvas.removeEventListener('wheel',wheel);canvas.removeEventListener('keydown',keyboard);
     for(const g of geometries)g.dispose();for(const m of materials)m.dispose();for(const t of textures)t.dispose();renderer.dispose();canvas.remove();
   }
-  return {available:true,setSnapshot,setDesign,setExploded(value){exploded=clamp(Number(value)||0,0,1);if(exploded&&desired.radius>10)desired.target.y=1.35;else if(!exploded)desired.target.y=.8;},setThermal(value){thermal=Boolean(value);if(latest&&!designOnly)setSnapshot(latest,selected);},setView,resize,dispose};
+  return {available:true,setSnapshot,setDesign,setExploded(value){exploded=clamp(Number(value)||0,0,1);if(exploded&&desired.radius>10)desired.target.y=1.35;else if(!exploded)desired.target.y=.8;},setThermal(value){thermal=Boolean(value);if(latest&&!designOnly)setSnapshot(latest,selected);},setView,focusPart,setLabelsVisible,resize,dispose};
 }

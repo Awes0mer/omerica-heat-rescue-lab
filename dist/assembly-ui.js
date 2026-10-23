@@ -1,5 +1,6 @@
 import { mountAssembly } from './assembly-scene.js';
 import { PARAMS } from './model.js';
+import { DEMO_INTERVAL_MS, DEMO_STEPS, createDemoState, transitionDemo } from './assembly-demo.js';
 
 const $ = id => document.getElementById(id);
 const describe = {
@@ -18,6 +19,8 @@ function dispatch(type,index){window.dispatchEvent(new CustomEvent('heat-scene-a
 function action(type,fields={}){window.dispatchEvent(new CustomEvent('heat-scene-action',{detail:{type,...fields}}));}
 let manualScene, aiScene, selected=1, latest=null;
 let exploded=0, thermal=false, globalInspection=false, component='overview', aiPlacement=null;
+let demo=createDemoState(), demoTimer=null, demoPauseNote='', labelsVisible=true, labelsBeforeDemo=true;
+const lockedControls=new Map();
 const host=$('assembly-canvas');
 function inspectPart({index=selected,component:nextComponent,label}) {
   component=describe[nextComponent]?nextComponent:'overview';
@@ -37,9 +40,9 @@ function showFallback() {
 
 try {
   manualScene=mountAssembly(host,{
-    onSelect(index){selected=index;dispatch('select',index);},
-    onTogglePipe(index){dispatch('pipe',index);},
-    onInspect:inspectPart
+    onSelect(index){pauseDemo();selected=index;dispatch('select',index);},
+    onTogglePipe(index){if(!demo.active)dispatch('pipe',index);},
+    onInspect(part){pauseDemo();inspectPart(part);}
   });
   if(manualScene.available)$('assembly-loading').hidden=true;
   else showFallback();
@@ -69,7 +72,7 @@ window.addEventListener('heat-ai-design',({detail})=>{
   aiScene?.setDesign?.(detail.design);
   if(detail.label==='AI’S SELECTED DESIGN' && detail.design?.counts?.length===3){
     aiPlacement=[...detail.design.counts];
-    $('assembly-ai-layout').disabled=false;
+    $('assembly-ai-layout').disabled=demo.active;
     $('assembly-ai-layout').textContent=`Use AI tiles ${aiPlacement.join(' / ')}`;
   }
 });
@@ -78,7 +81,7 @@ window.addEventListener('heat-ai-start',()=>{
   $('assembly-ai-layout').textContent='Run AI to use its tiles';
 });
 
-window.addEventListener('heat-mode',()=>{manualScene?.resize();aiScene?.resize();});
+window.addEventListener('heat-mode',()=>{pauseDemo('Paused after switching views.');manualScene?.resize();aiScene?.resize();});
 function separateLayers(amount){
   exploded=Math.max(0,Math.min(1,amount));manualScene?.setExploded(exploded);
   $('assembly-explode').setAttribute('aria-pressed',String(exploded>0));
@@ -86,18 +89,26 @@ function separateLayers(amount){
   $('assembly-separation').value=String(Math.round(exploded*100));
   $('assembly-separation-value').value=`${Math.round(exploded*100)}%`;
 }
-$('assembly-explode').addEventListener('click',()=>separateLayers(exploded>0?0:1));
-$('assembly-separation').addEventListener('input',event=>separateLayers(Number(event.target.value)/100));
-$('assembly-thermal').addEventListener('click',()=>{
-  thermal=!thermal;manualScene?.setThermal(thermal);$('assembly-thermal').setAttribute('aria-pressed',String(thermal));
+$('assembly-explode').addEventListener('click',()=>{pauseDemo();separateLayers(exploded>0?0:1);});
+$('assembly-separation').addEventListener('input',event=>{pauseDemo();separateLayers(Number(event.target.value)/100);});
+function setThermal(value){
+  thermal=Boolean(value);manualScene?.setThermal(thermal);$('assembly-thermal').setAttribute('aria-pressed',String(thermal));
   $('assembly-thermal').setAttribute('aria-label',thermal?'Turn off simulated temperature colors':'Show simulated temperature colors');
-});
-for(const button of document.querySelectorAll('[data-camera]'))button.addEventListener('click',()=>{
-  manualScene?.setView(button.dataset.camera);
-  for(const other of document.querySelectorAll('[data-camera]')){const active=other===button;other.classList.toggle('selected',active);other.setAttribute('aria-pressed',String(active));}
-});
-$('assembly-inspect').addEventListener('change',event=>inspectPart({component:event.target.value}));
-$('assembly-branch').addEventListener('change',event=>{selected=Number(event.target.value);dispatch('select',selected);inspectPart({component:$('assembly-inspect').value});});
+}
+$('assembly-thermal').addEventListener('click',()=>{pauseDemo();setThermal(!thermal);});
+function setLabels(value){
+  labelsVisible=Boolean(value);manualScene?.setLabelsVisible?.(labelsVisible);
+  $('assembly-labels').setAttribute('aria-pressed',String(labelsVisible));
+  $('assembly-labels').setAttribute('aria-label',labelsVisible?'Hide floating assembly labels':'Show floating assembly labels');
+}
+$('assembly-labels').addEventListener('click',()=>{pauseDemo();setLabels(!labelsVisible);});
+function setCamera(view){
+  manualScene?.setView(view);
+  for(const button of document.querySelectorAll('[data-camera]')){const active=button.dataset.camera===view;button.classList.toggle('selected',active);button.setAttribute('aria-pressed',String(active));}
+}
+for(const button of document.querySelectorAll('[data-camera]'))button.addEventListener('click',()=>{pauseDemo();setCamera(button.dataset.camera);});
+$('assembly-inspect').addEventListener('change',event=>{pauseDemo();inspectPart({component:event.target.value});manualScene?.focusPart?.({component:event.target.value,index:selected});});
+$('assembly-branch').addEventListener('change',event=>{pauseDemo();selected=Number(event.target.value);dispatch('select',selected);inspectPart({component:$('assembly-inspect').value});manualScene?.focusPart?.({component,index:selected});});
 const lab=host.closest('.lab');
 $('assembly-expand').addEventListener('click',async()=>{
   try {if(document.fullscreenElement)await document.exitFullscreen();else await lab.requestFullscreen();}
@@ -109,7 +120,7 @@ document.addEventListener('fullscreenchange',()=>{
   $('assembly-expand').setAttribute('aria-pressed',String(expanded));
   manualScene?.resize();
 });
-window.addEventListener('pagehide',event=>{if(!event.persisted){manualScene?.dispose();aiScene?.dispose();}});
+window.addEventListener('pagehide',event=>{pauseDemo('Paused when leaving this page.');if(!event.persisted){manualScene?.dispose();aiScene?.dispose();}});
 
 function updateComponentReadings(){
   if(!latest)return;
@@ -131,15 +142,17 @@ function updateLayoutControls(){
   const counts=latest.counts??latest.branches.map(b=>b.count);
   $('assembly-allocation').textContent=counts.map((n,i)=>`${'ABC'[i]} ${n}`).join(' / ');
   const from=Number($('assembly-from').value),to=Number($('assembly-to').value);
-  $('assembly-move').disabled=from===to||counts[from]===0;
-  $('assembly-balance').disabled=counts.every(n=>n===2);
+  $('assembly-move').disabled=demo.active||from===to||counts[from]===0;
+  $('assembly-balance').disabled=demo.active||counts.every(n=>n===2);
+  $('assembly-ai-layout').disabled=demo.active||!aiPlacement;
+  if(demo.active)setManualLock(true);
 }
 $('assembly-from').addEventListener('change',updateLayoutControls);
 $('assembly-to').addEventListener('change',updateLayoutControls);
 $('assembly-move').addEventListener('click',()=>action('move-tile',{from:Number($('assembly-from').value),to:Number($('assembly-to').value)}));
 $('assembly-balance').addEventListener('click',()=>action('balance-tiles'));
 $('assembly-ai-layout').addEventListener('click',()=>{if(aiPlacement)action('apply-ai-layout',{counts:aiPlacement});});
-$('assembly-export').addEventListener('click',()=>action('export-assembly',{metadata:{layerSeparation:exploded,thermalColors:thermal,inspectedComponent:component}}));
+$('assembly-export').addEventListener('click',()=>action('export-assembly',{metadata:{layerSeparation:exploded,thermalColors:thermal,labelsVisible,inspectedComponent:component,guidedDemo:demo.active?{step:demo.index+1,id:DEMO_STEPS[demo.index].id,scenario:DEMO_STEPS[demo.index].scenario}:null}}));
 window.addEventListener('heat-scene-action-result',({detail})=>{
   if(detail.reset){
     $('assembly-workshop-status').textContent=`Tiles ${detail.counts.join(' / ')}. New run at equilibrium; all pipes open.${detail.type==='apply-ai-layout'?' AI tile placement copied; benchmark loads and backup policy were not copied.':''}`;
@@ -149,4 +162,101 @@ window.addEventListener('heat-scene-action-result',({detail})=>{
     $('assembly-workshop-status').textContent='Exported the simulated state, six-tile allocation, assumptions and display settings.';
   }
 });
+
+const initialDemoCopy=Object.fromEntries(['title','explanation','look','limit'].map(key=>[key,$('assembly-demo-'+key).textContent]));
+function setManualLock(active){
+  const selector='#pause,#reset,#speed,#main-action,#backup,[data-mobile-pipe],[data-counts],#assembly-from,#assembly-to,#assembly-move,#assembly-balance,#assembly-ai-layout,#optimize,.apply-best';
+  if(active){
+    for(const control of document.querySelectorAll(selector)){
+      if(!lockedControls.has(control))lockedControls.set(control,control.disabled);
+      control.disabled=true;
+    }
+  }else{
+    for(const [control,disabled] of lockedControls)control.disabled=disabled;
+    lockedControls.clear();
+    // A layout worker may have finished while the guide was open.
+    $('optimize').disabled=$('optimize').textContent.startsWith('Testing');
+  }
+  lab.classList.toggle('demo-active',active);
+}
+function renderDemoControls(){
+  const last=DEMO_STEPS.length-1;
+  $('assembly-demo-start').disabled=demo.active;
+  $('assembly-demo-previous').disabled=!demo.active||demo.index===0;
+  $('assembly-demo-next').disabled=!demo.active||demo.index===last;
+  $('assembly-demo-play').disabled=!demo.active||demo.playing||demo.index===last;
+  $('assembly-demo-pause').disabled=!demo.active||!demo.playing;
+  $('assembly-demo-end').disabled=!demo.active;
+  if(demo.active){
+    const step=DEMO_STEPS[demo.index];
+    const status=demo.index===last?'Final step — choose Previous or End demo':demo.playing?'Autoplay: 12 seconds per step':demoPauseNote||'Paused — use Next or Play';
+    $('assembly-demo-progress').textContent=`${demo.index+1} / ${DEMO_STEPS.length} · ${step.title} · ${status}`;
+  }else{
+    $('assembly-demo-progress').textContent=`${DEMO_STEPS.length} steps · Start resets the teaching run · Optional autoplay: 12 seconds per step`;
+  }
+}
+function showDemoStep(){
+  const step=DEMO_STEPS[demo.index];
+  selected=1;
+  action('demo-step',{scenario:step.scenario,seconds:step.seconds});
+  separateLayers(step.separation);
+  setThermal(step.thermal);
+  setCamera(step.camera);
+  manualScene?.focusPart?.({component:step.component,index:1});
+  inspectPart({component:step.component,index:1});
+  $('assembly-demo-title').textContent=`${demo.index+1} / ${DEMO_STEPS.length} · ${step.title}`;
+  $('assembly-demo-explanation').textContent=step.explanation;
+  $('assembly-demo-look').textContent=step.lookFor;
+  $('assembly-demo-limit').textContent=step.limit;
+  $('assembly-workshop-status').textContent='Guided example: the six-tile layout and thermal state are fixed for this step. End demo to change the experiment.';
+  renderDemoControls();
+}
+function scheduleDemo(){
+  clearTimeout(demoTimer);demoTimer=null;
+  if(!demo.active||!demo.playing||document.hidden||$('manual-view').hidden)return;
+  demoTimer=setTimeout(()=>{
+    if(document.hidden||$('manual-view').hidden){pauseDemo('Paused while this view was hidden.');return;}
+    demo=transitionDemo(demo,'tick');
+    showDemoStep();
+    scheduleDemo();
+  },DEMO_INTERVAL_MS);
+}
+function pauseDemo(note='Paused after a view adjustment.'){
+  if(!demo.active)return;
+  const wasPlaying=demo.playing;
+  demo=transitionDemo(demo,'pause');
+  if(wasPlaying)demoPauseNote=note;
+  clearTimeout(demoTimer);demoTimer=null;
+  renderDemoControls();
+}
+$('assembly-demo-start').addEventListener('click',()=>{
+  labelsBeforeDemo=labelsVisible;
+  demo=transitionDemo(demo,'start');demoPauseNote='';
+  setManualLock(true);setLabels(false);
+  if(window.matchMedia('(min-width:761px)').matches)$('assembly-demo-details').open=true;
+  showDemoStep();
+});
+for(const name of ['previous','next'])$('assembly-demo-'+name).addEventListener('click',()=>{
+  clearTimeout(demoTimer);demoTimer=null;
+  demo=transitionDemo(demo,name);demoPauseNote='';showDemoStep();
+});
+$('assembly-demo-play').addEventListener('click',()=>{
+  demo=transitionDemo(demo,'play');demoPauseNote='';renderDemoControls();scheduleDemo();
+});
+$('assembly-demo-pause').addEventListener('click',()=>pauseDemo('Paused.'));
+$('assembly-demo-end').addEventListener('click',()=>{
+  clearTimeout(demoTimer);demoTimer=null;
+  demo=transitionDemo(demo,'end');demoPauseNote='';
+  setManualLock(false);
+  separateLayers(0);setThermal(false);setLabels(labelsBeforeDemo);setCamera('orbit');
+  manualScene?.focusPart?.({component:'overview',index:1});
+  action('demo-end');
+  inspectPart({component:'overview',index:1});
+  for(const [key,value] of Object.entries(initialDemoCopy))$('assembly-demo-'+key).textContent=value;
+  $('assembly-workshop-status').textContent='Fresh teaching run: six tiles, all pipes open. You can change the layout or block a pipe.';
+  renderDemoControls();updateLayoutControls();
+});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)pauseDemo('Paused while this tab was hidden.');});
+for(const event of ['pointerdown','wheel','keydown'])host.addEventListener(event,()=>pauseDemo(),{passive:true});
+renderDemoControls();
 action('request-snapshot');

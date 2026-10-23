@@ -146,3 +146,83 @@ button:focus-visible,select:focus-visible,input:focus-visible,a:focus-visible,su
 .assembly-separation{display:flex;align-items:center;gap:14px;margin-top:17px;font-size:11px;color:#b9cdd7}.assembly-separation input{width:160px;accent-color:#8ad6e1}.assembly-separation output{min-width:34px;font-variant-numeric:tabular-nums}
 @media(min-width:761px){#assembly-stage{min-height:560px;flex:1}.scene-wrap{justify-content:flex-start}.scene-wrap .assembly-toolbar{position:absolute}.mobile-pipe-controls{margin-top:auto}.lab-body{min-height:0}}
 @media(max-width:760px){.part-inspector{height:auto;min-height:0}.part-inspector p{min-height:0}.component-readings{grid-column:1/-1;min-height:43px;margin:5px 0 0;padding-top:8px}.component-readings dt{font-size:10px}.component-readings dd{font-size:15px}.assembly-workshop>summary{padding:16px 14px;font-size:13px}.assembly-workshop>summary strong{font-size:10px}.workshop-body{padding:0 14px 17px}.workshop-controls{display:grid;grid-template-columns:1fr 1fr;gap:9px}.workshop-controls select{width:100%;min-width:0}.workshop-controls button{padding:10px 5px;min-height:42px;font-size:11px}.assembly-separation input{min-width:0;flex:1}.assembly-workshop>summary{gap:8px}}
+
+/* Guided inspection uses normal document flow: controls and all explanations
+   stay outside the canvas, and native details keep the drawing unobscured. */
+.lab .lab-body{display:block;min-height:0}
+.lab .scene-wrap{padding:0;overflow:visible}
+.lab .assembly-toolbar{position:static;inset:auto;z-index:auto;pointer-events:auto;padding:14px 18px 10px;flex-wrap:wrap}
+.assembly-demo-controls{display:flex;flex-wrap:wrap;align-items:center;gap:7px;padding:0 18px 9px}
+.assembly-demo-controls button{min-height:36px;padding:8px 12px;border:1px solid #567385;border-radius:5px;background:#263c50;color:#d6e9ed;font:11px var(--font)}
+.assembly-demo-controls button:hover:not(:disabled){background:#3b5b70}
+.assembly-demo-controls button:disabled{opacity:.42;cursor:default}
+.assembly-demo-controls #assembly-demo-start{background:#c7e4df;border-color:#c7e4df;color:#1e3839;font-weight:600}
+.assembly-demo-controls #assembly-demo-play:not(:disabled){border-color:#c8b179;color:#eed699}
+.assembly-demo-progress{padding:0 18px 13px;color:#acc6d1;font-size:11px;line-height:1.5;min-height:30px;border-bottom:1px solid #ffffff15}
+.assembly-scene-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:17px 22px 0}
+.lab .assembly-stage-heading{position:static;inset:auto;pointer-events:auto}
+.lab .assembly-state-pill{position:static;inset:auto;flex-shrink:0;pointer-events:auto}
+.lab #assembly-stage{height:clamp(400px,53vw,640px);min-height:0;flex:none}
+.lab .assembly-orbit-tip{position:static;inset:auto;padding:8px 22px 15px;pointer-events:auto}
+.lab .scene-wrap.assembly-failed #assembly-stage{height:auto;min-height:60px}
+.lab .mobile-pipe-controls{margin-top:0}
+.assembly-demo-details{margin:0;background:#1b2e3e;border-top:1px solid #4e6a7a}
+.assembly-demo-details>summary,.assembly-readings-details>summary{padding:16px 22px;font:500 14px var(--display);color:#d3e5ec;gap:16px}
+.fold-symbol{font-size:21px;line-height:1;color:#78a3ac;flex-shrink:0}
+details[open]>summary>.fold-symbol{transform:rotate(45deg)}
+.assembly-demo-explanation{padding:0 22px 20px;max-width:1000px}
+.assembly-demo-explanation p{font-size:13px;line-height:1.7;color:#bdcfd8;margin:0 0 15px;max-width:90ch}
+.assembly-demo-explanation p:last-child{margin-bottom:0;color:#9fb6c4}
+.assembly-demo-explanation h3{font-size:11px;color:#d5e4e9;font-weight:600;margin:14px 0 5px}
+.lab .readings{display:block;padding:0;margin:0;border-left:0;border-top:1px solid #4e6a7a;background:#1b2939}
+.assembly-readings-details>summary>span:first-child{display:flex;gap:9px;align-items:center}
+.assembly-readings-body{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:18px;padding:3px 22px 22px;align-items:start}
+.lab .part-inspector{height:auto;min-height:0;margin:0;padding:0 14px 0 0;border:0;display:block}
+.lab .part-inspector p{min-height:0}
+.lab .part-inspector h3{font-size:18px}
+.lab .reading{padding:8px 0!important;border:0}
+.lab .reading.primary strong{font-size:35px}
+.lab .reading strong{font-size:30px}
+.assembly-readings-body .limit-note{grid-column:1/-1;padding:0}
+.manual-fold{border:1px solid #cdd8d0;border-radius:7px;background:#f5f8f3;min-width:0;overflow:hidden}
+.manual-fold>summary{padding:17px 19px;font:500 13px var(--display);color:#314c46}
+.manual-fold>.explanation{padding:0 19px 22px}
+.manual-fold>.explanation p{max-width:70ch}
+.manual-fold .chart-card{border:0;border-radius:0}
+.manual-fold.manual-intro{font-size:12px;margin-bottom:12px}
+.manual-fold.manual-intro>summary{padding:11px 15px;font-size:11px}
+.manual-fold.manual-intro>p{padding:0 15px 14px;line-height:1.6;margin:0}
+.under-lab{align-items:start;padding:18px 0;gap:16px}
+.budget-fold>.energy-budget{border:0;padding:0 19px 22px}
+.backup-explanation>summary{font-size:11px;padding-top:6px;text-decoration:underline;text-underline-offset:3px;color:#b6d8d8;justify-content:flex-start}
+.backup-explanation p{max-width:65ch;line-height:1.6}
+.lab.demo-active .mobile-pipe-controls button:disabled{cursor:default;opacity:.4}
+.lab:fullscreen #assembly-stage{height:55vh;min-height:300px}
+.lab:fullscreen .readings{padding:0}
+@media(max-width:760px){
+  .lab .assembly-toolbar{padding:12px 12px 10px;gap:8px}
+  .assembly-toggles{gap:5px;flex-wrap:wrap}
+  .assembly-demo-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:0 12px 9px}
+  .assembly-demo-controls #assembly-demo-start{grid-column:1/-1}
+  .assembly-demo-controls button{padding:9px 5px;min-height:38px;font-size:11px}
+  .assembly-demo-progress{padding:0 12px 12px;font-size:10px}
+  .assembly-scene-heading{padding:13px 14px 0;gap:10px;flex-wrap:wrap}
+  .assembly-stage-heading>span{font-size:16px}
+  .lab .assembly-state-pill{padding:5px 8px;font-size:9px}
+  .lab #assembly-stage{height:365px;min-height:0}
+  .lab .assembly-orbit-tip{padding:7px 14px 13px;font-size:9px}
+  .assembly-demo-details>summary,.assembly-readings-details>summary{padding:15px 14px;font-size:12px}
+  .assembly-demo-explanation{padding:0 14px 18px}
+  .assembly-demo-explanation p{font-size:12px}
+  .assembly-readings-body{grid-template-columns:1fr 1fr 1fr;gap:10px;padding:0 14px 18px}
+  .lab .part-inspector{grid-column:1/-1;padding:0 0 8px}
+  .lab .part-inspector p{max-width:65ch}
+  .lab .part-inspector .component-readings{max-width:340px;margin-top:12px}
+  .lab .reading.primary strong,.lab .reading strong{font-size:27px}
+  .lab .reading>span{font-size:9px;line-height:1.5;display:block;min-height:27px}
+  .lab .reading small{font-size:8px}
+  .under-lab{display:grid;grid-template-columns:1fr;padding:14px 0;gap:12px}
+  .manual-fold>summary{padding:15px 14px;font-size:12px}
+  .manual-fold>.explanation{padding:0 14px 18px}
+  .budget-fold>.energy-budget{padding:0 14px 18px}
+}

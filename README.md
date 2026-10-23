@@ -1,6 +1,6 @@
 # Omerica Heat Rescue — AI experiment lab with a 3D cooling assembly
 
-This combined release keeps the audited 3D cooling bench and adds editable tile placement, component readings, continuous layer separation, and assembly-state export. The physics, optimizer and recorded benchmark remain unchanged from audited commit `e56c199` (`synthetic-open-v2`).
+This combined release keeps the audited 3D cooling bench and adds a guided component tour, editable tile placement, component readings, continuous layer separation, and assembly-state export. The physics, optimizer and recorded benchmark remain unchanged from audited commit `e56c199` (`synthetic-open-v2`).
 
 **Can an AI learn where to place six thermoelectric generators and when to activate backup cooling, then pass cooling failures it has not trained on?**
 
@@ -31,6 +31,14 @@ The manual teaching view shows three equal-load server branches with circuit boa
 - WebGL is needed for the 3D renderer; the existing 2D view/live controls remain the fallback. Hidden and offscreen scenes skip rendering.
 
 `dist/assembly-scene.js` contains the original scene and handwritten camera/picking controls. It imports a locally vendored MIT copy of **Three.js 0.170.0**. No external meshes, textures, stock photos, reference-project assets, or additional controls library are used. Text labels are generated locally; page fonts retain their existing OFL notices. See [third-party notices](dist/third-party/README.md).
+
+## Follow the guided 3D demo
+
+Start the guide beneath the camera controls to inspect all the assembly components, a blocked branch, backup cooling, tile placement, the AI experiment and potential benefits. The 13 steps use focused camera views and separated layers. Previous and Next pause automatic progression; Play advances every 12 seconds and stops at the last step. Changing tabs or hiding the page pauses the guide without automatically resuming.
+
+Every step starts a fresh balanced teaching example. Component steps show all-open equilibrium. The blockage and backup steps each calculate an independent 120-second example from that same equilibrium; the backup comparison starts with backup enabled. These are paused solver results, not a continuation between steps. End returns to a fresh running experiment. Manual run, pipe and layout controls are disabled while the guide is active.
+
+Step explanations, component readings and supporting text sit outside the canvas in collapsible panels. Floating labels are hidden during the guide and can be toggled. The benefits discussion explains possible research and teaching uses; this simulation does not establish real energy savings, emissions reductions, water savings or hardware safety.
 
 ## Build and inspect a layout
 
