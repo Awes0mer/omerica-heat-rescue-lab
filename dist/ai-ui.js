@@ -214,7 +214,7 @@ $('ai-download').addEventListener('click', () => {
   if (!result) return;
   const blob = new Blob([JSON.stringify(result, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob), link = document.createElement('a');
-  link.href = url; link.download = `heat-rescue-seed-${result.seed}-budget-${result.budget}.json`; link.click();
+  link.href = url; link.download = `omerica-heat-rescue-seed-${result.seed}-budget-${result.budget}.json`; link.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 });
 

@@ -24,8 +24,10 @@
     },
     {
       "file": "dist/ai-ui.js",
-      "sha256": "213a09e59c0872d27d9855db699a8ebec3c5b04cc011f3603bba511e6c957727",
-      "identical_to_e56c199": true
+      "sha256": "207c40b3e2d4727c38c05bbc9fe36efa8a294a72c0859563b89b59edbff75a08",
+      "identical_to_e56c199": false,
+      "change": "Download filename prefixed with omerica- only; AI interface logic otherwise unchanged.",
+      "identical_after_filename_normalization": true
     },
     {
       "file": "dist/ai-worker.js",

@@ -36,7 +36,7 @@ Node.js is an optional test/benchmark development tool, not bundled in the web a
 
 ## Three.js — 3D assembly view
 
-Three.js **0.170.0** is bundled in `../vendor/three/three.module.js` under the [MIT license](../vendor/three/LICENSE), copyright © 2010–2024 three.js authors. Keep that complete license with the module. It is used only to render the presentation layer; it does not replace or alter the thermal solver, AI planner or experiment protocol.
+Three.js **0.170.0** is bundled in `../vendor/three/three.module.js` under the [MIT license](../vendor/three/LICENSE), copyright © 2010–2024 three.js authors. Keep that complete license with the module and preserve the [version-specific supplemental notices](THREE-NOTICE.md), including embedded Earcut 2.2.4 (ISC) and upstream shader/math credits. [Notice provenance](three-0.170.0-notice-provenance.json) records exact source pins and hashes. It is used only to render the presentation layer; it does not replace or alter the thermal solver, AI planner or experiment protocol.
 
 Source package: [official npm tarball](https://registry.npmjs.org/three/-/three-0.170.0.tgz). The verified SHA-512 package integrity and per-file SHA-256 values are recorded in [vendor provenance](../vendor/three/provenance.json). The locally included module and LICENSE were rehashed during the release audit and match that record.
 
