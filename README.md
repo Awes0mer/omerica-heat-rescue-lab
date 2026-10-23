@@ -22,13 +22,13 @@ npm run benchmark
 
 `npm test` runs all `*.test.mjs` files with Node's built-in test runner. `npm run benchmark` reruns the frozen eight-seed comparison and writes `dist/ai-benchmark.json`, including scenario definitions, individual results, learning curves and SHA-256 hashes of the planner and experimental physics source. The benchmark needs no network, API key or external model service.
 
-## A short demonstration for judges
+## Quick tour
 
-1. Open **AI experiment lab** and click **Run AI experiments**. Say: “We give each search 18 design experiments. Each design uses the same six tiles and the same test conditions.”
-2. Point to **AI predicted** and **Physics calculated**. Say: “The AI predicts a result, runs that experiment, then learns from the difference. It chooses where the tiles go, the temperature that starts backup cooling, and the backup flow.”
-3. Compare the learning curves and final cards. Say: “More generated electricity is not enough. We subtract extra pumping energy and separately check the temperature limit.”
-4. Open **Watch the chosen design face a held-out pipe failure**, choose a condition and replay it. Say: “These longer faults were withheld from the searches. The hot plate and water change temperature over time, and backup pumping has an electrical cost.”
-5. Open **The experiment notebook**, **Fair comparison & reproducibility**, and **What’s the research gap?** Say: “The predictions, observations, equations, assumptions and comparison results are inspectable. Some learned designs fail unfamiliar conditions; we report those failures.”
+1. Open **AI experiment lab** and click **Run AI experiments**. We give each search 18 design experiments. Each design uses the same six tiles and the same test conditions.
+2. Point to **AI predicted** and **Physics calculated**. The AI predicts a result, runs that experiment, then learns from the difference. It chooses where the tiles go, the temperature that starts backup cooling, and the backup flow.
+3. Compare the learning curves and final cards. More generated electricity is not enough. We subtract extra pumping energy and separately check the temperature limit.
+4. Open **Watch the chosen design face a held-out pipe failure**, choose a condition and replay it. These longer faults were withheld from the searches. The hot plate and water change temperature over time, and backup pumping has an electrical cost.
+5. Open **The experiment notebook**, **Fair comparison & reproducibility**, and **What’s the research gap?** The predictions, observations, equations, assumptions and comparison results are inspectable. Some learned designs fail unfamiliar conditions; we report those failures.
 
 For the physical intuition, the separate **Explore the physics** tab lets a viewer block a pipe and enable backup cooling directly. Its equal-load teaching setup is different from the AI benchmark; do not treat its readings as a replay of an AI design.
 
@@ -130,7 +130,7 @@ Project-authored code, UI, documentation and synthetic benchmark data are releas
 
 The clean public source release excludes earlier private Git history, raw Valency exports, manufacturer coefficient tables, third-party paper PDFs and private hosting configuration. No claim is made that cited papers themselves are open source.
 
-Valency was a research-stage service. It is not integrated into the executable app or required to rerun it. A separate commercial Valency license has **not** been verified; do not sell a Valency integration or redistribute its content/outputs on the strength of hackathon sponsorship. OpenAI Codex/ChatGPT, OpenAI Sites, GitHub and Slack are proprietary development/hosting/collaboration services, not dependencies licensed by this repository. The portable app can be served with open-source Python on Linux and viewed in Firefox without those services.
+Valency was used only at the research stage. It is not integrated into the executable app or required to rerun it. A separate commercial Valency license has **not** been verified, so no Valency integration is offered for sale and no Valency content or outputs are redistributed on the strength of hackathon sponsorship. OpenAI Codex/ChatGPT, OpenAI Sites, GitHub and Slack are proprietary development/hosting/collaboration services, not dependencies licensed by this repository. The portable app can be served with open-source Python on Linux and viewed in Firefox without those services.
 
 ## Hackathon disclosure
 

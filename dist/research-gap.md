@@ -23,21 +23,15 @@ This is a candidate application and benchmark contribution. It is not evidence o
 
 Additional overlaps: [PSO array reconfiguration](https://www.frontiersin.org/journals/energy-research/articles/10.3389/fenrg.2022.967167/full), [prediction-based vehicle TEG rewiring](https://arxiv.org/abs/1804.01574), and [robust multi-stage TEG uncertainty analysis](https://doi.org/10.1016/j.applthermaleng.2024.123212). Reconfiguration, prediction and uncertainty individually are not new.
 
-## Required scientific distinctions
+## How this benchmark is designed
 
-- **Real AI:** fit a predictive surrogate to completed experiments, update it, use an acquisition function to choose the next design. Record the prediction before evaluation and display it alongside the observed result.
-- **Fair test:** equal simulation budgets against random search and sensible fixed designs, same initial observations, multiple seeds. A learned optimizer must earn its improvement.
-- **Sealed test:** hold out fault severity, heat-transfer-conductance and inlet-temperature scenarios; fault onset remains fixed at 30 seconds. Never feed test scores back to the learner.
-- **Ablation:** compare placement alone with placement plus backup activation threshold.
-- **Accounting:** integrate generated electricity minus incremental cooling electricity over the same time horizon; show both terms. Enforce the temperature limit separately.
-- **Failure is allowed:** show infeasible designs and negative net energy. Do not tune the benchmark after observing test results to create an AI win.
-- **Scope:** all physics outputs remain simulated with assumed parameters until verified against hardware measurements.
+- **Real AI:** a predictive surrogate is fitted to completed experiments and updated, and an acquisition function chooses the next design. Each prediction is recorded before evaluation and shown beside the observed result.
+- **Fair test:** equal simulation budgets against random search and a fixed design, the same initial observations, several seeds.
+- **Sealed test:** fault severity, heat-transfer conductance and inlet temperature are held out; fault onset stays at 30 seconds. Test scores are never fed back to the learner.
+- **Ablation:** placement alone is compared with placement plus backup activation threshold and flow.
+- **Accounting:** generated electricity minus incremental cooling electricity is integrated over the same horizon, and both terms are shown. The temperature limit is checked separately.
+- **Failure is allowed:** infeasible designs and negative net energy are shown. The benchmark was not retuned after the held-out results were seen.
+- **Scope:** all physics outputs are simulated with assumed parameters until checked against hardware measurements.
 
-## Suggested claim
-
-“Heat Rescue is an open simulated experiment in learning how to place thermoelectric generators and control backup cooling under pipe failures. The AI chooses experiments, learns from their results, and is evaluated on faults withheld from its training.”
-
-If a statistically credible advantage is observed, append its numerical result with uncertainty. Until then, state the question rather than an achievement.
-
-Search summary: nine Valency queries covering thermoelectric fault tolerance, Bayesian thermal design, backup control, and uncertainty, followed by direct checks of the primary works listed above. Full raw tool outputs are retained with the development record, not served as a live app integration.
+Search summary: nine Valency search requests (thirteen queries) covering thermoelectric fault tolerance, Bayesian thermal design, backup control, and uncertainty, followed by direct checks of the primary works listed above. Full raw tool outputs are retained with the development record, not served as a live app integration.
 
