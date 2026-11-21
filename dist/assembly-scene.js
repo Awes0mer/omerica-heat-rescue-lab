@@ -385,7 +385,7 @@ export function mountAssembly(host, {onSelect, onTogglePipe, onInspect} = {}) {
       p.status.sprite.material.opacity=p.index===selected?1:.78;
       updateLabel(p.valveLabel,b.blocked?`RESTORE ${'ABC'[p.index]}`:`PIPE ${'ABC'[p.index]}`,b.blocked?'#ffb192':'#9ec9d6');
     }
-    updateLabel(totalLabel,`${Number(snapshot?.totalPowerW||0).toFixed(2)} W  /  OUTPUT`,'#f1d797');
+    updateLabel(totalLabel,`${Number(snapshot?.totalPowerW||0).toFixed(2)} W  /  SIMULATED`,'#f1d797');
     pumpLight.emissiveIntensity=snapshot?.backupActive?2:.03;
   }
   function setDesign(design={}) {

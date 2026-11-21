@@ -47,6 +47,46 @@ test('outgoing payload loses URLs, referrers, DOM text and automatic events', ()
   assert.deepEqual(filtered.properties, { view: 'manual', token: 'public-project-token', distinct_id: 'ephemeral', application: 'omerica-heat-rescue-lab' });
 });
 
+test('outgoing event keeps only allowlisted top-level keys and valid SDK fields', () => {
+  const uuid = '01890a5d-ac96-774b-bcce-0c2b1e1c9a2f', timestamp = '2026-11-21T10:00:00.000Z';
+  const input = JSON.parse(`{"__proto__":{"polluted":true},"constructor":"x"}`);
+  Object.assign(input, { uuid, event: 'app_loaded', timestamp, properties: { $lib: 'web', $time: 1.5, distinct_id: { nested: 'private' }, $session_id: 'x'.repeat(200), $insert_id: 'a b' }, $set: { email: 'private' }, $set_once: { name: 'private' }, unknown: 'private' });
+  const filtered = filterOutgoing(input);
+  assert.deepEqual(Object.keys(filtered).sort(), ['event', 'properties', 'timestamp', 'uuid']);
+  assert.equal(JSON.stringify(filtered).includes('private'), false);
+  assert.equal(filtered.polluted, undefined);
+  assert.equal(Object.getPrototypeOf(filtered), Object.prototype);
+  assert.deepEqual(filtered.properties, { $lib: 'web', $time: 1.5, application: 'omerica-heat-rescue-lab' });
+  const date = new Date(timestamp);
+  const rebuiltDate = filterOutgoing({ event: 'app_loaded', uuid, timestamp: date, properties: {} }).timestamp;
+  assert.ok(rebuiltDate instanceof Date && rebuiltDate !== date, 'a Date stays a Date, as the SDK expects, but as a fresh object');
+  assert.equal(rebuiltDate.toISOString(), timestamp);
+  const malformed = filterOutgoing({ event: 'app_loaded', uuid: '<script>', timestamp: 'yesterday', properties: {} });
+  assert.deepEqual(Object.keys(malformed).sort(), ['event', 'properties']);
+  assert.equal(filterOutgoing({ event: 'app_loaded', timestamp: new Date(NaN), properties: {} }).timestamp, undefined);
+  assert.equal(filterOutgoing({ event: ['app_loaded'], properties: {} }), null);
+});
+
+test('outgoing values are read once and Date timestamps are rebuilt', () => {
+  const date = new Date('2026-11-21T10:00:00.000Z'); date.toJSON = () => 'SECRET_DATE'; date.getTime = () => NaN;
+  assert.equal(JSON.stringify(filterOutgoing({ event: 'app_loaded', timestamp: date, properties: {} })).includes('SECRET'), false);
+  const cleanDate = filterOutgoing({ event: 'app_loaded', timestamp: date, properties: {} }).timestamp;
+  assert.ok(cleanDate instanceof Date && cleanDate !== date && Object.keys(cleanDate).length === 0);
+  assert.equal(cleanDate.toISOString(), '2026-11-21T10:00:00.000Z');
+  const flip = (good, bad) => { let n = 0; return () => (n++ ? bad : good); };
+  const properties = {}, input = { properties };
+  Object.defineProperty(properties, 'distinct_id', { enumerable: true, get: flip('ok', { secret: 'x' }) });
+  Object.defineProperty(properties, 'release', { enumerable: true, get: flip('v1', 'SECRET release') });
+  Object.defineProperty(properties, '$exception_type', { enumerable: true, get: flip('TypeError', 'SECRET type') });
+  Object.defineProperty(input, 'uuid', { enumerable: true, get: flip('abc', 'SECRET uuid') });
+  Object.defineProperty(input, 'event', { enumerable: true, get: flip('$exception', 'SECRET event') });
+  const out = filterOutgoing(input);
+  assert.equal(JSON.stringify(out).includes('SECRET'), false);
+  assert.equal(out.properties.distinct_id, 'ok');
+  const named = {}; Object.defineProperty(named, 'event', { get: flip('app_loaded', 'nope') }); named.properties = {};
+  assert.doesNotThrow(() => filterOutgoing(named));
+});
+
 test('errors discard raw messages and foreign/query-bearing stack contents', async () => {
   const e = new TypeError('Input value supersecret is invalid');
   e.stack = 'TypeError: supersecret\n at render (https://example.test/app.js?token=private:22:7)\n at other (https://elsewhere.test/a.js:1:2)';

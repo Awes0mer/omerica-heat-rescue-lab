@@ -21,7 +21,16 @@ const EVENT_FIELDS = Object.freeze({
 });
 const ERROR_CONTEXTS = ['window_error', 'unhandled_rejection', 'renderer_init', 'asset_load', 'experiment', 'verification', 'ai_worker', 'layout_worker'];
 const ERROR_NAMES = ['Error', 'TypeError', 'RangeError', 'ReferenceError', 'SyntaxError', 'URIError', 'EvalError'];
-const SDK_FIELDS = new Set(['token', 'distinct_id', '$device_id', '$session_id', '$window_id', '$lib', '$lib_version', '$insert_id', '$time', '$process_person_profile']);
+const SDK_ID = value => typeof value === 'string' && /^[A-Za-z0-9._:-]{1,128}$/.test(value);
+const SDK_FIELDS = Object.freeze({
+  token: value => typeof value === 'string' && /^[A-Za-z0-9_-]{1,256}$/.test(value),
+  distinct_id: SDK_ID, $device_id: SDK_ID, $session_id: SDK_ID, $window_id: SDK_ID, $insert_id: SDK_ID,
+  $lib: value => typeof value === 'string' && /^[A-Za-z0-9._-]{1,32}$/.test(value),
+  $lib_version: value => typeof value === 'string' && /^[A-Za-z0-9.+-]{1,32}$/.test(value),
+  $time: value => typeof value === 'number' && Number.isFinite(value) && value >= 0,
+  $process_person_profile: value => typeof value === 'boolean',
+});
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,6})?(?:Z|[+-]\d{2}:\d{2})$/;
 
 export function sanitizeEvent(name, properties = {}) {
   if (!Object.hasOwn(EVENT_FIELDS, name)) return null;
@@ -53,13 +62,16 @@ export function sanitizeError(error, origin) {
 }
 
 export function filterOutgoing(event, origin = globalThis.location?.origin || '') {
-  if (!event || (!Object.hasOwn(EVENT_FIELDS, event.event) && !['$exception', '$pageview'].includes(event.event))) return null;
+  const name = event?.event;
+  if (typeof name !== 'string' || (!Object.hasOwn(EVENT_FIELDS, name) && !['$exception', '$pageview'].includes(name))) return null;
   const source = event.properties || {};
-  const properties = event.event.startsWith('$') ? {} : sanitizeEvent(event.event, source);
-  for (const key of SDK_FIELDS) if (Object.hasOwn(source, key)) properties[key] = source[key];
-  if (event.event === '$exception') {
+  const properties = name.startsWith('$') ? {} : sanitizeEvent(name, source);
+  if (!properties) return null;
+  for (const [key, valid] of Object.entries(SDK_FIELDS)) { if (!Object.hasOwn(source, key)) continue; const value = source[key]; if (valid(value)) properties[key] = value; }
+  if (name === '$exception') {
+    const exceptionType = source.$exception_type;
     properties.$exception_message = 'Unexpected application error';
-    properties.$exception_type = ERROR_NAMES.includes(source.$exception_type) ? source.$exception_type : 'Error';
+    properties.$exception_type = ERROR_NAMES.includes(exceptionType) ? exceptionType : 'Error';
     properties.$exception_level = 'error';
     properties.$exception_list = (Array.isArray(source.$exception_list) ? source.$exception_list : []).filter(exception => exception && typeof exception === 'object').slice(0, 5).map(exception => {
       const frames = [];
@@ -77,11 +89,22 @@ export function filterOutgoing(event, origin = globalThis.location?.origin || ''
       return result;
     });
   }
-  if (ERROR_CONTEXTS.includes(source.error_context)) properties.error_context = source.error_context;
-  if (typeof source.release === 'string' && /^[a-zA-Z0-9._-]{1,64}$/.test(source.release)) properties.release = source.release;
+  const errorContext = source.error_context;
+  if (ERROR_CONTEXTS.includes(errorContext)) properties.error_context = errorContext;
+  const release = source.release;
+  if (typeof release === 'string' && /^[a-zA-Z0-9._-]{1,64}$/.test(release)) properties.release = release;
   properties.application = 'omerica-heat-rescue-lab';
   // URL, referrer, DOM text, input values, person properties and campaign fields are omitted.
-  return { ...event, properties };
+  // Only these top-level keys are forwarded; $set, $set_once and unknown keys are dropped.
+  const result = { event: name, properties };
+  const uuid = event.uuid;
+  if (typeof uuid === 'string' && /^[0-9a-fA-F-]{1,64}$/.test(uuid)) result.uuid = uuid;
+  const { timestamp } = event;
+  if (timestamp instanceof Date) {
+    const time = Date.prototype.getTime.call(timestamp);
+    if (Number.isFinite(time)) result.timestamp = new Date(time);
+  } else if (typeof timestamp === 'string' && ISO_DATE.test(timestamp) && Number.isFinite(Date.parse(timestamp))) result.timestamp = timestamp;
+  return result;
 }
 
 /** Official snippet queue protocol; SDK comes only from the chosen PostHog cloud. */
