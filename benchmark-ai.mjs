@@ -1,6 +1,7 @@
 /** Frozen, independently seeded comparison. No tuning against held-out results. */
 import { readFile, writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
+import { pathToFileURL } from 'node:url';
 import { runExperimentCampaign, PLANNER_PROTOCOL } from './dist/ai-planner.js';
 import { evaluateDesign, TRAIN_SCENARIOS, HOLDOUT_SCENARIOS } from './dist/experiment-model.js';
 import { PARAMS } from './dist/model.js';
@@ -9,15 +10,20 @@ const seeds = [1, 2, 3, 4, 5, 6, 7, 8];
 const budget = 18;
 const digest = async path => createHash('sha256').update(await readFile(new URL(path, import.meta.url))).digest('hex');
 const summarize = (design, train, holdout) => ({ design, train: { scoreJ: train.scoreJ, maxHotC: train.maxHotC, feasible: train.feasible }, holdout: { scoreJ: holdout.scoreJ, maxHotC: holdout.maxHotC, feasible: holdout.feasible } });
+const median = sorted => sorted.length % 2 ? sorted[(sorted.length - 1) / 2] : (sorted[sorted.length / 2 - 1] + sorted[sorted.length / 2]) / 2;
+export const serializeReport = report => JSON.stringify(report, null, 2) + '\n';
+
+/** Builds the benchmark report without writing any file; log receives the per-seed progress lines. */
+export async function buildReport({ log = () => {} } = {}) {
 const runs = [];
 for (const seed of seeds) {
   const result = await runExperimentCampaign({ evaluateDesign, seed, budget, yieldControl: async () => {} });
   runs.push({ seed, fixed: summarize(result.fixed.design, result.fixed.train, result.fixed.holdout), ...Object.fromEntries(['ai', 'random', 'placement'].map(method => [method, { ...summarize(result[method].best.design, result[method].best.outcome, result[method].holdout), learningCurve: result[method].history.map(r => ({ trial: r.trial, scoreJ: r.bestSoFar.scoreJ, feasible: r.bestSoFar.feasible })) }])) });
-  console.log(JSON.stringify({ seed, ...Object.fromEntries(['ai', 'random', 'placement'].map(method => [method, { joules: +runs.at(-1)[method].holdout.scoreJ.toFixed(2), feasible: runs.at(-1)[method].holdout.feasible }])) }));
+  log(JSON.stringify({ seed, ...Object.fromEntries(['ai', 'random', 'placement'].map(method => [method, { joules: +runs.at(-1)[method].holdout.scoreJ.toFixed(2), feasible: runs.at(-1)[method].holdout.feasible }])) }));
 }
 const methods = Object.fromEntries(['fixed', 'ai', 'random', 'placement'].map(method => {
   const values = runs.map(run => run[method].holdout.scoreJ).sort((a, b) => a - b);
-  return [method, { count: runs.length, heldoutFeasibleRuns: runs.filter(run => run[method].holdout.feasible).length, positiveNetAndFeasibleRuns: runs.filter(run => run[method].holdout.feasible && run[method].holdout.scoreJ > 0).length, energyStatisticsIncludeUnsafeRuns: true, meanHeldoutWorstEnergyJ: values.reduce((a, b) => a + b, 0) / values.length, medianHeldoutWorstEnergyJ: (values[3] + values[4]) / 2, minimumHeldoutWorstEnergyJ: values[0], maximumHeldoutWorstEnergyJ: values.at(-1) }];
+  return [method, { count: runs.length, heldoutFeasibleRuns: runs.filter(run => run[method].holdout.feasible).length, positiveNetAndFeasibleRuns: runs.filter(run => run[method].holdout.feasible && run[method].holdout.scoreJ > 0).length, energyStatisticsIncludeUnsafeRuns: true, meanHeldoutWorstEnergyJ: values.reduce((a, b) => a + b, 0) / values.length, medianHeldoutWorstEnergyJ: median(values), minimumHeldoutWorstEnergyJ: values[0], maximumHeldoutWorstEnergyJ: values.at(-1) }];
 }));
 const report = {
   description: 'Eight predeclared seeds, 18 observed training designs per method, fixed scenario protocol; no global optimum or hardware validation claimed.',
@@ -35,5 +41,11 @@ const report = {
   methods,
   runs,
 };
-await writeFile(new URL('./dist/ai-benchmark.json', import.meta.url), JSON.stringify(report, null, 2) + '\n');
-console.log(JSON.stringify({ summary: methods }));
+return { report, methods };
+}
+
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  const { report, methods } = await buildReport({ log: console.log });
+  await writeFile(new URL('./dist/ai-benchmark.json', import.meta.url), serializeReport(report));
+  console.log(JSON.stringify({ summary: methods }));
+}

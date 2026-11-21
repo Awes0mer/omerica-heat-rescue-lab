@@ -51,12 +51,15 @@ test('campaign uses equal budgets, shared initial data, no repeated candidates, 
   for (const method of ['ai', 'random', 'placement']) assert.equal(new Set(result[method].history.map(r => designKey(r.design))).size, 12);
   assert.ok(result.placement.history.every(r => r.design.triggerC === 74 && r.design.backupFlowFraction === 0.5));
   assert.deepEqual(result.ai.history.slice(0, 4).map(r => r.outcome), result.random.history.slice(0, 4).map(r => r.outcome));
-  assert.ok(calls.filter(c => c.split === 'train').length <= 31, 'common starting observations are cached, with exactly 12 available to each search');
+  assert.deepEqual(result.ai.history.slice(0, 4).map(r => designKey(r.design)), result.random.history.slice(0, 4).map(r => designKey(r.design)));
+  assert.equal(calls.filter(c => c.split === 'train').length, 31, 'common starting observations are cached, with exactly 12 available to each search');
   const firstHeldout = calls.findIndex(c => c.split === 'holdout');
   assert.ok(firstHeldout > 0);
   assert.ok(calls.slice(firstHeldout).every(c => c.split === 'holdout'));
+  assert.deepEqual(calls.slice(firstHeldout).map(c => designKey(c.design)), [result.fixed.design, ...['ai', 'random', 'placement'].map(m => result[m].best.design)].map(designKey));
   assert.equal(result.metadata.heldoutUsedForSelection, false);
-  assert.deepEqual(result.ai.best, (await run()).ai.best, 'same seed and observations give reproducible selection');
+  const again = await run();
+  for (const method of ['ai', 'random', 'placement']) assert.deepEqual([again[method].history, again[method].best, again[method].holdout], [result[method].history, result[method].best, result[method].holdout], `same seed and observations give reproducible ${method} selection`);
 });
 
 test('held-out outcomes cannot influence the selected designs', async () => {
